@@ -1,3 +1,4 @@
+import { clsx } from "clsx";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Route, useLocation } from "wouter";
@@ -11,7 +12,17 @@ function App() {
     <p>The location is <code>{location}</code>.</p>
 
     <button
-      className="bg-sky-500 hover:bg-sky-400 active:bg-sky-600 border border-sky-600 hover:border-sky-500 active:border-sky-600 text-white px-touch/2 min-h-touch rounded hover:shadow active:shadow-inner transition-colors duration-100"
+      className={clsx([
+        "px-touch/2 min-h-touch",
+        "rounded",
+
+        "hover:shadow active:shadow-inner",
+
+        "text-white",
+        "bg-sky-500 hover:bg-sky-400 active:bg-sky-600",
+        "border border-sky-600 hover:border-sky-500 active:border-sky-600",
+        "transition-colors duration-100"
+      ])}
       onClick={() => navigate("/map")}
     >
       Start Mapping!
