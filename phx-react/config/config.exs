@@ -41,8 +41,19 @@ config :wander_web, WanderWeb.Endpoint,
 config :esbuild,
   version: "0.17.11",
   wander_web: [
-    args:
-      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+    args: (
+      Path.wildcard("./apps/wander_web/assets/wander/*.{js,jsx}")
+      ++ Path.wildcard("./apps/wander_web/assets/wander/**/*.{js,jsx}")
+      |> Enum.map(& String.trim_leading(&1, "apps/wander_web/assets/"))
+    ) ++ ~w(
+      wander/global.js wander/app.jsx
+      --bundle
+      --target=es2017 --platform=browser
+      --jsx=automatic
+      --outdir=../priv/static/assets
+      --external:/fonts/*
+      --external:/images/*
+    ),
     cd: Path.expand("../apps/wander_web/assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
@@ -53,8 +64,8 @@ config :tailwind,
   wander_web: [
     args: ~w(
       --config=tailwind.config.js
-      --input=css/app.css
-      --output=../priv/static/assets/app.css
+      --input=wander/global.css
+      --output=../priv/static/assets/wander/global.css
     ),
     cd: Path.expand("../apps/wander_web/assets", __DIR__)
   ]

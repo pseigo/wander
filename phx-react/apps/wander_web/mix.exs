@@ -74,7 +74,7 @@ defmodule WanderWeb.MixProject do
       ],
       "assets.build": [
         "tailwind wander_web",
-        "esbuild wander_web"
+        "esbuild wander_web --bundle --target=es2017 --platform=browser --jsx=automatic"
       ],
       "assets.deploy": [
         "tailwind wander_web --minify",
