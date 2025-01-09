@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "paths": {
-      "/*": ["./*"]
+      "/*": ["./*"],
+      "test-support": ["./test/support"]
     }
   }
 }
