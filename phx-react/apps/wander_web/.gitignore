@@ -27,6 +27,11 @@ wander_web-*.tar
 
 # Ignore assets that are produced by build tools.
 /priv/static/assets/
+/priv/static/favicon-*.ico
+/priv/static/robots-*.txt
+/priv/static/*.gz
+/priv/static/**/*.gz
+/priv/static/images/logo-*.svg
 
 # Ignore digested assets cache.
 /priv/static/cache_manifest.json
