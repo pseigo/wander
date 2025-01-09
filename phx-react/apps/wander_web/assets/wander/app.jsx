@@ -2,6 +2,7 @@ import { clsx } from "clsx";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Route, useLocation } from "wouter";
+import { Button } from "/wander/common/components/button";
 
 function App() {
   const [location, navigate] = useLocation();
@@ -14,25 +15,9 @@ function App() {
         The location is <code>{location}</code>.
       </p>
 
-      <button
-        className={clsx([
-          "px-touch/2 min-h-touch",
-          "rounded",
-
-          "hover:shadow active:shadow-inner",
-
-          "text-white",
-          "bg-sky-500 hover:bg-sky-400 active:bg-sky-600",
-          "border border-sky-600 hover:border-sky-500 active:border-sky-600",
-          "transition-colors duration-100",
-        ])}
-        onClick={() => navigate("/map")}
-      >
-        Start Mapping!
-      </button>
-
       <Route path="/">
         <p>Home.</p>
+        <Button label="Start Mapping!" onClick={() => navigate("/map")} />
       </Route>
 
       <Route path="/map">
