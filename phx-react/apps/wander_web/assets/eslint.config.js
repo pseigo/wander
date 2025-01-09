@@ -55,7 +55,6 @@ export default [
       "react/no-string-refs": "warn",
       "react/no-unescaped-entities": "warn",
       "react/no-unknown-property": "warn",
-      "react/prop-types": "warn",
       "react/require-render-return": "error",
       // Our rules:
       "react/jsx-no-leaked-render": "error",
