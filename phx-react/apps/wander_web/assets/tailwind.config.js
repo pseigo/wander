@@ -7,7 +7,8 @@ const path = require("path")
 
 module.exports = {
   content: [
-    "./js/**/*.js",
+    "./wander/**/*.js",
+    "./wander/**/*.jsx",
     "../lib/wander_web.ex",
     "../lib/wander_web/**/*.*ex"
   ],
