@@ -14,6 +14,24 @@ module.exports = {
   ],
   theme: {
     extend: {
+      spacing: {
+        "touch/12": "calc(44px/12)",
+        "touch/11": "4px",
+        "touch/10": "4.4px",
+        "touch/9": "calc(44px/9)",
+        "touch/8": "5.5px",
+        "touch/7": "calc(44px/7)",
+        "touch/6": "calc(44px/6)",
+        "touch/5": "calc(44px/5)",
+        "touch/4": "11px",
+        "touch/3": "calc(44px/3)",
+        "touch/2": "22px",
+        "touch": "44px",
+        "touch*3/4": "55px",
+        "touch*3/2": "66px",
+        "touch*2": "88px"
+      },
+      lineHeight: ({ theme }) => ({ ...theme("spacing") }),
       colors: {
         brand: "#FD4F00",
       }
