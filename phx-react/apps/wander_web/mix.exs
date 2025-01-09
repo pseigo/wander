@@ -68,13 +68,21 @@ defmodule WanderWeb.MixProject do
     [
       setup: ["deps.get", "assets.setup", "assets.build"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind wander_web", "esbuild wander_web"],
+      "assets.setup": [
+        "tailwind.install --if-missing",
+        "esbuild.install --if-missing"
+      ],
+      "assets.build": [
+        "tailwind wander_web",
+        "esbuild wander_web"
+      ],
       "assets.deploy": [
         "tailwind wander_web --minify",
         "esbuild wander_web --minify",
         "phx.digest"
-      ]
+      ],
+      "assets.clean": ["phx.digest.clean"],
+      "assets.clean.all": ["phx.digest.clean --all"]
     ]
   end
 end
