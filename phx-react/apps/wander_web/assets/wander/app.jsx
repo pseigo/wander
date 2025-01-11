@@ -1,37 +1,25 @@
-import { clsx } from "clsx";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Route, useLocation } from "wouter";
-import { Button } from "/wander/common/components/button";
+
+import { Switch } from "wouter";
+
+import { Route } from "/wander/common/router/route";
+import { LandingPage } from "/wander/pages/landing";
+import { MapPage } from "/wander/pages/map";
+import { NotFoundErrorPage } from "/wander/pages/errors/not_found";
 
 function App() {
-  const [location, navigate] = useLocation();
-
   return (
-    <div>
-      <h1>Hello, world!</h1>
-
-      <p>
-        The location is <code>{location}</code>.
-      </p>
-
-      <Route path="/">
-        <p>Home.</p>
-        <Button label="Start Mapping!" onClick={() => navigate("/map")} />
-      </Route>
-
-      <Route path="/map">
-        <p>{"I'm a map!"}</p>
-      </Route>
-    </div>
+    // prettier-ignore
+    <Switch>
+      <Route path="/"><LandingPage /></Route>
+      <Route path="/map"><MapPage /></Route>
+      <Route><NotFoundErrorPage /></Route>
+    </Switch>
   );
 }
 
 function init() {
-  // Clear the existing HTML content
-  document.body.innerHTML = '<div id="app"></div>';
-
-  // Render your React component instead
   const root = createRoot(document.getElementById("app"));
   root.render(
     <StrictMode>
@@ -40,5 +28,4 @@ function init() {
   );
 }
 
-// Uncomment this line to replace every page with the React example.
 init();

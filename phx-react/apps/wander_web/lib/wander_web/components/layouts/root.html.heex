@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" class="[scrollbar-gutter:stable]">
+<html lang="en" class="[scrollbar-gutter:stable] min-h-[100vh]">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="csrf-token" content={get_csrf_token()} />
     <.live_title default="Wander" suffix=" · Phoenix Framework">
       {assigns[:page_title]}
@@ -11,7 +11,7 @@
     <script defer phx-track-static type="text/javascript" src={~p"/assets/global.js"}></script>
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}></script>
   </head>
-  <body class="bg-white">
+  <body class="bg-white min-h-[100vh]">
     {@inner_content}
   </body>
 </html>
