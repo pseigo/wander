@@ -23,16 +23,21 @@ const siteName = "Wander";
  * `toDocumentTitle` to learn more.
  *
  * @example &lt;caption>Setting the document title on mount.&lt;/caption>
- * import { useDynamicDocumentTitle, toDocumentTitle } from "/wander/common/hooks/document_title";
+ * import {
+ *   useDynamicDocumentTitle,
+ *   toDocumentTitle
+ * } from "/wander/common/hooks/document_title";
  *
  * export function ExamplePage() {
  *   const [_documentTitle, setDocumentTitle] = useDynamicDocumentTitle();
  *
  *   useEffect(() => {
- *     setDocumentTitle(toDocumentTitle(["Sub-section", "Example"]));
+ *     setDocumentTitle(
+ *       toDocumentTitle(["Sub-section", "Example"])
+ *     );
  *   }, []);
  *
- *   return <main><h1>Example Page</h1></main>
+ *   return <main><h1>Example Page</h1></main>;
  * }
  *
  * @returns {[string, React.Dispatch<React.SetStateAction<string>>]} `[documentTitle, setDocumentTitle]`
@@ -71,12 +76,17 @@ export function useDynamicDocumentTitle() {
  * `toDocumentTitle` to learn more.
  *
  * @example &lt;caption>Setting the document title on mount.&lt;/caption>
- * import { useStaticDocumentTitle, toDocumentTitle } from "/wander/common/hooks/document_title";
+ * import {
+ *   useStaticDocumentTitle,
+ *   toDocumentTitle
+ * } from "/wander/common/hooks/document_title";
  *
  * export function ExamplePage() {
- *   const [_documentTitle] = useStaticDocumentTitle(toDocumentTitle(["Sub-section", "Example"]));
+ *   const [_documentTitle] = useStaticDocumentTitle(
+ *     toDocumentTitle(["Sub-section", "Example"])
+ *   );
  *
- *   return <main><h1>Example Page</h1></main>
+ *   return <main><h1>Example Page</h1></main>;
  * }
  *
  * @param {(string | null)} title - The document title, or `null` to use the site's default title.
@@ -86,7 +96,7 @@ export function useDynamicDocumentTitle() {
 export function useStaticDocumentTitle(title) {
   // Declare outside `useEffect` so we can return it to the call site, because
   // we're not using `useState`.
-  const titleOrSiteName = (title !== null) ? title : siteName;
+  const titleOrSiteName = title !== null ? title : siteName;
 
   useEffect(() => {
     document.title = titleOrSiteName;
@@ -119,7 +129,7 @@ function destructor() {
  *
  * @returns {string}
  */
-export function toDocumentTitle(titleOrTitles, opts = {withSiteName: true}) {
+export function toDocumentTitle(titleOrTitles, opts = { withSiteName: true }) {
   const { withSiteName } = opts;
   const titles = normalizeTitleOrTitles(titleOrTitles, withSiteName);
   const title = titles.reduceRight((acc, e) => e + " | " + acc);

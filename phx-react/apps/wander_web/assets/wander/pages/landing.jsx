@@ -2,7 +2,10 @@ import { clsx } from "clsx";
 import { useLocation } from "wouter";
 
 import { Button } from "/wander/common/components/button";
-import { useStaticDocumentTitle, toDocumentTitle } from "/wander/common/hooks/document_title";
+import {
+  useStaticDocumentTitle,
+  toDocumentTitle,
+} from "/wander/common/hooks/document_title";
 
 import {
   ctaButtonLabel,
@@ -14,7 +17,9 @@ import { Explainers } from "./landing/explainers";
 
 export function LandingPage(_props) {
   const [_location, navigate] = useLocation();
-  const [_documentTitle] = useStaticDocumentTitle("Wander: Browse places in your city");
+  const [_documentTitle] = useStaticDocumentTitle(
+    "Wander: Browse places in your city"
+  );
 
   return (
     <main

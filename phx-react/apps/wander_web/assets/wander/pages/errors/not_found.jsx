@@ -1,11 +1,16 @@
 import { useLocation } from "wouter";
 
 import { InternalLink, ExternalLink } from "/wander/common/components/link";
-import { useStaticDocumentTitle, toDocumentTitle } from "/wander/common/hooks/document_title";
+import {
+  useStaticDocumentTitle,
+  toDocumentTitle,
+} from "/wander/common/hooks/document_title";
 
 export function NotFoundErrorPage() {
   const [location, _navigate] = useLocation();
-  const [_documentTitle] = useStaticDocumentTitle(toDocumentTitle(["Not Found", "Error"]));
+  const [_documentTitle] = useStaticDocumentTitle(
+    toDocumentTitle(["Not Found", "Error"])
+  );
 
   return (
     <div className="px-touch/2 pt-10">
