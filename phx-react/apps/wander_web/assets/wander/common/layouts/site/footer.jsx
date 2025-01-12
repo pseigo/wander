@@ -29,158 +29,164 @@ export function Footer({ className }) {
           "mx-auto",
         ])}
       >
-        <h2 className="text-3xl mb-8">Wander</h2>
+        <nav>
+          <h2 className="text-3xl mb-8">
+            <InternalLink href="/" unstyled>
+              Wander
+            </InternalLink>
+          </h2>
 
-        <nav
-          className={clsx([
-            "flex flex-col gap-7",
-            "sm:grid",
-            "sm:grid-cols-[minmax(0,3fr),_minmax(0,2fr)]",
-            "lg:grid-cols-[minmax(0,3fr),_minmax(0,2fr),_minmax(0,3fr)]",
-          ])}
-        >
-          <Section
+          <div
             className={clsx([
-              "sm:col-start-1 sm:row-start-1",
-              "lg:col-start-1 lg:row-start-1",
+              "flex flex-col gap-7",
+              "sm:grid",
+              "sm:grid-cols-[minmax(0,3fr),_minmax(0,2fr)]",
+              "lg:grid-cols-[minmax(0,3fr),_minmax(0,2fr),_minmax(0,3fr)]",
             ])}
           >
-            <Section.Title>Account</Section.Title>
-            <Section.List>
-              <Section.ListItem>
-                <InternalLink background="dark" href="/account/new">
-                  Create an Account
-                </InternalLink>
-              </Section.ListItem>
-              <Section.ListItem>
-                <InternalLink background="dark" href="/account/sign-in">
-                  Sign In
-                </InternalLink>
-              </Section.ListItem>
-            </Section.List>
-          </Section>
+            <Section
+              className={clsx([
+                "sm:col-start-1 sm:row-start-1",
+                "lg:col-start-1 lg:row-start-1",
+              ])}
+            >
+              <Section.Title>Account</Section.Title>
+              <Section.List>
+                <Section.ListItem>
+                  <InternalLink background="dark" href="/account/new">
+                    Create an Account
+                  </InternalLink>
+                </Section.ListItem>
+                <Section.ListItem>
+                  <InternalLink background="dark" href="/account/sign-in">
+                    Sign In
+                  </InternalLink>
+                </Section.ListItem>
+              </Section.List>
+            </Section>
 
-          <Section
-            className={clsx([
-              "sm:col-start-1 sm:row-start-2",
-              "lg:col-start-1 lg:row-start-2",
-            ])}
-          >
-            <Section.Title>Documentation</Section.Title>
-            <Section.List>
-              <Section.ListItem>
-                <InternalLink
-                  background="dark"
-                  href="/docs/tutorials"
-                  rel="help"
-                >
-                  Tutorials
-                </InternalLink>
-              </Section.ListItem>
-              <Section.ListItem>
-                <InternalLink
-                  background="dark"
-                  href="/docs/guides/contribute-to-openstreetmap"
-                >
-                  OpenStreetMap Contribution Guide
-                </InternalLink>
-              </Section.ListItem>
-              <Section.ListItem>
-                <InternalLink background="dark" href="/docs/guides/self-host">
-                  Self-Hosting Guide
-                </InternalLink>
-              </Section.ListItem>
-            </Section.List>
-          </Section>
+            <Section
+              className={clsx([
+                "sm:col-start-1 sm:row-start-2",
+                "lg:col-start-1 lg:row-start-2",
+              ])}
+            >
+              <Section.Title>Documentation</Section.Title>
+              <Section.List>
+                <Section.ListItem>
+                  <InternalLink
+                    background="dark"
+                    href="/docs/tutorials"
+                    rel="help"
+                  >
+                    Tutorials
+                  </InternalLink>
+                </Section.ListItem>
+                <Section.ListItem>
+                  <InternalLink
+                    background="dark"
+                    href="/docs/guides/contribute-to-openstreetmap"
+                  >
+                    OpenStreetMap Contribution Guide
+                  </InternalLink>
+                </Section.ListItem>
+                <Section.ListItem>
+                  <InternalLink background="dark" href="/docs/guides/self-host">
+                    Self-Hosting Guide
+                  </InternalLink>
+                </Section.ListItem>
+              </Section.List>
+            </Section>
 
-          <Section
-            className={clsx([
-              "sm:col-start-1 sm:row-start-3",
-              "lg:col-start-2 lg:row-start-1",
-            ])}
-          >
-            <Section.Title>Help</Section.Title>
-            <Section.List>
-              <Section.ListItem>
-                <ExternalLink
-                  background="dark"
-                  href="https://github.com/pseigo/wander/labels/bug"
-                >
-                  Known Issues
-                </ExternalLink>
-              </Section.ListItem>
-              <Section.ListItem>
-                <ExternalLink
-                  background="dark"
-                  href="https://github.com/pseigo/wander/issues/new"
-                >
-                  Report a Bug
-                </ExternalLink>
-              </Section.ListItem>
-            </Section.List>
-          </Section>
+            <Section
+              className={clsx([
+                "sm:col-start-1 sm:row-start-3",
+                "lg:col-start-2 lg:row-start-1",
+              ])}
+            >
+              <Section.Title>Help</Section.Title>
+              <Section.List>
+                <Section.ListItem>
+                  <ExternalLink
+                    background="dark"
+                    href="https://github.com/pseigo/wander/labels/bug"
+                  >
+                    Known Issues
+                  </ExternalLink>
+                </Section.ListItem>
+                <Section.ListItem>
+                  <ExternalLink
+                    background="dark"
+                    href="https://github.com/pseigo/wander/issues/new"
+                  >
+                    Report a Bug
+                  </ExternalLink>
+                </Section.ListItem>
+              </Section.List>
+            </Section>
 
-          <Section
-            className={clsx([
-              "sm:col-start-2 sm:row-start-1",
-              "lg:col-start-2 lg:row-start-2",
-            ])}
-          >
-            <Section.Title>Source Code</Section.Title>
-            <Section.List>
-              <Section.ListItem>
-                <ExternalLink
-                  background="dark"
-                  href="https://github.com/pseigo/wander/"
-                >
-                  GitHub Repository
-                </ExternalLink>
-              </Section.ListItem>
-            </Section.List>
-          </Section>
+            <Section
+              className={clsx([
+                "sm:col-start-2 sm:row-start-1",
+                "lg:col-start-2 lg:row-start-2",
+              ])}
+            >
+              <Section.Title>Source Code</Section.Title>
+              <Section.List>
+                <Section.ListItem>
+                  <ExternalLink
+                    background="dark"
+                    href="https://github.com/pseigo/wander/"
+                  >
+                    GitHub Repository
+                  </ExternalLink>
+                </Section.ListItem>
+              </Section.List>
+            </Section>
 
-          <Section
-            className={clsx([
-              "sm:col-start-2 sm:row-start-2",
-              "lg:col-start-3 lg:row-start-1",
-            ])}
-          >
-            <Section.Title>Legal</Section.Title>
-            <Section.List>
-              <Section.ListItem>
-                <InternalLink background="dark" href="/legal/terms">
-                  Terms of Service
-                </InternalLink>
-              </Section.ListItem>
-              <Section.ListItem>
-                <InternalLink background="dark" href="/legal/privacy">
-                  Privacy Policy
-                </InternalLink>
-              </Section.ListItem>
-            </Section.List>
-          </Section>
+            <Section
+              className={clsx([
+                "sm:col-start-2 sm:row-start-2",
+                "lg:col-start-3 lg:row-start-1",
+              ])}
+            >
+              <Section.Title>Legal</Section.Title>
+              <Section.List>
+                <Section.ListItem>
+                  <InternalLink background="dark" href="/legal/terms">
+                    Terms of Service
+                  </InternalLink>
+                </Section.ListItem>
+                <Section.ListItem>
+                  <InternalLink background="dark" href="/legal/privacy">
+                    Privacy Policy
+                  </InternalLink>
+                </Section.ListItem>
+              </Section.List>
+            </Section>
 
-          <Section
-            className={clsx([
-              "sm:col-start-2 sm:row-start-3",
-              "lg:col-start-3 lg:row-start-2",
-            ])}
-          >
-            <div className="flex flex-col gap-2">
-              <div className="text-[#d8d8d8]">
-                Wander is free and open source software under the{" "}
-                <ExternalLink
-                  background="dark"
-                  href="http://www.apache.org/licenses/LICENSE-2.0"
-                >
-                  Apache License, Version 2.0.
-                </ExternalLink>
+            <Section
+              className={clsx([
+                "sm:col-start-2 sm:row-start-3",
+                "lg:col-start-3 lg:row-start-2",
+              ])}
+            >
+              <div className="flex flex-col gap-2">
+                <div className="text-[#d8d8d8]">
+                  Wander is free and open source software under the{" "}
+                  <ExternalLink
+                    background="dark"
+                    href="http://www.apache.org/licenses/LICENSE-2.0"
+                  >
+                    Apache License, Version 2.0.
+                  </ExternalLink>
+                </div>
+                <div className="text-sm text-[#acacac]">
+                  Copyright (c) 2025 Peyton Seigo
+                </div>
               </div>
-              <div className="text-sm text-[#acacac]">
-                Copyright (c) 2025 Peyton Seigo
-              </div>
-            </div>
-          </Section>
+            </Section>
+          </div>
         </nav>
       </div>
     </footer>

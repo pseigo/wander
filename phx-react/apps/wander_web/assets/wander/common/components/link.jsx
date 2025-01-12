@@ -20,18 +20,23 @@ import { Link as WouterLink } from "wouter";
 /**
  * @param {object} props
  * @param {LinkBackground} props.background - Defaults to "auto".
+ * @param {boolean} props.unstyled - If `true` does not style the link. Defaults to `false`.
+ * @param {(string | string[] | null)} props.className
  */
 export function InternalLink(props) {
-  const { background = "auto" } = props;
+  const { background = "auto", unstyled = false, className = null } = props;
 
   // TODO: Don't put `background` on element. Only accept global attributes and <a> attributes. Figure out simple way to document and process taking global attributes and element-specific attributes until/if we use TypeScript.
   return (
     <WouterLink
       className={clsx([
         "decoration-[1.5px]",
-        "hover:underline",
-        "text-[rgb(36,109,225)] hover:text-[rgb(78,137,230)]",
-        classesForBackground(background),
+        !unstyled && [
+          "hover:underline",
+          "text-[rgb(36,109,225)] hover:text-[rgb(78,137,230)]",
+          classesForBackground(background),
+        ],
+        className,
       ])}
       {...props}
     />
