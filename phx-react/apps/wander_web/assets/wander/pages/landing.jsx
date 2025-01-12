@@ -19,7 +19,7 @@ import { useLocation } from "wouter";
 
 import { Button } from "/wander/common/components/button";
 import {
-  useStaticDocumentTitle,
+  useDocumentTitle,
   toDocumentTitle,
 } from "/wander/common/hooks/document_title";
 
@@ -33,8 +33,10 @@ import { Explainers } from "./landing/explainers";
 
 export function LandingPage(_props) {
   const [_location, navigate] = useLocation();
-  const [_documentTitle] = useStaticDocumentTitle(
-    "Wander: Browse places in your city"
+  const [_documentTitle, _setDocumentTitle] = useDocumentTitle(
+    toDocumentTitle("Wander: Browse places in your city", {
+      withSiteName: false,
+    })
   );
 
   return (

@@ -19,16 +19,11 @@ import { useState, useEffect } from "react";
 const siteName = "Wander";
 
 /**
- * Hook to access and set the document's title. You must call
- * `setDocumentTitle` yourself on mount.
+ * Hook to set and access the document's title.
  *
- * `setDocumentTitle` takes a string, or `null` to use the site's default
- * title.
- *
- * ## Reducing boilerplate
- *
- * If you're not using `setDocumentTitle` beyond the initial mount, you can
- * reduce boilerplate by using `useStaticDocumentTitle` instead.
+ * Both `useDocumentTitle` and its `setDocumentTitle` setter take a string. You
+ * can also pass `null` or call `useDocumentTitle()` with no arguments to use
+ * the site's default title.
  *
  * ## Creating consistent titles with `toDocumentTitle`
  *
@@ -40,31 +35,39 @@ const siteName = "Wander";
  *
  * @example &lt;caption>Setting the document title on mount.&lt;/caption>
  * import {
- *   useDynamicDocumentTitle,
+ *   useDocumentTitle,
  *   toDocumentTitle
  * } from "/wander/common/hooks/document_title";
  *
  * export function ExamplePage() {
- *   const [_documentTitle, setDocumentTitle] = useDynamicDocumentTitle();
+ *   const [documentTitle, setDocumentTitle] = useDocumentTitle(
+ *     toDocumentTitle(
+ *       ["Sub-section", "Initial Title"]
+ *     )
+ *   );
  *
- *   useEffect(() => {
- *     setDocumentTitle(
- *       toDocumentTitle(["Sub-section", "Example"])
- *     );
- *   }, []);
- *
- *   return <main><h1>Example Page</h1></main>;
+ *   return (
+ *     <main>
+ *       <h1>Example Page</h1>
+ *       <p>
+ *          The current document title is:{" "}
+ *          <code>{documentTitle}</code>
+ *       </p>
+ *       <button onClick={() => setDocumentTitle("New Title")}>
+ *          Change Document Title
+ *       </button>
+ *    </main>
+ *  );
  * }
  *
- * @returns {[string, React.Dispatch<React.SetStateAction<string>>]} `[documentTitle, setDocumentTitle]`
+ * @returns {[string, React.Dispatch<React.SetStateAction<string | null>>]} `[documentTitle, setDocumentTitle]`
  */
-export function useDynamicDocumentTitle() {
-  const [title, setTitle] = useState(null);
+export function useDocumentTitle(initialTitle = null) {
+  const [title, setTitle] = useState(initialTitle);
 
   useEffect(() => {
     if (title === null || title === undefined) {
-      const newTitle = siteName ?? "";
-      setTitle(newTitle);
+      setTitle(defaultTitle());
       return destructor;
     }
 
@@ -75,56 +78,16 @@ export function useDynamicDocumentTitle() {
   return [title, setTitle];
 }
 
-/**
- * Hook to access the document title and set it on mount.
- *
- * ## Changing the document title after the initial mount
- *
- * If you would like to change the document's title after the initial mount,
- * you can use `useDynamicDocumentTitle` instead.
- *
- * ## Creating consistent titles with `toDocumentTitle`
- *
- * If you would like the title to include the site name (probably in most
- * cases), or would like the title to describe more than one section in a way
- * that's consistent across the application, use `toDocumentTitle` to create
- * the value you pass into `useStaticDocumentTitle`. See the documentation for
- * `toDocumentTitle` to learn more.
- *
- * @example &lt;caption>Setting the document title on mount.&lt;/caption>
- * import {
- *   useStaticDocumentTitle,
- *   toDocumentTitle
- * } from "/wander/common/hooks/document_title";
- *
- * export function ExamplePage() {
- *   const [_documentTitle] = useStaticDocumentTitle(
- *     toDocumentTitle(["Sub-section", "Example"])
- *   );
- *
- *   return <main><h1>Example Page</h1></main>;
- * }
- *
- * @param {(string | null)} title - The document title, or `null` to use the site's default title.
- *
- * @returns {[string]}
- */
-export function useStaticDocumentTitle(title) {
-  // Declare outside `useEffect` so we can return it to the call site, because
-  // we're not using `useState`.
-  const titleOrSiteName = title !== null ? title : siteName;
-
-  useEffect(() => {
-    document.title = titleOrSiteName;
-    return destructor;
-  }, []);
-
-  return [titleOrSiteName];
+function destructor() {
+  // Set default on unmount in case the next route doesn't set a title.
+  document.title = defaultTitle();
 }
 
-function destructor() {
-  // In case some routes don't set a title.
-  document.title = siteName ?? "";
+/**
+ * @returns {string}
+ */
+function defaultTitle() {
+  return siteName ?? "";
 }
 
 /**
@@ -136,8 +99,7 @@ function destructor() {
  * to set a completely custom document title (e.g., on the main landing page).
  *
  * The result of this function is typically passed into the hook
- * `useStaticDocumentTitle`, or `setDocumentTitle` returned by the hook
- * `useDynamicDocumentTitle`.
+ * `useDocumentTitle` or the `setDocumentTitle` setter it returns.
  *
  * @param {(string | string[])} titleOrTitles
  * @param {object} opts

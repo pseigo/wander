@@ -18,13 +18,13 @@ import { useLocation } from "wouter";
 
 import { InternalLink, ExternalLink } from "/wander/common/components/link";
 import {
-  useStaticDocumentTitle,
+  useDocumentTitle,
   toDocumentTitle,
 } from "/wander/common/hooks/document_title";
 
 export function NotFoundErrorPage() {
   const [location, _navigate] = useLocation();
-  const [_documentTitle] = useStaticDocumentTitle(
+  const [_documentTitle, _setDocumentTitle] = useDocumentTitle(
     toDocumentTitle(["Not Found", "Error"])
   );
 
