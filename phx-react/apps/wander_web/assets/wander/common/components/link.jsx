@@ -46,13 +46,7 @@ export function InternalLink(props) {
   return (
     <WouterLink
       className={clsx([
-        "decoration-[1.5px]",
-        !unstyled && [
-          "hover:underline",
-          "text-[rgb(36,109,225)] hover:text-[rgb(78,137,230)]",
-          classesForBackground(background),
-        ],
-        className,
+        classesForLink(background, unstyled, className),
       ])}
       {...props}
     />
@@ -62,9 +56,11 @@ export function InternalLink(props) {
 /**
  * @param {object} props
  * @param {LinkBackground} props.background - Defaults to "auto".
+ * @param {boolean} props.unstyled - If `true` does not style the link. Defaults to `false`.
+ * @param {(string | string[] | null)} props.className
  */
 export function ExternalLink(props) {
-  const { background = "auto" } = props;
+  const { background = "auto", unstyled = false, className = null } = props;
 
   // TODO: Don't put `background` on element. Only accept global attributes and <a> attributes. Figure out simple way to document and process taking global attributes and element-specific attributes until/if we use TypeScript.
   // TODO: Merge custom 'rel' string with privacy/security presets, and make sure the 'rel' we set doesn't get overridden. e.g., rel="help"
@@ -72,16 +68,25 @@ export function ExternalLink(props) {
   return (
     <a
       className={clsx([
-        "decoration-[1.5px]",
-        "hover:underline",
-        "text-[rgb(36,109,225)] hover:text-[rgb(78,137,230)]",
-        classesForBackground(background),
+        classesForLink(background, unstyled, className),
       ])}
       target="_blank"
       rel="noreferrer noopener"
       {...props}
     />
   );
+}
+
+function classesForLink(background, unstyled, className) {
+  return [
+    "decoration-[1.5px]",
+    !unstyled && [
+      "hover:underline",
+      "text-[rgb(36,109,225)] hover:text-[rgb(78,137,230)]",
+      classesForBackground(background),
+    ],
+    className,
+  ];
 }
 
 /**
