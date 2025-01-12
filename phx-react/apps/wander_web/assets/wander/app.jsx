@@ -13,7 +13,7 @@ function App() {
     // prettier-ignore
     <Switch>
       <Route path="/"><LandingPage /></Route>
-      <Route path="/map"><MapPage /></Route>
+      <Route path="/map" Layout={null}><MapPage /></Route>
       <Route><NotFoundErrorPage /></Route>
     </Switch>
   );
