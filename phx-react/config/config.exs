@@ -48,7 +48,7 @@ config :esbuild,
     ) ++ ~w(
       wander/global.js wander/app.jsx
       --bundle
-      --target=es2017 --platform=browser
+      --target=es2020 --platform=browser
       --jsx=automatic
       --outdir=../priv/static/assets
       --external:/fonts/*

@@ -12,7 +12,7 @@ export default [
     ignores: [],
     languageOptions: {
       sourceType: "module",
-      ecmaVersion: 2017,
+      ecmaVersion: 2020,
       parserOptions: {
         ecmaFeatures: {
           impliedStrict: true,
@@ -85,7 +85,7 @@ export default [
     ignores: [],
     languageOptions: {
       sourceType: "module",
-      ecmaVersion: 2017,
+      ecmaVersion: 2020,
       parserOptions: {
         ecmaFeatures: {
           impliedStrict: true,
