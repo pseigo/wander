@@ -121,11 +121,24 @@ export function toDocumentTitle(titleOrTitles, opts = { withSiteName: true }) {
  * @returns {string[]}
  */
 function normalizeTitleOrTitles(titleOrTitles, withSiteName) {
+  const errorPrefix = "[toTitle/1][normalizeTitleOrTitles/2]: 'titleOrTitles' argument must be an 'Array' or 'String', but";
+
+  const type = typeof titleOrTitles;
+  switch (type) {
+    case "string":
+    case "object":
+      break;
+
+    default:
+      const error = `${errorPrefix} 'typeof titleOrTitles' is '${type}'`;
+      throw new Error(error);
+  }
+
   /** @type {string[]} */
   let titles = [];
-  const type = titleOrTitles.constructor;
 
-  switch (type) {
+  const constructor = titleOrTitles.constructor;
+  switch (constructor) {
     case String:
       titles = [titleOrTitles];
       break;
@@ -135,7 +148,7 @@ function normalizeTitleOrTitles(titleOrTitles, withSiteName) {
       break;
 
     default:
-      const error = `[toTitle/1][normalizeTitleOrTitles/2]: 'titleOrTitles' argument must be an 'Array' or 'String', but 'titleOrTitles.constructor' is '${type}'`;
+      const error = `${errorPrefix} 'titleOrTitles.constructor' is '${constructor}'`;
       throw new Error(error);
   }
 
