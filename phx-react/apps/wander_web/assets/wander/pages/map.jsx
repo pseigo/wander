@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { clsx } from "clsx";
 import { useLocation } from "wouter";
 
 import { Button } from "/wander/common/components/button";
@@ -21,6 +22,7 @@ import {
   useDocumentTitle,
   toDocumentTitle,
 } from "/wander/common/hooks/document_title";
+import { LeafletMap } from "/wander/maps/leaflet";
 
 export function MapPage(_props) {
   const [_location, navigate] = useLocation();
@@ -29,9 +31,18 @@ export function MapPage(_props) {
   );
 
   return (
-    <>
-      <p>Map coming soon...</p>
-      <Button label="Home" onClick={() => navigate("/")} />
-    </>
+    <div className="w-full h-full">
+      {/* <Button label="Go Home" onClick={() => navigate("/")} /> */}
+      <LeafletMap />
+
+      <style href="FullscreenMap" precedence="normal">{`
+        html, body, #app {
+          margin: 0;
+          padding: 0;
+          height: 100%;
+          overflow: clip;
+        }
+      `}</style>
+    </div>
   );
 }
