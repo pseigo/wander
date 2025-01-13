@@ -76,11 +76,7 @@ export function ExternalLink(props) {
 function classesForLink(background, unstyled, className) {
   return [
     "decoration-[1.5px]",
-    !unstyled && [
-      "hover:underline",
-      "text-[rgb(36,109,225)] hover:text-[rgb(78,137,230)]",
-      classesForBackground(background),
-    ],
+    !unstyled && ["hover:underline", classesForBackground(background)],
     className,
   ];
 }
@@ -92,21 +88,21 @@ function classesForLink(background, unstyled, className) {
 function classesForBackground(background) {
   switch (background) {
     case "light":
-      return ["text-[rgb(36,109,225)] hover:text-[rgb(78,137,230)]"];
+      return "text-[rgb(36,109,225)] hover:text-[rgb(78,137,230)]";
 
     case "dark":
-      return ["text-[rgb(107,156,234)] hover:text-[rgb(138,178,242)]"];
+      return "text-[rgb(107,156,234)] hover:text-[rgb(138,178,242)]";
 
     case "auto":
       return [
-        "text-[rgb(107,156,234)] hover:text-[rgb(138,178,242)]",
-        "dark:text-[rgb(36,109,225)] dark:hover:text-[rgb(78,137,230)]",
+        "text-[rgb(36,109,225)] hover:text-[rgb(78,137,230)]",
+        "dark:text-[rgb(107,156,234)] dark:hover:text-[rgb(138,178,242)]",
       ];
 
     case "auto_invert":
       return [
-        "text-[rgb(36,109,225)] hover:text-[rgb(78,137,230)]",
-        "dark:text-[rgb(107,156,234)] dark:hover:text-[rgb(138,178,242)]",
+        "text-[rgb(107,156,234)] hover:text-[rgb(138,178,242)]",
+        "dark:text-[rgb(36,109,225)] dark:hover:text-[rgb(78,137,230)]",
       ];
   }
 }
