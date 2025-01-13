@@ -151,7 +151,8 @@ function PointerPositionPanel({ position }) {
       id="pointer-position-panel"
       className={clsx([
         "absolute bottom-0 left-0 z-[1]",
-        "bg-[rgb(255_255_255_/_0.6)]",
+        "text-black bg-[rgb(255_255_255_/_0.6)]",
+        "dark:text-white dark:bg-[rgb(0_0_0_/_0.6)]",
         "rounded-tr-md",
       ])}
       ref={ref}

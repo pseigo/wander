@@ -32,7 +32,7 @@ export function MapPage(_props) {
   );
 
   return (
-    <div className="w-full h-full">
+    <div className={clsx(["w-full h-full", "dark:text-black"])}>
       {/*
       <Button label="Go Home" onClick={() => navigate("/")} />
       <LeafletMap />
