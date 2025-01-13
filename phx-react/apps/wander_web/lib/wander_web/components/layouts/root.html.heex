@@ -11,7 +11,11 @@
     <script defer phx-track-static type="text/javascript" src={~p"/assets/global.js"}></script>
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}></script>
   </head>
-  <body class="bg-white min-h-[100vh]">
+  <body class={[
+    "min-h-[100vh]",
+    "bg-white text-black",
+    "dark:bg-[#0f0f0f] dark:text-white"
+  ]}>
     {@inner_content}
   </body>
 </html>

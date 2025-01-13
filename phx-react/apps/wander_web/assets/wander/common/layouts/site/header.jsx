@@ -28,13 +28,14 @@ export function Header() {
       className={clsx([
         horizontalGutterPaddingClasses,
         "py-touch/10",
-
         "sticky top-0",
 
-        "bg-[rgb(0,129,221)]",
-        "border-b border-[rgb(0,120,206)]",
+        "border-b",
         "shadow-sm",
         "text-white",
+
+        "bg-[rgb(0,129,221)] border-[rgb(0,120,206)]",
+        "dark:bg-[rgb(1,53,91)] dark:border-[rgb(0,52,89)]",
       ])}
     >
       <nav className="max-w-[900px] mx-auto">

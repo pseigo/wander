@@ -33,7 +33,7 @@ export function Hero() {
       className={clsx([
         horizontalGutterPaddingClasses,
         "pt-[calc(theme(spacing.touch*3/4)+env(safe-area-inset-top))] pb-touch*3/4",
-        "bg-[#007ed7]",
+        "bg-[#007ed7] dark:bg-[rgb(0,62,107)]",
         "text-center text-white",
       ])}
     >

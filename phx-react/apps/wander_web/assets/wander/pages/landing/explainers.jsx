@@ -74,7 +74,7 @@ export function Explainers({ className }) {
           <Explainer.Point>
             You can browse, create collections, and export your data without
             signing in.{" "}
-            <span className="text-gray-500 italic">
+            <span className="text-gray-500 dark:text-gray-400 italic">
               (See{" "}
               <InternalLink href="/docs/browser-storage-caveats">
                 caveats

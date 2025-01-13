@@ -42,6 +42,10 @@ export function LandingPage(_props) {
   return (
     <main
       aria-description={`A description of what Wander is, and "${ctaButtonLabel}" buttons that open the map.`}
+      className={clsx([
+        "bg-white dark:bg-[#0f0f0f]",
+        "text-black dark:text-white",
+      ])}
     >
       <Hero />
       <div className={clsx([horizontalGutterPaddingClasses, "mt-8"])}>
