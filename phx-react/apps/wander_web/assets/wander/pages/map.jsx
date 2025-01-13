@@ -23,6 +23,7 @@ import {
   toDocumentTitle,
 } from "/wander/common/hooks/document_title";
 import { LeafletMap } from "/wander/maps/leaflet";
+import { MapLibreMap } from "/wander/maps/maplibre";
 
 export function MapPage(_props) {
   const [_location, navigate] = useLocation();
@@ -32,10 +33,14 @@ export function MapPage(_props) {
 
   return (
     <div className="w-full h-full">
-      {/* <Button label="Go Home" onClick={() => navigate("/")} /> */}
+      {/*
+      <Button label="Go Home" onClick={() => navigate("/")} />
       <LeafletMap />
+      */}
 
-      <style href="FullscreenMap" precedence="normal">{`
+      <MapLibreMap />
+
+      <style>{`
         html, body, #app {
           margin: 0;
           padding: 0;

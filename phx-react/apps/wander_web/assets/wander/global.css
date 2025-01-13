@@ -19,3 +19,4 @@
 @import "tailwindcss/utilities";
 
 @import "../vendor/leaflet/leaflet.css";
+@import "../node_modules/maplibre-gl/dist/maplibre-gl.css";
