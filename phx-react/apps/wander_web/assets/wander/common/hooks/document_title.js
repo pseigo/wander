@@ -121,7 +121,8 @@ export function toDocumentTitle(titleOrTitles, opts = { withSiteName: true }) {
  * @returns {string[]}
  */
 function normalizeTitleOrTitles(titleOrTitles, withSiteName) {
-  const errorPrefix = "[toTitle/1][normalizeTitleOrTitles/2]: 'titleOrTitles' argument must be an 'Array' or 'String', but";
+  const errorPrefix =
+    "[toTitle/1][normalizeTitleOrTitles/2]: 'titleOrTitles' argument must be an 'Array' or 'String', but";
 
   const type = typeof titleOrTitles;
   switch (type) {

@@ -45,9 +45,7 @@ export function InternalLink(props) {
   // TODO: Don't put `background` on element. Only accept global attributes and <a> attributes. Figure out simple way to document and process taking global attributes and element-specific attributes until/if we use TypeScript.
   return (
     <WouterLink
-      className={clsx([
-        classesForLink(background, unstyled, className),
-      ])}
+      className={clsx([classesForLink(background, unstyled, className)])}
       {...props}
     />
   );
@@ -67,9 +65,7 @@ export function ExternalLink(props) {
   // TODO: Make sure we're using the appropriate attributes for privacy/security.
   return (
     <a
-      className={clsx([
-        classesForLink(background, unstyled, className),
-      ])}
+      className={clsx([classesForLink(background, unstyled, className)])}
       target="_blank"
       rel="noreferrer noopener"
       {...props}
