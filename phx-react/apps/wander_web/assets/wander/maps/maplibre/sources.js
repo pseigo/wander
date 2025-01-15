@@ -16,13 +16,14 @@
 
 import { cafes } from "/wander/maps/data/places";
 
+import { CAFES } from "./constants";
+
 /**
  * @param {ML.Map} map
  */
 export function addSources(map) {
-  const sourceName = "cafes";
   const source = cafeSource();
-  map.addSource(sourceName, source);
+  map.addSource(CAFES.sourceName, source);
 }
 
 /**

@@ -39,10 +39,7 @@ function addCafeLayers(map) {
 }
 
 /**
- * Returns an `AddLayerObject` to visualize café data in source `sourceName`.
- *
- * @param {string} layerId - ID to assign to the layer.
- * @param {string} sourceName - Name of the source added to the map.
+ * Returns an `AddLayerObject` for café map icons.
  *
  * @see https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/#addlayer
  * @see https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/AddLayerObject/
@@ -65,10 +62,14 @@ function cafeIconLayer() {
   return layer;
 }
 
+/**
+ * Returns an `AddLayerObject` for café map labels.
+ *
+ * @returns {ML.AddLayerObject}
+ */
 function cafeLabelLayer() {
   const layer = {
     id: CAFES.labelLayerId,
-    // @see https://maplibre.org/maplibre-style-spec/layers/#type
     type: "symbol",
     source: CAFES.sourceName,
     layout: {
