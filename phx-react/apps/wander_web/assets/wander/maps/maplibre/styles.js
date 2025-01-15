@@ -58,7 +58,7 @@ export const vectorStyle = {
       type: "vector",
       tiles: ["https://vector.openstreetmap.org/shortbread_v1/{z}/{x}/{y}.mvt"],
       minzoom: 0,
-      maxzoom: 19,
+      maxzoom: 14,
     },
   },
   layers: [

@@ -22,8 +22,8 @@ import {
   useDocumentTitle,
   toDocumentTitle,
 } from "/wander/common/hooks/document_title";
-import { LeafletMap } from "/wander/maps/leaflet";
-import { MapLibreMap } from "/wander/maps/maplibre";
+import { LeafletMap } from "/wander/maps/leaflet_map";
+import { MapLibreMap } from "/wander/maps/maplibre_map";
 
 export function MapPage(_props) {
   const [_location, navigate] = useLocation();
