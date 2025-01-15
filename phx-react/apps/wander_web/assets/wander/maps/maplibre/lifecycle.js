@@ -68,7 +68,6 @@ export function createMap(nodeId, initialCenter, initialZoomLevel) {
  * @see https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/RequestParameters/
  */
 function transformRequest(url, resourceType = null) {
-
   // [start] Example
   const prefix = "https://vector.openstreetmap.org/shortbread_v1/";
 

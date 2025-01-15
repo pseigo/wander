@@ -63,8 +63,8 @@ function cafeSource() {
     type: "geojson",
     data: {
       type: "FeatureCollection",
-      features: pointFeatures
-    }
+      features: pointFeatures,
+    },
   };
 
   return sourceSpec;

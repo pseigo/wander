@@ -18,4 +18,4 @@ export const CAFES = {
   sourceName: "cafes",
   iconLayerId: "cafeIcons",
   labelLayerId: "cafeLabels",
-}
+};

@@ -36,7 +36,11 @@ export function MapLibreMap() {
   const [zoomLevel, setZoomLevel] = useState(initialZoomLevel);
 
   useEffect(() => {
-    const map = MapLibre.createMap(mapNodeId.current, initialCenter, initialZoomLevel);
+    const map = MapLibre.createMap(
+      mapNodeId.current,
+      initialCenter,
+      initialZoomLevel
+    );
     mapRef.current = map;
 
     // Data
@@ -47,9 +51,12 @@ export function MapLibreMap() {
     });
 
     // Interaction
-    map.on("click", CAFES.iconLayerId, (e) => console.log("clicked", e));
-    map.on("touchstart", CAFES.iconLayerId, (e) => console.log("touchstart", e));
-    map.on("touchend", CAFES.iconLayerId, (e) => console.log("touchend", e));
+    // prettier-ignore
+    {
+      map.on("click", CAFES.iconLayerId, (e) => console.log("clicked", e));
+      map.on("touchstart", CAFES.iconLayerId, (e) => console.log("touchstart", e));
+      map.on("touchend", CAFES.iconLayerId, (e) => console.log("touchend", e));
+    }
 
     // Map state for debug panels
     map.on("mousemove", (e) => {

@@ -66,7 +66,9 @@ function classesForPosition(position) {
       return "bottom-0 left-0";
   }
 
-  throw new Error(`[PanelGroup] '${position}' is not a valid \`PanelGroupPosition\``);
+  throw new Error(
+    `[PanelGroup] '${position}' is not a valid \`PanelGroupPosition\``
+  );
 }
 
 /**
@@ -83,5 +85,7 @@ function classesForStackDirection(stackDirection) {
       return "flex-row";
   }
 
-  throw new Error(`[PanelGroup] '${stackDirection}' is not a valid \`PanelGroupStackDirection\``);
+  throw new Error(
+    `[PanelGroup] '${stackDirection}' is not a valid \`PanelGroupStackDirection\``
+  );
 }

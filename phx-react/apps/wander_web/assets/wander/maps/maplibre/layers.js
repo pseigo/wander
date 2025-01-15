@@ -56,7 +56,7 @@ function cafeIconLayer() {
       "icon-image": "marker-small-4x",
       "icon-overlap": "always",
       "icon-size": 0.25,
-    }
+    },
   };
 
   return layer;
@@ -78,8 +78,8 @@ function cafeLabelLayer() {
       "text-overlap": "never",
       "text-anchor": "top",
       "text-size": 12,
-      "text-offset": [0, 0.80],
-    }
+      "text-offset": [0, 0.8],
+    },
   };
 
   return layer;

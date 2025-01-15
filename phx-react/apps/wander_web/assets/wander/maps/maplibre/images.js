@@ -21,7 +21,9 @@
  */
 export async function addImages(map) {
   /** @type {ML.GetResourceResponse} */
-  const response = await map.loadImage("/images/icons/maps/marker-small@4x.png");
+  const response = await map.loadImage(
+    "/images/icons/maps/marker-small@4x.png"
+  );
   const markerSmall4x = response.data;
   map.addImage("marker-small-4x", markerSmall4x);
 }
