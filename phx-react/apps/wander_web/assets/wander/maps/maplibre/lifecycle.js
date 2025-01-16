@@ -32,7 +32,7 @@ export function createMap(nodeId, initialCenter, initialZoomLevel) {
     //transformRequest: transformRequest,
     attributionControl: {
       compact: false,
-      customAttribution: "&copy; OpenStreetMap",
+      customAttribution: "Map and Place Data &copy; OpenStreetMap, ODbL",
     },
     center: [initialCenter.longitude, initialCenter.latitude],
     zoom: initialZoomLevel,
