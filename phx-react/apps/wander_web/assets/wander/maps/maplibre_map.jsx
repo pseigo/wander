@@ -22,18 +22,38 @@ import { randomLowerAlphaNumericString } from "/wander/common/strings";
 
 import * as MapLibre from "/wander/maps/maplibre";
 import { CAFES } from "/wander/maps/maplibre/constants";
+import { sampleCafe } from "/wander/maps/maplibre/sources";
 import { PanelGroup } from "/wander/maps/panels/panel_group";
 import { PointerPositionPanel } from "/wander/maps/panels/pointer_position_panel";
 import { ZoomLevelPanel } from "/wander/maps/panels/zoom_level_panel";
+import { FeatureSheet } from "/wander/maps/feature_sheet";
 
 const initialCenter = { longitude: -114.0716, latitude: 51.0428 };
-const initialZoomLevel = 13;
+const initialZoomLevel = 15;
+
+/**
+ * When a Map click event fires and no layer click event is observed within
+ * this time (before or after as I'm not sure if the library guarantees order),
+ * we assume that the layer (determined by the callsite of this constant) was
+ * _not_ clicked.
+ *
+ * This is hacky. Would be happy to know if the map library offers a way to
+ * determine if a map click was _not_ on one or more particular layers without
+ * numerous potential timing bugs.
+ */
+const k_mapClickConsideredOutsideLayerAfterMillis = 10;
+const sampleFeature = sampleCafe();
 
 export function MapLibreMap() {
   const mapNodeId = useRef(`MapLibreMap-${randomLowerAlphaNumericString()}`);
   const mapRef = useRef(null);
+
   const [pointerPosition, setPointerPosition] = useState(initialCenter);
   const [zoomLevel, setZoomLevel] = useState(initialZoomLevel);
+
+  const [selectedFeature, setSelectedFeature] = useState(null);
+  const [clickedAt, setClickedAt] = useState({ map: null, layer: null });
+  const mapClickConsideredOutsideLayerTimerRef = useRef(null);
 
   useEffect(() => {
     const map = MapLibre.createMap(
@@ -43,31 +63,14 @@ export function MapLibreMap() {
     );
     mapRef.current = map;
 
-    // Data
-    map.on("load", async () => {
-      MapLibre.addSources(map);
-      await MapLibre.addImages(map);
-      MapLibre.addLayers(map);
-    });
-
-    // Interaction
-    // prettier-ignore
-    {
-      map.on("click", CAFES.iconLayerId, (e) => console.log("clicked", e));
-      map.on("touchstart", CAFES.iconLayerId, (e) => console.log("touchstart", e));
-      map.on("touchend", CAFES.iconLayerId, (e) => console.log("touchend", e));
-    }
-
-    // Map state for debug panels
-    map.on("mousemove", (e) => {
-      const longitude = e.lngLat["lng"];
-      const latitude = e.lngLat["lat"];
-      setPointerPosition({ longitude: longitude, latitude: latitude });
-    });
-    map.on("zoom", (_e) => {
-      const zoomLevel = map.getZoom();
-      setZoomLevel(zoomLevel);
-    });
+    registerDataLoadListener(map);
+    registerInteractionListeners(
+      map,
+      setSelectedFeature,
+      setClickedAt,
+      mapClickConsideredOutsideLayerTimerRef
+    );
+    registerDebugInfoStateUpdaters(map, setPointerPosition, setZoomLevel);
 
     return () => {
       MapLibre.deleteMap(mapRef.current);
@@ -75,18 +78,135 @@ export function MapLibreMap() {
     };
   }, []);
 
+  useEffect(() => {
+    if (clickedAt.map === null && clickedAt.layer === null) {
+      // Cleared after both events fired. (Or mounting.)
+      return;
+    }
+
+    if (clickedAt.map === null || clickedAt.layer === null) {
+      // Either `clickedAt.map` or `clickedAt.millis` is null but not both.
+      // Waiting for other event to fire. (Or its state update to go through.)
+      return;
+    }
+
+    // Now, both `clickedAt.map` and `clickedAt.layer` are non-null.
+
+    // Clear timer
+    if (mapClickConsideredOutsideLayerTimerRef.current !== null) {
+      clearTimeout(mapClickConsideredOutsideLayerTimerRef.current);
+      mapClickConsideredOutsideLayerTimerRef.current = null;
+    }
+
+    if (clickedAt.map >= clickedAt.layer) {
+      // Map event queued a state update first.
+      const dtMillis = clickedAt.map - clickedAt.layer;
+      console.log(
+        `[map clicked] event fired ${dtMillis}ms after layer click event`
+      );
+    } else {
+      // Layer event queued a state update first.
+      const dtMillis = clickedAt.layer - clickedAt.map;
+      console.log(
+        `[layer clicked] event fired ${dtMillis}ms after map click event`
+      );
+    }
+
+    setClickedAt({ map: null, layer: null });
+  }, [clickedAt]);
+
   return (
-    // prettier-ignore
     <div className="h-full static z-0">
+      {/*
+      <FeatureSheet feature={sampleFeature} />
       <PanelGroup position="bottom-left" stack="vertical">
         <PointerPositionPanel position={pointerPosition} />
         <ZoomLevelPanel zoomLevel={zoomLevel} />
       </PanelGroup>
+      */}
 
-      <div id={mapNodeId.current} className={clsx([
-        "h-full",
-        "bg-gray-300"
-      ])}></div>
+      <FeatureSheet
+        feature={selectedFeature}
+        onClose={() => setSelectedFeature(null)}
+      />
+
+      <div
+        id={mapNodeId.current}
+        className={clsx(["h-full", "bg-gray-300"])}
+      ></div>
     </div>
   );
+}
+
+function registerInteractionListeners(
+  map,
+  setSelectedFeature,
+  setClickedAt,
+  mapClickConsideredOutsideLayerTimerRef
+) {
+  map.on("mouseenter", CAFES.iconLayerId, (_e) => {
+    map.getCanvas().style.cursor = "pointer";
+  });
+  map.on("mouseleave", CAFES.iconLayerId, (_e) => {
+    map.getCanvas().style.cursor = "";
+  });
+
+  map.on("click", (e) => {
+    console.log("[map clicked]", e);
+    const rawFeatures = e.features;
+    console.log("[map clicked](cont'd)", rawFeatures);
+
+    mapClickConsideredOutsideLayerTimerRef.current = setTimeout(() => {
+      setSelectedFeature(null);
+      setClickedAt({ map: null, layer: null });
+    }, k_mapClickConsideredOutsideLayerAfterMillis);
+
+    setClickedAt((clickedAt) => {
+      return { ...clickedAt, map: performance.now() };
+    });
+  });
+
+  map.on("click", CAFES.iconLayerId, (e) => {
+    console.log("[layer clicked]", e);
+    console.log(
+      `[layer clicked](cont'd) ${e.features.length} feature(s):`,
+      e.features
+    );
+
+    const rawFeature = e.features[0];
+    const properties = rawFeature.properties;
+    const id = properties["@id"];
+    const geometry = rawFeature.geometry;
+    const feature = { id: id, properties: properties, geometry: geometry };
+
+    setSelectedFeature(feature);
+    setClickedAt((clickedAt) => {
+      return { ...clickedAt, layer: performance.now() };
+    });
+  });
+
+  // TODO: touch events
+  // map.on("touchstart", CAFES.iconLayerId, (e) => { ... });
+  // map.on("touchmove", CAFES.iconLayerId, (e) => { ... });
+  // map.on("touchend", CAFES.iconLayerId, (e) => { ... });
+}
+
+function registerDataLoadListener(map) {
+  map.on("load", async () => {
+    MapLibre.addSources(map);
+    await MapLibre.addImages(map);
+    MapLibre.addLayers(map);
+  });
+}
+
+function registerDebugInfoStateUpdaters(map, setPointerPosition, setZoomLevel) {
+  map.on("mousemove", (e) => {
+    const longitude = e.lngLat["lng"];
+    const latitude = e.lngLat["lat"];
+    setPointerPosition({ longitude: longitude, latitude: latitude });
+  });
+  map.on("zoom", (_e) => {
+    const zoomLevel = map.getZoom();
+    setZoomLevel(zoomLevel);
+  });
 }

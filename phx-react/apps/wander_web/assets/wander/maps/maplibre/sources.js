@@ -69,3 +69,47 @@ function cafeSource() {
 
   return sourceSpec;
 }
+
+/**
+ * @returns {Feature}
+ */
+export function sampleCafe() {
+  const pointFeatures = cafes.filter((e) => {
+    if (!Object.hasOwn(e, "type")) {
+      return false;
+    }
+    const elementType = e["type"];
+
+    if (elementType !== "Feature") {
+      return false;
+    }
+
+    if (!Object.hasOwn(e, "geometry")) {
+      return false;
+    }
+    const geometry = e["geometry"];
+
+    if (!Object.hasOwn(geometry, "type")) {
+      return false;
+    }
+    const geometryType = geometry["type"];
+
+    return geometryType === "Point" && Object.hasOwn(geometry, "coordinates");
+  });
+
+  const rawFeature = pointFeatures.find((feature) => {
+    return feature.properties.name === "Monogram Coffee";
+  });
+
+  if (rawFeature === undefined) {
+    throw new Error("could not find a feature matching the search criteria");
+  }
+
+  const feature = {
+    id: rawFeature.properties["@id"],
+    properties: rawFeature.properties,
+    geometry: rawFeature.geometry,
+  };
+
+  return feature;
+}

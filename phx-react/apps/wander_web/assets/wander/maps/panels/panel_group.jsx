@@ -37,7 +37,7 @@ export function PanelGroup({ children, position, stack = "vertical" }) {
     // prettier-ignore
     <div
       className={clsx([
-        "absolute z-[1]", classesForPosition(position),
+        "absolute z-[10]", classesForPosition(position),
         "flex", classesForStackDirection(stack),
       ])}
     >
