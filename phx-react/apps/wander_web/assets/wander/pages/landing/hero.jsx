@@ -32,7 +32,7 @@ export function Hero() {
     <div
       className={clsx([
         horizontalGutterPaddingClasses,
-        "pt-[calc(theme(spacing.touch*3/4)+env(safe-area-inset-top))] pb-touch*3/4",
+        "pt-[calc(theme(spacing.touch*5/4)+env(safe-area-inset-top))] pb-touch*5/4",
         "bg-[#007ed7] dark:bg-[rgb(0,62,107)]",
         "text-center text-white",
       ])}

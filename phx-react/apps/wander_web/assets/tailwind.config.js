@@ -43,8 +43,9 @@ module.exports = {
         "touch/3": "calc(44px/3)",
         "touch/2": "22px",
         "touch": "44px",
-        "touch*3/4": "55px",
+        "touch*5/4": "55px",
         "touch*3/2": "66px",
+        "touch*7/4": "77px",
         "touch*2": "88px"
       },
       lineHeight: ({ theme }) => ({ ...theme("spacing") }),
