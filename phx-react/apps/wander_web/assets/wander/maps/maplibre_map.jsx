@@ -163,7 +163,13 @@ function registerInteractionListeners(
     //console.log("[map clicked](cont'd)", rawFeatures);
 
     mapClickConsideredOutsideLayerTimerRef.current = setTimeout(() => {
-      setSelectedFeature(null);
+      // Uncomment this line to clear the selected feature when the user
+      // clicks/taps on the map.
+      //
+      // For now it's disabled because when it's on, if you have a feature
+      // selected you can't double tap/click to zoom without closing the sheet.
+      //setSelectedFeature(null);
+
       setClickedAt({ map: null, layer: null });
     }, k_mapClickConsideredOutsideLayerAfterMillis);
 
