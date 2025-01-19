@@ -15,24 +15,20 @@
  */
 
 import { clsx } from "clsx";
+import { memo } from "react";
 
-import { IconButton } from "/wander/common/components/icon_button";
-
-export function Actions({ onClose }) {
+// TODO: how to make this be shown when the sheet shows, rather than popping in late?
+export const ResizeHandle = memo(function ResizeHandle() {
   return (
-    <div className={clsx(["flex flex-row gap-[9px]", "float-right"])}>
-      <IconButton
-        iconName="hero-bookmark"
-        size="compact"
-        border={true}
-        onClick={() => console.log("[action button clicked] TODO")}
-      />
-      <IconButton
-        iconName="hero-x-mark"
-        size="compact"
-        border={true}
-        onClick={onClose}
-      />
-    </div>
+    <img
+      src="/images/decorations/sheet-resize-handle-light.svg"
+      aria-hidden="true"
+      className={clsx([
+        "absolute",
+        "top-[4px]",
+        "left-1/2 translate-x-[-50%]",
+        "pointer-events-none",
+      ])}
+    />
   );
-}
+});

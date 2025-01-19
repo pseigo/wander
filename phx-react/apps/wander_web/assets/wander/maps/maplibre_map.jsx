@@ -98,6 +98,7 @@ export function MapLibreMap() {
       mapClickConsideredOutsideLayerTimerRef.current = null;
     }
 
+    /*
     if (clickedAt.map >= clickedAt.layer) {
       // Map event queued a state update first.
       const dtMillis = clickedAt.map - clickedAt.layer;
@@ -111,6 +112,7 @@ export function MapLibreMap() {
         `[layer clicked] event fired ${dtMillis}ms after map click event`
       );
     }
+    */
 
     setClickedAt({ map: null, layer: null });
   }, [clickedAt]);
@@ -118,17 +120,21 @@ export function MapLibreMap() {
   return (
     <div className="h-full static z-0">
       {/*
-      <FeatureSheet feature={sampleFeature} />
       <PanelGroup position="bottom-left" stack="vertical">
         <PointerPositionPanel position={pointerPosition} />
         <ZoomLevelPanel zoomLevel={zoomLevel} />
       </PanelGroup>
       */}
 
-      <FeatureSheet
-        feature={selectedFeature}
-        onClose={() => setSelectedFeature(null)}
-      />
+      {/*
+      <FeatureSheet feature={sampleFeature} />
+      */}
+      {selectedFeature !== null && (
+        <FeatureSheet
+          feature={selectedFeature}
+          onClose={() => setSelectedFeature(null)}
+        />
+      )}
 
       <div
         id={mapNodeId.current}
@@ -152,9 +158,9 @@ function registerInteractionListeners(
   });
 
   map.on("click", (e) => {
-    console.log("[map clicked]", e);
-    const rawFeatures = e.features;
-    console.log("[map clicked](cont'd)", rawFeatures);
+    //console.log("[map clicked]", e);
+    //const rawFeatures = e.features;
+    //console.log("[map clicked](cont'd)", rawFeatures);
 
     mapClickConsideredOutsideLayerTimerRef.current = setTimeout(() => {
       setSelectedFeature(null);
@@ -167,11 +173,11 @@ function registerInteractionListeners(
   });
 
   map.on("click", CAFES.iconLayerId, (e) => {
-    console.log("[layer clicked]", e);
-    console.log(
-      `[layer clicked](cont'd) ${e.features.length} feature(s):`,
-      e.features
-    );
+    //console.log("[layer clicked]", e);
+    //console.log(
+    //  `[layer clicked](cont'd) ${e.features.length} feature(s):`,
+    //  e.features
+    //);
 
     const rawFeature = e.features[0];
     const properties = rawFeature.properties;

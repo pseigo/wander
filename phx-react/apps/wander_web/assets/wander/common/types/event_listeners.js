@@ -14,25 +14,12 @@
  * limitations under the License.
  */
 
-import { clsx } from "clsx";
+/**
+ * @callback mouseDownListener
+ * @param {MouseEvent} event - The "mousedown" event.
+ */
 
-import { IconButton } from "/wander/common/components/icon_button";
-
-export function Actions({ onClose }) {
-  return (
-    <div className={clsx(["flex flex-row gap-[9px]", "float-right"])}>
-      <IconButton
-        iconName="hero-bookmark"
-        size="compact"
-        border={true}
-        onClick={() => console.log("[action button clicked] TODO")}
-      />
-      <IconButton
-        iconName="hero-x-mark"
-        size="compact"
-        border={true}
-        onClick={onClose}
-      />
-    </div>
-  );
-}
+/**
+ * @callback touchStartListener
+ * @param {TouchEvent} event - The "touchstart" event.
+ */

@@ -21,12 +21,12 @@ import { Icon } from "/wander/common/components/icon";
 import { Actions } from "./header/actions";
 import { AmenityIcon } from "./header/amenity_icon";
 
-export function Header({ feature, onClose }) {
+export function Header({ feature, onClose, titleShrinkProgress }) {
   return (
     <div>
       <Actions onClose={onClose} />
       <div className="flex flex-col gap-0">
-        <Title feature={feature} />
+        <Title feature={feature} titleShrinkProgress={titleShrinkProgress} />
         <ConciseInfo feature={feature} />
         <ConciseStatus feature={feature} />
       </div>
@@ -34,19 +34,30 @@ export function Header({ feature, onClose }) {
   );
 }
 
-function Title({ feature }) {
+/**
+ * @param {Feature} feature
+ * @param {float} titleShrinkProgress in `[0, 1.0]`
+ */
+function Title({ feature, titleShrinkProgress }) {
   const name = feature.properties.name ?? (
     <span className="italic">(name unknown)</span>
   );
 
+  // titleShrinkProgress == 0 => 24px == 1.25rem;
+  // titleShrinkProgress == 1 => 20px == 1.5rem;
+  const fontSize = `calc(1.5rem - .25rem * ${titleShrinkProgress})`;
+
   return (
     <h2
       className={clsx([
-        "font-bold text-[1.5rem]",
+        "font-bold",
 
         // TODO: only clip if detent is small
         "whitespace-nowrap overflow-hidden text-ellipsis",
       ])}
+      style={{
+        fontSize: fontSize,
+      }}
     >
       {name}
     </h2>

@@ -16,12 +16,6 @@
 
 import { clsx } from "clsx";
 
-import { Header } from "./info/header";
-
-export function Info({ feature, onClose }) {
-  return (
-    <div className="select-none">
-      <Header feature={feature} onClose={onClose} />
-    </div>
-  );
+export function Info({ feature }) {
+  return <div className="select-none">info...</div>;
 }
