@@ -68,6 +68,9 @@ export function useVerticalDrag() {
     const curriedOnMouseUp = (e) => onMouseUp(e, dragRef, setIsDragging);
     const curriedOnTouchEnd = (e) => onTouchEnd(e, dragRef, setIsDragging);
 
+    const curriedOnContextMenu = (e) =>
+      onContextMenu(e, dragRef, setIsDragging);
+
     window.addEventListener("mousemove", curriedOnMouseMove);
     window.addEventListener("touchmove", curriedOnTouchMove);
 
@@ -75,7 +78,11 @@ export function useVerticalDrag() {
     window.addEventListener("touchend", curriedOnTouchEnd);
     window.addEventListener("touchcancel", curriedOnTouchEnd);
 
+    window.addEventListener("contextmenu", curriedOnContextMenu);
+
     return () => {
+      window.removeEventListener("contextmenu", curriedOnContextMenu);
+
       window.removeEventListener("touchcancel", curriedOnTouchEnd);
       window.removeEventListener("touchend", curriedOnTouchEnd);
       window.removeEventListener("mouseup", curriedOnMouseUp);
@@ -99,10 +106,66 @@ export function useVerticalDrag() {
 //
 // (*) = only for debug purposes
 
+/**
+ * Possible `MouseEvent.button` values for mouse events **caused by** the
+ * "depression or release of a mouse button"; `MouseEvent.button` is not
+ * meaningful for `MouseEvent`s triggered by other causes.
+ *
+ * @see https://w3c.github.io/uievents/#dom-mouseevent-button
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
+ */
+const k_mouseButton = {
+  /** e.g., left mouse button */
+  primary: 0,
+
+  /** e.g., middle mouse button, mouse wheel button */
+  auxiliary: 1,
+
+  /** e.g., right mouse button */
+  secondary: 2,
+
+  /** e.g., special 'back' button on a mouse */
+  x1: 3,
+
+  /** e.g., special 'forward' button on a mouse */
+  x2: 4,
+};
+
 function onMouseDown(e, dragRef, setIsDragging) {
   const clientY = e.clientY;
-  //console.log("[useVerticalDrag] mousedown", e, e.currentTarget, clientY);
-  onDragStart(e, clientY, dragRef, setIsDragging);
+  //console.log("[useVerticalDrag] mousedown", e, e.currentTarget, clientY, e.button);
+
+  // prettier-ignore
+  if (e.button === k_mouseButton.primary)
+  {
+    onDragStart(e, clientY, dragRef, setIsDragging);
+  }
+  else if (e.button === k_mouseButton.secondary)
+  {
+    // Fallback for `onContextMenu` due to the following behaviour:
+    //
+    // > Any right-click event that is not disabled (by calling the click
+    // > event's `preventDefault()` method) will result in a `contextmenu`
+    // > event being fired at the targeted element.
+    // >
+    // > **Note**: An exception to this in Firefox: if the user holds down the
+    // > Shift key while right-clicking, then the context menu will be shown
+    // > without a `contextmenu` event being fired.
+    // >
+    // > -- via https://web.archive.org/web/20250116015121/https://developer.mozilla.org/en-US/docs/Web/API/Element/contextmenu_event
+    // >
+    // > (Mozilla Contributors, CC BY-SA 2.5)
+    //
+    onDragEnd(e, dragRef, setIsDragging);
+  }
+}
+
+function onContextMenu(e, dragRef, setIsDragging) {
+  //console.log("[useVerticalDrag] contextmenu", e, e.button);
+
+  // End drag now because the application will not receive any "mouseup" events
+  // while the system's context menu is open.
+  onDragEnd(e, dragRef, setIsDragging);
 }
 
 function onMouseMove(e, dragRef, setDY) {
@@ -111,8 +174,11 @@ function onMouseMove(e, dragRef, setDY) {
 }
 
 function onMouseUp(e, dragRef, setIsDragging) {
-  //console.log("[useVerticalDrag] mouseup", e);
-  onDragEnd(e, dragRef, setIsDragging);
+  //console.log("[useVerticalDrag] mouseup", e, e.button);
+
+  if (e.button === k_mouseButton.primary) {
+    onDragEnd(e, dragRef, setIsDragging);
+  }
 }
 
 function onTouchStart(e, dragRef, setIsDragging) {
