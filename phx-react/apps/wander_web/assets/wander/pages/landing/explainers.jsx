@@ -27,10 +27,10 @@ export function Explainers({ className }) {
         </Explainer.Title>
         <Explainer.Points>
           <Explainer.Point>
-            Gone are the days of not being able to find a place on the map if
-            you don't know its name. In addition, we don't favour one business
-            over another in search results. If it’s in OpenStreetMap (
-            <abbr>OSM</abbr>) you can see it without complications.
+            Gone are the days of not being able to find a place on the map and
+            search results that favour one business over another. If it’s in
+            OpenStreetMap (<abbr>OSM</abbr>) you can see it without
+            complications.
           </Explainer.Point>
 
           <Explainer.Point>
@@ -47,23 +47,37 @@ export function Explainers({ className }) {
         <Explainer.Title>Save your favourite places</Explainer.Title>
         <Explainer.Points>
           <Explainer.Point>
-            Create collections and nest them like folders on a computer.
+            <InternalLink href="/docs/collections">Save</InternalLink> places to
+            collections and nest them like folders on a computer.
           </Explainer.Point>
 
           <Explainer.Point>
-            Make a collection public to share by URL, and decide if nested
-            collections should also be public or stay private.
-          </Explainer.Point>
-
-          <Explainer.Point>Attach notes to your saved places.</Explainer.Point>
-
-          <Explainer.Point>
-            Customize how your collections look on the map.
+            <InternalLink href="/docs/collections/share">Share</InternalLink>{" "}
+            collections with others, or keep them private.
           </Explainer.Point>
 
           <Explainer.Point>
-            Export your collections to portable files at any time to backup,
-            share, or eject from Wander.
+            <InternalLink href="/docs/check-ins">Check-in</InternalLink> when
+            you visit and write notes to remember how it went.{" "}
+            <PointNote>
+              (Check-ins are{" "}
+              <InternalLink href="/docs/check-ins/privacy">
+                always kept private
+              </InternalLink>
+              .)
+            </PointNote>
+          </Explainer.Point>
+
+          <Explainer.Point>
+            <InternalLink href="/docs/collections/customize">
+              Customize
+            </InternalLink>{" "}
+            how your saved places look on the map.
+          </Explainer.Point>
+
+          <Explainer.Point>
+            <InternalLink href="/docs/export">Export</InternalLink> your data to
+            portable files at any time to backup, share, or eject from Wander.
           </Explainer.Point>
         </Explainer.Points>
       </Explainer>
@@ -74,24 +88,28 @@ export function Explainers({ className }) {
           <Explainer.Point>
             You can browse, create collections, and export your data without
             signing in.{" "}
-            <span className="text-gray-500 dark:text-gray-400 italic">
+            <PointNote>
               (See{" "}
               <InternalLink href="/docs/browser-storage-caveats">
                 caveats
               </InternalLink>{" "}
               of browser storage.)
-            </span>
+            </PointNote>
           </Explainer.Point>
 
           <Explainer.Point>
-            Create a free account to back up your data, sync across devices, and
-            share collections.
+            <InternalLink href="/account/new">
+              Create a free account
+            </InternalLink>{" "}
+            to back up your data, sync across devices, and share collections.
           </Explainer.Point>
 
           <Explainer.Point>
-            Currently there are no paid plans, but free accounts do have storage
-            limits. In the future, we may offer premium tiers to support hosting
-            costs and fund future development.
+            <PointNote>
+              Currently there are no paid plans, but free accounts do have
+              storage limits. In the future, we may offer premium tiers to
+              support hosting costs and fund future development.
+            </PointNote>
           </Explainer.Point>
 
           <Explainer.Point>
@@ -108,5 +126,13 @@ export function Explainers({ className }) {
         </Explainer.Points>
       </Explainer>
     </article>
+  );
+}
+
+function PointNote({ children }) {
+  return (
+    <span className="text-gray-500 dark:text-gray-400 italic text-[.90rem]">
+      {children}
+    </span>
   );
 }
