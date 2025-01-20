@@ -114,27 +114,34 @@ export function FeatureSheet({ feature, onClose }) {
           transform: `translateY(${dY}px)`,
         }}
       >
-        <div className="px-touch/4 pb-[calc(theme(spacing[touch/2])_+_env(safe-area-inset-bottom))]">
-          <div
-            className="h-[100px] overflow-scroll"
-            onPointerDown={(e) => e.stopPropagation()}
-            onTouchStart={(e) => e.stopPropagation()}
-            onPointerMove={(e) => e.stopPropagation()}
-            onTouchMove={(e) => e.stopPropagation()}
-          >
-            <p>foobar</p>
-            <p>foobar</p>
-            <p>foobar</p>
-            <p>foobar</p>
-            <p>foobar</p>
-            <p>foobar</p>
-            <p>foobar</p>
-            <p>foobar</p>
-            <p>foobar</p>
-            <p>foobar</p>
-            <p>foobar</p>
-            <p>foobar</p>
-          </div>
+        <div
+          className={clsx([
+            "m-touch/4",
+            "p-touch/4 h-[150px]",
+            //"pb-[calc(theme(spacing[touch/2])_+_env(safe-area-inset-bottom))]",
+            "overflow-y-scroll",
+            "border-2 border-gray-300 rounded-md",
+          ])}
+          onPointerDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          onPointerMove={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
+        >
+          <span>Things we would like to contain to a scrolling container:</span>
+          <ul className="list-disc list-inside">
+            <li>foobar</li>
+            <li>foobar</li>
+            <li>foobar</li>
+            <li>foobar</li>
+            <li>foobar</li>
+            <li>foobar</li>
+            <li>foobar</li>
+            <li>foobar</li>
+            <li>foobar</li>
+            <li>foobar</li>
+            <li>foobar</li>
+            <li>foobar</li>
+          </ul>
         </div>
       </div>
     </div>

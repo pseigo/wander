@@ -17,5 +17,7 @@
 import { clsx } from "clsx";
 
 export function Info({ feature }) {
+  return null; // stub
+
   return <div className="select-none">info...</div>;
 }
