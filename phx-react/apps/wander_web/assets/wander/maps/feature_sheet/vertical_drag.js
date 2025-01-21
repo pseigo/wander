@@ -33,20 +33,23 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * - `onMouseDown` - The listener to register on the draggable element's "mousedown" event.
  * - `onTouchStart` - The listener to register on the draggable element's "touchstart" event.
  *
+ * @param {integer} initialDY - Initial vertical displacement in pixels
+ *  (negative is up, positive is down). Defaults to `0`.
+ *
  * @returns {[integer, boolean, mouseDownListener, touchStartListener]}
  *  `[dY, isDragging, onMouseDown, onStartStart]`
  */
-export function useVerticalDrag() {
+export function useVerticalDrag(initialDY = 0) {
   // State used outside of renders.
   const dragRef = useRef({
-    dY: 0,
+    dY: initialDY,
     isDragging: false,
     draggingInitialDY: null,
     draggingInitialY: null,
   });
 
   // State used in renders (if the hook's client wishes to).
-  const [dY, setDY] = useState(0);
+  const [dY, setDY] = useState(initialDY);
   const [isDragging, setIsDragging] = useState(false);
 
   // Event listeners to be registered on the draggable DOM Element.
