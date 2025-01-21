@@ -18,5 +18,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@import "./common/styles/material_symbols";
+
 @import "../vendor/leaflet/leaflet.css";
 @import "../node_modules/maplibre-gl/dist/maplibre-gl.css";

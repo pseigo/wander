@@ -65,8 +65,8 @@ module.exports = {
     plugin(({addVariant}) => addVariant("phx-submit-loading", [".phx-submit-loading&", ".phx-submit-loading &"])),
     plugin(({addVariant}) => addVariant("phx-change-loading", [".phx-change-loading&", ".phx-change-loading &"])),
 
-    // Embeds Heroicons (https://heroicons.com) into your app.css bundle
-    // See your `CoreComponents.icon/1` for more information.
+    // Embeds Heroicons (https://heroicons.com) into the `global.css` bundle.
+    // See the Phoenix app's `CoreComponents.icon/1` for more information.
     //
     plugin(function({matchComponents, theme}) {
       let iconsDir = path.join(__dirname, "../../../deps/heroicons/optimized")
