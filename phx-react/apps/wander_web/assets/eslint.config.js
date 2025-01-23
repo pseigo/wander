@@ -23,6 +23,7 @@ export default [
   {
     name: "wander",
     files: [
+      "*.config.{js,cjs}",
       "wander/**/*.{js,jsx,ts,tsx}"
     ],
     ignores: [],
