@@ -75,9 +75,15 @@ function ConciseInfo({ feature }) {
     >
       <span>Coffee Shop</span>
       <span aria-hidden="true">·</span>
-      <div className="flex flex-row gap-1.5 items-baseline">
+      <div className="flex flex-row gap-[.12rem] items-baseline relative">
+        <AmenityIcon name="accessible_forward" />
+        <AmenityIcon name="wc" />
+        <AmenityIcon name="table_bar" />
+        <AmenityIcon name="deck" />
+        <AmenityIcon name="wifi_lock" />
+        {/*
         <AmenityIcon name="hero-wifi-micro" />
-        {/* TODO: Get Material icons or another set to support more amenity icons. */}
+				*/}
       </div>
     </div>
   );
@@ -85,8 +91,10 @@ function ConciseInfo({ feature }) {
 
 function ConciseStatus({ feature }) {
   return (
-    <div className={clsx(["flex flex-row gap-[5px]", "text-[1rem]"])}>
-      <span className={clsx(["font-semibold text-[#01a001]"])}>Open</span>
+    <div
+      className={clsx(["flex flex-row gap-[5px] mt-[.2rem]", "text-[1rem]"])}
+    >
+      <span className={clsx(["font-semibold text-[#479768]"])}>Open</span>
 
       <span aria-hidden="true">·</span>
 

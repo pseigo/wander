@@ -14,8 +14,26 @@
  * limitations under the License.
  */
 
-import { Icon } from "/wander/common/components/icon";
+import { clsx } from "clsx";
+import { memo } from "react";
 
-export function AmenityIcon({ name }) {
-  return <Icon name={name} size="micro" className="text-[#568bdb]" />;
-}
+import { MaterialIcon } from "/wander/common/components/icon";
+
+/**
+ * Renders an amenity icon. See `MaterialIcon` for appearance utility classes.
+ */
+export const AmenityIcon = memo(function AmenityIcon({ name, className }) {
+  return (
+    <MaterialIcon
+      name={name}
+      className={clsx([
+        "text-[#46afcc]",
+        "text-[1.125rem]",
+        // Shift symbols down by ~11.5%-12% of font size.
+        "relative top-[.135rem]",
+        "opsz-20 grad-0 dark:grad-n25",
+        className,
+      ])}
+    />
+  );
+});

@@ -13,9 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { clsx } from "clsx";
-
-export function Info({ feature }) {
-  return <div className="w-full">Info</div>;
-}
