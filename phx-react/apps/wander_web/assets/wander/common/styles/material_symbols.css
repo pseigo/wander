@@ -79,12 +79,14 @@
 
   --material-symbol-opsz: 24;
   --material-symbol-grad: 0;
+  --material-symbol-fill: 0;
 }
 
 span.material-symbols-outlined {
   font-variation-settings:
     "opsz" var(--material-symbol-opsz),
-    "GRAD" var(--material-symbol-grad);
+    "GRAD" var(--material-symbol-grad),
+    "FILL" var(--material-symbol-fill);
 }
 
 /* [start] Custom axes utility classes */
@@ -106,6 +108,10 @@ span.material-symbols-outlined.grad-0 {
 }
 span.material-symbols-outlined.grad-200 {
   --material-symbol-grad: 200;
+}
+
+span.material-symbols-outlined.fill {
+  --material-symbol-fill: 1;
 }
 /* [end] Custom axes utility classes */
 /* [end] Material Symbols */
