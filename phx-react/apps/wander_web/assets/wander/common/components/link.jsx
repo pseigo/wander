@@ -35,30 +35,64 @@ import { Link as WouterLink } from "wouter";
 
 /**
  * @param {object} props
+ * @param {ReactElement} props.children
+ * @param {boolean} props.newTab - Opens in a new tab or window (depending on
+ *  the user's browser settings) when `true`, otherwise opens in the tab where
+ *  it is clicked (navigates away from the current page). Defaults to `false`.
  * @param {LinkBackground} props.background - Defaults to "auto".
  * @param {boolean} props.unstyled - If `true` does not style the link. Defaults to `false`.
  * @param {(string | string[] | null)} props.className
  */
 export function InternalLink(props) {
-  const { background = "auto", unstyled = false, className = null } = props;
+  const {
+    children,
+    newTab = false,
+    background = "auto",
+    unstyled = false,
+    className = null,
+  } = props;
 
   // TODO: Don't put `background` on element. Only accept global attributes and <a> attributes. Figure out simple way to document and process taking global attributes and element-specific attributes until/if we use TypeScript.
-  return (
-    <WouterLink
-      className={clsx([classesForLink(background, unstyled, className)])}
-      {...props}
-    />
-  );
+  if (newTab === true) {
+    return (
+      <a
+        className={clsx([classesForLink(background, unstyled, className)])}
+        target="_blank"
+        {...props}
+      >
+        {children}
+      </a>
+    );
+  } else {
+    return (
+      <WouterLink
+        className={clsx([classesForLink(background, unstyled, className)])}
+        {...props}
+      >
+        {children}
+      </WouterLink>
+    );
+  }
 }
 
 /**
  * @param {object} props
+ * @param {ReactElement} props.children
+ * @param {boolean} props.newTab - Opens in a new tab or window (depending on
+ *  the user's browser settings) when `true`, otherwise opens in the tab where
+ *  it is clicked (navigates away from the current page). Defaults to `true`.
  * @param {LinkBackground} props.background - Defaults to "auto".
  * @param {boolean} props.unstyled - If `true` does not style the link. Defaults to `false`.
  * @param {(string | string[] | null)} props.className
  */
 export function ExternalLink(props) {
-  const { background = "auto", unstyled = false, className = null } = props;
+  const {
+    children,
+    newTab = true,
+    background = "auto",
+    unstyled = false,
+    className = null,
+  } = props;
 
   // TODO: Don't put `background` on element. Only accept global attributes and <a> attributes. Figure out simple way to document and process taking global attributes and element-specific attributes until/if we use TypeScript.
   // TODO: Merge custom 'rel' string with privacy/security presets, and make sure the 'rel' we set doesn't get overridden. e.g., rel="help"
@@ -66,10 +100,12 @@ export function ExternalLink(props) {
   return (
     <a
       className={clsx([classesForLink(background, unstyled, className)])}
-      target="_blank"
+      target={!!newTab && "_blank"}
       rel="noreferrer noopener"
       {...props}
-    />
+    >
+      {children}
+    </a>
   );
 }
 
