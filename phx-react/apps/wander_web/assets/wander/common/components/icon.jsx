@@ -41,8 +41,6 @@ const materialPrefix = "material_";
  * and setting utility classes for its variable font axes, as using it directly
  * is more explicit and less confusing.
  *
- * @license MIT
- * @see https://github.com/tailwindlabs/heroicons/blob/master/LICENSE
  *
  * @param {object} props
  * @param {string} props.name
@@ -84,6 +82,9 @@ export function Icon({ name, size = null, className }) {
  *
  * See the Phoenix Framework documentation and generated
  * `WanderWeb.CoreComponents` module for more information on HeroIcons.
+ *
+ * @license MIT
+ * @see https://github.com/tailwindlabs/heroicons/blob/master/LICENSE
  *
  * @param {object} props
  * @param {string} props.name - The icon name prefixed with `hero-`.
@@ -130,7 +131,9 @@ export function HeroIcon({ name, size = null, className }) {
  * @see https://github.com/google/material-design-icons/blob/master/LICENSE
  *
  * @param {object} props
- * @param {string} props.name - The icon name prefixed with `hero-`.
+ * @param {string} props.name - The icon name in lower-snakecase, like
+ *  `account_circle`. This component doesn't take a prefix for its name,
+ *  unlike `HeroIcon`.
  * @param {(IconSize | null)} props.size - Defaults to `null`. If you don't set this
  *  property, be sure to set your size classes in `className`.
  * @param {(string | string[] | null | undefined)} props.className
