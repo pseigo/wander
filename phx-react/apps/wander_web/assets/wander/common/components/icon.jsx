@@ -137,8 +137,9 @@ export function HeroIcon({ name, size = null, className }) {
  * @param {(IconSize | null)} props.size - Defaults to `null`. If you don't set this
  *  property, be sure to set your size classes in `className`.
  * @param {(string | string[] | null | undefined)} props.className
+ * @param {(string | undefined)} props.style
  */
-export function MaterialIcon({ name, size = null, className }) {
+export function MaterialIcon({ name, size = null, className, style }) {
   return (
     <span
       className={clsx([
@@ -146,6 +147,7 @@ export function MaterialIcon({ name, size = null, className }) {
         classesForSize(size),
         className,
       ])}
+      style={style}
     >
       {name}
     </span>

@@ -20,9 +20,12 @@ import { memo } from "react";
 import { MaterialIcon } from "/wander/common/components/icon";
 
 /**
- * Renders an amenity icon. See `MaterialIcon` for appearance utility classes.
+ * Renders an amenity icon. See `MaterialIcon` for info on `name`.
+ *
+ * @param {object} props
+ * @param {string} props.name - The Material Symbols icon name in lower-snakecase.
  */
-export const AmenityIcon = memo(function AmenityIcon({ name, className }) {
+export const AmenityIcon = memo(function AmenityIcon({ name }) {
   return (
     <MaterialIcon
       name={name}
@@ -32,7 +35,6 @@ export const AmenityIcon = memo(function AmenityIcon({ name, className }) {
         // Shift symbols down by ~11.5%-12% of font size.
         "relative top-[.135rem]",
         "opsz-20 grad-0 dark:grad-n25",
-        className,
       ])}
     />
   );

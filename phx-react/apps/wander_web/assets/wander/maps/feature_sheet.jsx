@@ -32,7 +32,7 @@ const verticalGutterClasses = "py-[14px]";
 
 export function FeatureSheet({ feature, onClose }) {
   const elementRef = useRef(null);
-  const [dY, isDragging, onMouseDown, onTouchStart] = useVerticalDrag();
+  const [dY, isDragging, onMouseDown, onTouchStart] = useVerticalDrag(-600);
 
   /*
   // Testing querying for element heights:
@@ -67,7 +67,7 @@ export function FeatureSheet({ feature, onClose }) {
     <div className="overflow-hidden absolute inset-0 touch-pan-y">
       <div
         className={clsx([
-          "absolute bottom-0 z-[20]",
+          "absolute top-full z-[20]",
           "w-full",
           "pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]",
           "pt-px", // For `ResizeHandle`
