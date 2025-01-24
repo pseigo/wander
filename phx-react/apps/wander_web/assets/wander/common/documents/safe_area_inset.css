@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-
-@import "./common/documents/safe_area_inset";
-@import "./common/styles/material_symbols";
-
-@import "../vendor/leaflet/leaflet.css";
-@import "../node_modules/maplibre-gl/dist/maplibre-gl.css";
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0);
+  --safe-area-inset-right: env(safe-area-inset-right, 0);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0);
+  --safe-area-inset-left: env(safe-area-inset-left, 0);
+}
