@@ -64,7 +64,15 @@ export function FeatureSheet({ feature, onClose }) {
   const titleShrinkProgress = calcTitleShrinkProgress(dY);
 
   return (
-    <div className="overflow-hidden absolute inset-0 touch-pan-y">
+    <div
+      className={clsx([
+        "feature-sheet",
+        "overflow-hidden absolute",
+        "inset-0",
+        "mb-[calc(-1*env(safe-area-inset-bottom))]",
+        "touch-pan-y",
+      ])}
+    >
       <div
         className={clsx([
           "absolute top-full z-[20]",
