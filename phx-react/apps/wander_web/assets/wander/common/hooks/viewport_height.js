@@ -67,5 +67,6 @@ export function useViewportHeight() {
  * - `entry.borderBoxSize[0].blockSize` on `document.documentElement` observed
  *   with `ResizeObserver`
  * - `document.getElementsByTagName("html").item(0).offsetHeight`
+ * - `document.documentElement.getBoundingClientRect().height`
  *
  */
