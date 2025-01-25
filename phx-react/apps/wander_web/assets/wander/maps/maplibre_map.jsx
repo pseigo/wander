@@ -15,7 +15,7 @@
  */
 
 import { clsx } from "clsx";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ML from "maplibre-gl";
 
 import { randomLowerAlphaNumericString } from "/wander/common/strings";
@@ -27,6 +27,10 @@ import { PanelGroup } from "/wander/maps/panels/panel_group";
 import { PointerPositionPanel } from "/wander/maps/panels/pointer_position_panel";
 import { ZoomLevelPanel } from "/wander/maps/panels/zoom_level_panel";
 import { FeatureSheet } from "/wander/maps/feature_sheet";
+import {
+  FeatureSheetDebugPanel,
+  useFeatureSheetDebugInfo,
+} from "/wander/maps/panels/feature_sheet_debug_panel";
 
 const initialCenter = { longitude: -114.0716, latitude: 51.0428 };
 const initialZoomLevel = 15;
@@ -54,6 +58,9 @@ export function MapLibreMap() {
   const [selectedFeature, setSelectedFeature] = useState(null);
   const [clickedAt, setClickedAt] = useState({ map: null, layer: null });
   const mapClickConsideredOutsideLayerTimerRef = useRef(null);
+
+  const [getSheetDebugInfoSetters, sheetDY, sheetHeaderHeight] =
+    useFeatureSheetDebugInfo();
 
   useEffect(() => {
     const map = MapLibre.createMap(
@@ -124,15 +131,22 @@ export function MapLibreMap() {
         <PointerPositionPanel position={pointerPosition} />
         <ZoomLevelPanel zoomLevel={zoomLevel} />
       </PanelGroup>
+      <PanelGroup position="top-left" stack="vertical">
+        <FeatureSheetDebugPanel dY={sheetDY} headerHeight={sheetHeaderHeight} />
+      </PanelGroup>
       */}
 
       {/*
-      <FeatureSheet feature={sampleFeature} />
+      <FeatureSheet
+        feature={sampleFeature}
+        getDebugInfoSetters={getSheetDebugInfoSetters}
+      />
       */}
       {selectedFeature !== null && (
         <FeatureSheet
           feature={selectedFeature}
           onClose={() => setSelectedFeature(null)}
+          getDebugInfoSetters={getSheetDebugInfoSetters}
         />
       )}
 

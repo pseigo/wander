@@ -17,6 +17,10 @@
 import { clsx } from "clsx";
 import { memo, useEffect, useRef } from "react";
 
+import { useElementHeightObserver } from "/wander/common/hooks/element_height_observer";
+import { useViewportHeight } from "/wander/common/hooks/viewport_height";
+
+import { useSheetDetents } from "./feature_sheet/sheet_detents";
 import { useVerticalDrag } from "./feature_sheet/vertical_drag";
 import { Header } from "./feature_sheet/header";
 import { NavBar } from "./feature_sheet/nav_bar";
@@ -30,36 +34,29 @@ const MemoInfo = memo(Info);
 const horizontalGutterClasses = "px-[14px]";
 const verticalGutterClasses = "py-[14px]";
 
-export function FeatureSheet({ feature, onClose }) {
-  const elementRef = useRef(null);
-  const [dY, isDragging, onMouseDown, onTouchStart] = useVerticalDrag(-600);
+export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
+  const [viewportHeight] = useViewportHeight();
+  const headerRef = useRef(null);
+  const [headerHeight] = useElementHeightObserver(headerRef);
 
-  /*
-  // Testing querying for element heights:
-  const resizeObserverRef = useRef(null);
+  const [
+    dY,
+    setDY,
+    isDragging,
+    completedDrag,
+    setCompletedDrag,
+    startMouseDrag,
+    startTouchDrag,
+  ] = useVerticalDrag(0);
+  const [_currentDetent] = useSheetDetents(
+    setDY,
+    completedDrag,
+    setCompletedDrag,
+    viewportHeight,
+    headerHeight
+  );
 
-  useEffect(() => {
-    if (elementRef.current === null) {
-      return;
-    }
-
-    const headerRect = elementRef.current.getBoundingClientRect();
-    console.log("headerRect", headerRect);
-
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        console.log("[resizeObserver]", entry.contentRect.height);
-      }
-    });
-    resizeObserver.observe(elementRef.current);
-    resizeObserverRef.current = resizeObserver;
-
-    return () => {
-      resizeObserverRef.disconnect();
-      resizeObserverRef.current = null;
-    };
-  }, []);
-  */
+  //useDebugInfoReporting(getDebugInfoSetters, dY, headerHeight);
 
   const titleShrinkProgress = calcTitleShrinkProgress(dY);
 
@@ -87,9 +84,8 @@ export function FeatureSheet({ feature, onClose }) {
 
           isDragging && "select-none",
         ])}
-        ref={elementRef}
-        onMouseDown={onMouseDown}
-        onTouchStart={onTouchStart}
+        onMouseDown={startMouseDrag}
+        onTouchStart={startTouchDrag}
         style={{
           transform: `translateY(${dY}px)`,
         }}
@@ -102,6 +98,7 @@ export function FeatureSheet({ feature, onClose }) {
               feature={feature}
               onClose={onClose}
               titleShrinkProgress={titleShrinkProgress}
+              ref={headerRef}
             />
           </div>
 
@@ -113,26 +110,6 @@ export function FeatureSheet({ feature, onClose }) {
           <MemoInfo feature={feature} />
         </div>
       </div>
-
-      {/*
-      <div
-        className={clsx([
-          "absolute top-full mt-[-1px] z-[21]",
-          "w-full",
-          "pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]",
-          "border-b rounded-b-[14px]",
-          "text-black bg-[#fafafa] border-[#f4f4f4]",
-          isDragging && "select-none",
-        ])}
-        onMouseDown={onMouseDown}
-        onTouchStart={onTouchStart}
-        style={{
-          transform: `translateY(${dY}px)`,
-        }}
-      >
-        <Info feature={feature} />
-      </div>
-      */}
     </div>
   );
 }
@@ -154,6 +131,22 @@ function calcTitleShrinkProgress(dY) {
   return progress;
 }
 
+/**
+ * Reports debug info for anyone listening via the setters provided by
+ * `getDebugInfoSetters`. May have a severe drain on performance.
+ *
+ * @param {function(any)} getDebugInfoSettings
+ */
+function useDebugInfoReporting(getDebugInfoSetters, dY, headerHeight) {
+  useEffect(() => {
+    getDebugInfoSetters().dY(dY);
+  }, [dY]);
+
+  useEffect(() => {
+    getDebugInfoSetters().headerHeight(headerHeight);
+  }, [headerHeight]);
+}
+
 function VerticalDragDebugInfo({ isDragging, dY }) {
   return (
     <p className="text-xs mt-2 text-gray-500">
@@ -165,6 +158,9 @@ function VerticalDragDebugInfo({ isDragging, dY }) {
   );
 }
 
+/**
+ * A temporary component for testing scrolling within the sheet.
+ */
 function SampleInnerScrollContainer() {
   return (
     <div

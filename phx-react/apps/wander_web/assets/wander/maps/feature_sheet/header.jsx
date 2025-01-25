@@ -21,9 +21,9 @@ import { Icon } from "/wander/common/components/icon";
 import { Actions } from "./header/actions";
 import { AmenityIcon } from "./header/amenity_icon";
 
-export function Header({ feature, onClose, titleShrinkProgress }) {
+export function Header({ feature, onClose, titleShrinkProgress, ref }) {
   return (
-    <div>
+    <div className="sheet-header" ref={ref}>
       <Actions onClose={onClose} />
       <div className="flex flex-col gap-0">
         <Title feature={feature} titleShrinkProgress={titleShrinkProgress} />
@@ -45,19 +45,20 @@ function Title({ feature, titleShrinkProgress }) {
 
   // titleShrinkProgress == 0 => 24px == 1.25rem;
   // titleShrinkProgress == 1 => 20px == 1.5rem;
-  const fontSize = `calc(1.5rem - .25rem * ${titleShrinkProgress})`;
+  //const fontSize = `calc(1.5rem - .25rem * ${titleShrinkProgress})`;
 
   return (
     <h2
       className={clsx([
         "font-bold",
+        "text-[1.25rem]",
 
         // TODO: only clip if detent is small
         "whitespace-nowrap overflow-hidden text-ellipsis",
       ])}
-      style={{
-        fontSize: fontSize,
-      }}
+      //style={{
+      //  fontSize: fontSize,
+      //}}
     >
       {name}
     </h2>

@@ -17,6 +17,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
+ * Useful information about a drag gesture, made available by `useVerticalDrag`
+ * when a drag gesture completes on the corresponding element.
+ *
+ * @typedef {{initialDY: integer, finalDY: integer, pixelsPerSecond: integer}} CompletedDrag
+ */
+
+/**
  * A hook for tracking vertical drag gestures on a DOM element. Supports both
  * mouse and touch gestures.
  *
@@ -30,14 +37,18 @@ import { useCallback, useEffect, useRef, useState } from "react";
  *
  * - `isDragging` - `true` if the element is currently being dragged.
  *
- * - `onMouseDown` - The listener to register on the draggable element's "mousedown" event.
- * - `onTouchStart` - The listener to register on the draggable element's "touchstart" event.
+ * - `completedDrag` - Set to a `CompletedDrag` when a drag ends.
+ * - `setCompletedDrag` - After using `completedDrag`, you may reset it back to
+ *   null if you wish: `setCompletedDrag(null)`
+ *
+ * - `startMouseDrag` - The listener to register on the draggable element's "mousedown" event.
+ * - `startTouchDrag` - The listener to register on the draggable element's "touchstart" event.
  *
  * @param {integer} initialDY - Initial vertical displacement in pixels
  *  (negative is up, positive is down). Defaults to `0`.
  *
- * @returns {[integer, boolean, mouseDownListener, touchStartListener]}
- *  `[dY, isDragging, onMouseDown, onStartStart]`
+ * @returns {[integer, boolean, (CompletedDrag | null), React.Dispatch, mouseDownListener, touchStartListener]}
+ *  `[dY, isDragging, completedDrag, setCompletedDrag, startMouseDrag, startTouchDrag]`
  */
 export function useVerticalDrag(initialDY = 0) {
   // State used outside of renders.
@@ -46,19 +57,21 @@ export function useVerticalDrag(initialDY = 0) {
     isDragging: false,
     draggingInitialDY: null,
     draggingInitialY: null,
+    draggingStartedAt: null,
   });
 
   // State used in renders (if the hook's client wishes to).
   const [dY, setDY] = useState(initialDY);
   const [isDragging, setIsDragging] = useState(false);
+  const [completedDrag, setCompletedDrag] = useState(null);
 
   // Event listeners to be registered on the draggable DOM Element.
   const curriedOnMouseDown = useCallback(
-    (e) => onMouseDown(e, dragRef, setIsDragging),
+    (e) => onMouseDown(e, dragRef, setIsDragging, setCompletedDrag),
     [dragRef, setIsDragging]
   );
   const curriedOnTouchStart = useCallback(
-    (e) => onTouchStart(e, dragRef, setIsDragging),
+    (e) => onTouchStart(e, dragRef, setIsDragging, setCompletedDrag),
     [dragRef, setIsDragging]
   );
 
@@ -68,11 +81,13 @@ export function useVerticalDrag(initialDY = 0) {
     const curriedOnMouseMove = (e) => onMouseMove(e, dragRef, setDY);
     const curriedOnTouchMove = (e) => onTouchMove(e, dragRef, setDY);
 
-    const curriedOnMouseUp = (e) => onMouseUp(e, dragRef, setIsDragging);
-    const curriedOnTouchEnd = (e) => onTouchEnd(e, dragRef, setIsDragging);
+    const curriedOnMouseUp = (e) =>
+      onMouseUp(e, dragRef, setIsDragging, setCompletedDrag);
+    const curriedOnTouchEnd = (e) =>
+      onTouchEnd(e, dragRef, setIsDragging, setCompletedDrag);
 
     const curriedOnContextMenu = (e) =>
-      onContextMenu(e, dragRef, setIsDragging);
+      onContextMenu(e, dragRef, setIsDragging, setCompletedDrag);
 
     window.addEventListener("mousemove", curriedOnMouseMove);
     window.addEventListener("touchmove", curriedOnTouchMove);
@@ -95,7 +110,20 @@ export function useVerticalDrag(initialDY = 0) {
     };
   }, []);
 
-  return [dY, isDragging, curriedOnMouseDown, curriedOnTouchStart];
+  // Update ref state when client pushes changes.
+  useEffect(() => {
+    dragRef.current.dY = dY;
+  }, [dY]);
+
+  return [
+    dY,
+    setDY,
+    isDragging,
+    completedDrag,
+    setCompletedDrag,
+    curriedOnMouseDown,
+    curriedOnTouchStart,
+  ];
 }
 
 // .---------------------------------------------------------------.
@@ -103,8 +131,10 @@ export function useVerticalDrag(initialDY = 0) {
 // |-------------------+-----------------+-------------------------|
 // | dY                |        x        |            x            |
 // | isDragging        |        x (*)    |            x            |
+// | completedDrag     |        x        |                         |
 // | draggingInitialDY |                 |            x            |
 // | draggingInitialY  |                 |            x            |
+// | draggingStartedAt |                 |            x            |
 // '-------------------|-----------------|-------------------------'
 //
 // (*) = only for debug purposes
@@ -134,7 +164,7 @@ const k_mouseButton = {
   x2: 4,
 };
 
-function onMouseDown(e, dragRef, setIsDragging) {
+function onMouseDown(e, dragRef, setIsDragging, setCompletedDrag) {
   const clientY = e.clientY;
   //console.log("[useVerticalDrag] mousedown", e, e.currentTarget, clientY, e.button);
 
@@ -159,16 +189,16 @@ function onMouseDown(e, dragRef, setIsDragging) {
     // >
     // > (Mozilla Contributors, CC BY-SA 2.5)
     //
-    onDragEnd(e, dragRef, setIsDragging);
+    onDragEnd(e, dragRef, setIsDragging, setCompletedDrag);
   }
 }
 
-function onContextMenu(e, dragRef, setIsDragging) {
+function onContextMenu(e, dragRef, setIsDragging, setCompletedDrag) {
   //console.log("[useVerticalDrag] contextmenu", e, e.button);
 
   // End drag now because the application will not receive any "mouseup" events
   // while the system's context menu is open.
-  onDragEnd(e, dragRef, setIsDragging);
+  onDragEnd(e, dragRef, setIsDragging, setCompletedDrag);
 }
 
 function onMouseMove(e, dragRef, setDY) {
@@ -176,11 +206,11 @@ function onMouseMove(e, dragRef, setDY) {
   onDragMove(e, e.clientY, dragRef, setDY);
 }
 
-function onMouseUp(e, dragRef, setIsDragging) {
+function onMouseUp(e, dragRef, setIsDragging, setCompletedDrag) {
   //console.log("[useVerticalDrag] mouseup", e, e.button);
 
   if (e.button === k_mouseButton.primary) {
-    onDragEnd(e, dragRef, setIsDragging);
+    onDragEnd(e, dragRef, setIsDragging, setCompletedDrag);
   }
 }
 
@@ -196,9 +226,9 @@ function onTouchMove(e, dragRef, setDY) {
   onDragMove(e, clientY, dragRef, setDY);
 }
 
-function onTouchEnd(e, dragRef, setIsDragging) {
+function onTouchEnd(e, dragRef, setIsDragging, setCompletedDrag) {
   //console.log("[useVerticalDrag] touchend", e);
-  onDragEnd(e, dragRef, setIsDragging);
+  onDragEnd(e, dragRef, setIsDragging, setCompletedDrag);
 }
 
 function onDragStart(e, clientY, dragRef, setIsDragging) {
@@ -211,6 +241,7 @@ function onDragStart(e, clientY, dragRef, setIsDragging) {
 
   dragRef.current.draggingInitialDY = dragRef.current.dY;
   dragRef.current.draggingInitialY = initialY;
+  dragRef.current.draggingStartedAt = window.performance.now();
 }
 
 function onDragMove(e, clientY, dragRef, setDY) {
@@ -227,14 +258,30 @@ function onDragMove(e, clientY, dragRef, setDY) {
   setDY(newDY);
 }
 
-function onDragEnd(e, dragRef, setIsDragging) {
+function onDragEnd(e, dragRef, setIsDragging, setCompletedDrag) {
   if (dragRef.current.isDragging === true) {
     //console.log("[useVerticalDrag] dragend", e, e.currentTarget);
 
     dragRef.current.isDragging = false;
     setIsDragging(false);
 
-    dragRef.current.draggingInitialDY = null;
+    const initialDY = dragRef.current.draggingInitialDY;
+    const finalDY = dragRef.current.dY;
+
+    const distance = Math.abs(finalDY - initialDY);
+    const durationMs =
+      window.performance.now() - dragRef.current.draggingStartedAt;
+    const speed = Math.trunc(distance / (durationMs / 1000));
+
+    const completedDrag = {
+      initialDY: initialDY,
+      finalDY: finalDY,
+      pixelsPerSecond: speed,
+    };
+    setCompletedDrag(completedDrag);
+
+    dragRef.current.draggingStartedAt = null;
     dragRef.current.draggingInitialY = null;
+    dragRef.current.draggingInitialDY = null;
   }
 }
