@@ -14,13 +14,6 @@ defmodule WanderWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", WanderWeb do
-    pipe_through :browser
-
-    get "/", PageController, :home
-    get "/*rest", PageController, :home
-  end
-
   # Other scopes may use custom stacks.
   # scope "/api", WanderWeb do
   #   pipe_through :api
@@ -42,4 +35,12 @@ defmodule WanderWeb.Router do
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end
+
+  scope "/", WanderWeb do
+    pipe_through :browser
+
+    get "/", PageController, :home
+    get "/*rest", PageController, :home
+  end
+
 end
