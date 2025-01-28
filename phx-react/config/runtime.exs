@@ -1,5 +1,9 @@
 import Config
 
+alias Wander.Repos.SlRepo
+alias Wander.Repos.PgRepo
+alias Wander.Repos.PgOsmRepo
+
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
 # system starts, so it is typically used to load production configuration
@@ -7,16 +11,39 @@ import Config
 # any compile-time configuration in here, as it won't be applied.
 # The block below contains prod specific runtime configuration.
 if config_env() == :prod do
-  database_path =
+  sl_database_path =
     System.get_env("DATABASE_PATH") ||
       raise """
       environment variable DATABASE_PATH is missing.
       For example: /etc/wander/wander.db
       """
 
-  config :wander, Wander.Repo,
-    database: database_path,
+  pg_database_url =
+    System.get_env("DATABASE_URL") ||
+      raise """
+      environment variable DATABASE_URL is missing.
+      For example: ecto://USER:PASS@HOST/DATABASE
+      """
+
+  config :wander, SlRepo,
+    database: sl_database_path,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "5")
+
+  maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
+
+  config :wander, PgRepo,
+    types: Wander.Repos.PostgresTypes,
+    # ssl: true,
+    database: pg_database_url,
+    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "6"),
+    socket_options: maybe_ipv6
+
+  config :wander, PgOsmRepo,
+    types: Wander.Repos.PostgresTypes,
+    # ssl: true,
+    database: pg_database_url,
+    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "12"),
+    socket_options: maybe_ipv6
 
   import Config
 

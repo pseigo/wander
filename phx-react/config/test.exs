@@ -1,14 +1,36 @@
 import Config
 
+alias Wander.Repos.SlRepo
+alias Wander.Repos.PgRepo
+alias Wander.Repos.PgOsmRepo
+
 # Configure your database
 #
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
-config :wander, Wander.Repo,
+config :wander, SlRepo,
   database: Path.expand("../wander_test.db", __DIR__),
   pool_size: 5,
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :wander, PgRepo,
+  types: Wander.Repos.PostgresTypes,
+  username: "postgres",
+  password: "postgres_v5lmJseKtPBWce",
+  hostname: "localhost",
+  database: "wander_test#{System.get_env("MIX_TEST_PARTITION")}",
+  pool: Ecto.Adapters.SQL.Sandbox,
+  pool_size: System.schedulers_online() * 2
+
+config :wander, PgOsmRepo,
+  types: Wander.Repos.PostgresTypes,
+  username: "postgres",
+  password: "postgres_v5lmJseKtPBWce",
+  hostname: "localhost",
+  database: "wander_test#{System.get_env("MIX_TEST_PARTITION")}",
+  pool: Ecto.Adapters.SQL.Sandbox,
+  pool_size: System.schedulers_online() * 2
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.

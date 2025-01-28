@@ -18,7 +18,9 @@ defmodule Wander.DataCase do
 
   using do
     quote do
-      alias Wander.Repo
+      alias Wander.Repos.SlRepo
+      alias Wander.Repos.PgRepo
+      alias Wander.Repos.PgOsmRepo
 
       import Ecto
       import Ecto.Changeset
@@ -36,8 +38,14 @@ defmodule Wander.DataCase do
   Sets up the sandbox based on the test tags.
   """
   def setup_sandbox(tags) do
-    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(Wander.Repo, shared: not tags[:async])
-    on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
+    sl_repo_pid = Ecto.Adapters.SQL.Sandbox.start_owner!(Wander.Repos.SlRepo, shared: not tags[:async])
+    pg_repo_pid = Ecto.Adapters.SQL.Sandbox.start_owner!(Wander.Repos.PgRepo, shared: not tags[:async])
+    pg_osm_repo_pid = Ecto.Adapters.SQL.Sandbox.start_owner!(Wander.Repos.PgOsmRepo, shared: not tags[:async])
+    on_exit(fn ->
+      Ecto.Adapters.SQL.Sandbox.stop_owner(sl_repo_pid)
+      Ecto.Adapters.SQL.Sandbox.stop_owner(pg_repo_pid)
+      Ecto.Adapters.SQL.Sandbox.stop_owner(pg_osm_repo_pid)
+    end)
   end
 
   @doc """

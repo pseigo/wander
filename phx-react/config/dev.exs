@@ -1,11 +1,35 @@
 import Config
 
-# Configure your database
-config :wander, Wander.Repo,
+alias Wander.Repos.SlRepo
+alias Wander.Repos.PgRepo
+alias Wander.Repos.PgOsmRepo
+
+# Configure the databases
+config :wander, SlRepo,
   database: Path.expand("../wander_dev.db", __DIR__),
   pool_size: 5,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true
+
+config :wander, PgRepo,
+  types: Wander.Repos.PostgresTypes,
+  username: "postgres",
+  password: "postgres_v5lmJseKtPBWce",
+  hostname: "localhost",
+  database: "wander_dev",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 6
+
+config :wander, PgOsmRepo,
+  types: Wander.Repos.PostgresTypes,
+  username: "postgres",
+  password: "postgres_v5lmJseKtPBWce",
+  hostname: "localhost",
+  database: "osm",
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 12
 
 # For development, we disable any cache and enable
 # debugging and code reloading.

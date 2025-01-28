@@ -8,7 +8,9 @@ defmodule Wander.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      Wander.Repo,
+      Wander.Repos.SlRepo,
+      Wander.Repos.PgRepo,
+      Wander.Repos.PgOsmRepo,
       {Ecto.Migrator,
         repos: Application.fetch_env!(:wander, :ecto_repos),
         skip: skip_migrations?()},

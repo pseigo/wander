@@ -1,0 +1,16 @@
+services:
+  postgres-dev:
+    container_name: wander-dev-db
+    image: postgis/postgis:17-3.5
+    volumes:
+      - dev-db-data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_v5lmJseKtPBWce
+      POSTGRES_DB: wander_dev
+
+volumes:
+  dev-db-data:
+

@@ -9,9 +9,13 @@
 # move said applications out of the umbrella.
 import Config
 
+alias Wander.Repos.SlRepo
+alias Wander.Repos.PgRepo
+alias Wander.Repos.PgOsmRepo
+
 # Configure Mix tasks and generators
 config :wander,
-  ecto_repos: [Wander.Repo]
+  ecto_repos: [SlRepo, PgRepo, PgOsmRepo]
 
 # Configures the mailer
 #
@@ -23,7 +27,7 @@ config :wander,
 config :wander, Wander.Mailer, adapter: Swoosh.Adapters.Local
 
 config :wander_web,
-  ecto_repos: [Wander.Repo],
+  ecto_repos: [SlRepo, PgRepo, PgOsmRepo],
   generators: [context_app: :wander, binary_id: true]
 
 # Configures the endpoint

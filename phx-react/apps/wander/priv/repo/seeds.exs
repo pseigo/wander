@@ -5,7 +5,9 @@
 # Inside the script, you can read and write to any of your
 # repositories directly:
 #
-#     Wander.Repo.insert!(%Wander.SomeSchema{})
+#     Wander.Repos.SlRepo.insert!(%Wander.SomeSchema{})
+#     Wander.Repos.PgRepo.insert!(%Wander.SomeSchema{})
+#     Wander.Repos.PgOsmRepo.insert!(%Wander.SomeSchema{})
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
