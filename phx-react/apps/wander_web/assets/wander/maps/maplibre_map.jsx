@@ -32,6 +32,8 @@ import {
   useFeatureSheetDebugInfo,
 } from "/wander/maps/panels/feature_sheet_debug_panel";
 
+import { useLiveSourceData } from "./maplibre_map/live_source_data";
+
 const initialCenter = { longitude: -114.0716, latitude: 51.0428 };
 const initialZoomLevel = 15;
 
@@ -48,7 +50,7 @@ const initialZoomLevel = 15;
 const k_mapClickConsideredOutsideLayerAfterMillis = 10;
 const sampleFeature = sampleCafe();
 
-export function MapLibreMap() {
+export function MapLibreMap({ cafes }) {
   const mapNodeId = useRef(`MapLibreMap-${randomLowerAlphaNumericString()}`);
   const mapRef = useRef(null);
 
@@ -62,6 +64,8 @@ export function MapLibreMap() {
   const [getSheetDebugInfoSetters, sheetDY, sheetHeaderHeight] =
     useFeatureSheetDebugInfo();
 
+  const [mapIsLoaded, setMapIsLoaded] = useState(false);
+
   useEffect(() => {
     const map = MapLibre.createMap(
       mapNodeId.current,
@@ -70,7 +74,7 @@ export function MapLibreMap() {
     );
     mapRef.current = map;
 
-    registerDataLoadListener(map);
+    registerDataLoadListener(map, setMapIsLoaded);
     registerInteractionListeners(
       map,
       setSelectedFeature,
@@ -84,6 +88,8 @@ export function MapLibreMap() {
       mapRef.current = null;
     };
   }, []);
+
+  useLiveSourceData(mapRef, mapIsLoaded, cafes);
 
   useEffect(() => {
     if (clickedAt.map === null && clickedAt.layer === null) {
@@ -217,11 +223,12 @@ function registerInteractionListeners(
   // map.on("touchend", CAFES.iconLayerId, (e) => { ... });
 }
 
-function registerDataLoadListener(map) {
+function registerDataLoadListener(map, setMapIsLoaded) {
   map.on("load", async () => {
     MapLibre.addSources(map);
     await MapLibre.addImages(map);
     MapLibre.addLayers(map);
+    setMapIsLoaded(true);
   });
 }
 

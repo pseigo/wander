@@ -11,4 +11,15 @@ defmodule Wander.Osm.Pois.CafeNode do
     field :tags, :map, writable: :never
     field :geom, Geo.PostGIS.Geometry, writable: :never
   end
+
+  @type id() :: integer()
+
+  @type t() :: %__MODULE__{
+    node_id: id(),
+    name: String.t(),
+    type: String.t(),
+    opening_hours: String.t(),
+    tags: %{String.t() => String.t()},
+    geom: Geo.geometry()
+  }
 end

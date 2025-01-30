@@ -25,11 +25,14 @@ import {
 import { LeafletMap } from "/wander/maps/leaflet_map";
 import { MapLibreMap } from "/wander/maps/maplibre_map";
 
+import { useOsmCafes } from "./map/osm_pois";
+
 export function MapPage(_props) {
   const [_location, navigate] = useLocation();
   const [_documentTitle, _setDocumentTitle] = useDocumentTitle(
     toDocumentTitle("Map")
   );
+  const [cafes] = useOsmCafes();
 
   return (
     <div className={clsx(["w-full h-full", "dark:text-black"])}>
@@ -38,7 +41,7 @@ export function MapPage(_props) {
       <LeafletMap />
       */}
 
-      <MapLibreMap />
+      <MapLibreMap cafes={cafes} />
 
       <style>{`
         html, body, #app {

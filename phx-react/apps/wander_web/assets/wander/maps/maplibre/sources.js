@@ -36,6 +36,7 @@ export function addSources(map) {
  * @returns {ML.SourceSpecification}
  */
 function cafeSource() {
+  /*
   const pointFeatures = cafes.filter((e) => {
     if (!Object.hasOwn(e, "type")) {
       return false;
@@ -58,12 +59,14 @@ function cafeSource() {
 
     return geometryType === "Point" && Object.hasOwn(geometry, "coordinates");
   });
+  */
 
   const sourceSpec = {
     type: "geojson",
     data: {
       type: "FeatureCollection",
-      features: pointFeatures,
+      features: [],
+      //features: pointFeatures,
     },
   };
 

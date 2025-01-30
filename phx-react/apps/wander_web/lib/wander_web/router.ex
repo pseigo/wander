@@ -12,6 +12,10 @@ defmodule WanderWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+
+    scope "/api", WanderWeb do
+      get "/osm/pois/cafes", Osm.PoisController, :get_cafes
+    end
   end
 
   # Other scopes may use custom stacks.
