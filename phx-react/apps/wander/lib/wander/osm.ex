@@ -4,11 +4,11 @@ defmodule Wander.Osm do
   @type osm_node() :: CafeNode.t()
 
   @type geojson_feature() :: %{
-    optional(:id) => String.t(),
-    type: String.t(),
-    geometry: map(),
-    properties: map()
-  }
+          optional(:id) => String.t(),
+          type: String.t(),
+          geometry: map(),
+          properties: map()
+        }
 
   @doc """
   Returns a GeoJSON representation of the `osm_node` as a `geojson_feature`

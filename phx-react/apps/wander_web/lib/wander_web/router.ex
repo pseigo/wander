@@ -46,5 +46,4 @@ defmodule WanderWeb.Router do
     get "/", PageController, :home
     get "/*rest", PageController, :home
   end
-
 end

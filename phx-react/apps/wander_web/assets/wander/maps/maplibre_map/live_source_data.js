@@ -17,7 +17,6 @@
 import { useEffect } from "react";
 
 import { CAFES } from "/wander/maps/maplibre/constants";
-import { Map } from "maplibre-gl";
 
 /**
  * @param {React.RefObject<ML.Map>} mapRef
@@ -55,7 +54,7 @@ export function useLiveSourceData(mapRef, mapIsLoaded, cafes) {
 function updateSource(source, sourceName, features) {
   //console.log("[useCreateSourcesAndSyncData] updating source...");
   const featureCollection = createFeatureCollection(features);
-    source.setData(featureCollection);
+  source.setData(featureCollection);
 }
 
 /**
@@ -75,7 +74,7 @@ function createSourceSpec(features) {
   const featureCollection = createFeatureCollection(features);
   const sourceSpec = {
     type: "geojson",
-    data: featureCollection
+    data: featureCollection,
   };
   return sourceSpec;
 }

@@ -45,11 +45,10 @@ config :wander_web, WanderWeb.Endpoint,
 config :esbuild,
   version: "0.17.11",
   wander_web: [
-    args: (
-      Path.wildcard("./apps/wander_web/assets/wander/*.{js,jsx}")
-      ++ Path.wildcard("./apps/wander_web/assets/wander/**/*.{js,jsx}")
-      |> Enum.map(& String.trim_leading(&1, "apps/wander_web/assets/"))
-    ) ++ ~w(
+    args:
+      ((Path.wildcard("./apps/wander_web/assets/wander/*.{js,jsx}") ++
+          Path.wildcard("./apps/wander_web/assets/wander/**/*.{js,jsx}"))
+       |> Enum.map(&String.trim_leading(&1, "apps/wander_web/assets/"))) ++ ~w(
       wander/global.js wander/app.jsx
       --bundle
       --target=es2020 --platform=browser

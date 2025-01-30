@@ -32,7 +32,7 @@ async function getCafesAndStore(setCafes) {
   try {
     cafes = await getCafes();
     //console.log("got cafes", cafes);
-  } catch(error) {
+  } catch (error) {
     console.error("failed to get cafes", error);
     return;
   }
