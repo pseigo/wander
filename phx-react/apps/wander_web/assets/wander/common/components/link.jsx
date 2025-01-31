@@ -66,8 +66,8 @@ export function InternalLink(props) {
   } else {
     return (
       <WouterLink
-        className={clsx([classesForLink(background, unstyled, className)])}
         {...props}
+        className={clsx([classesForLink(background, unstyled, className)])}
       >
         {children}
       </WouterLink>
@@ -99,10 +99,10 @@ export function ExternalLink(props) {
   // TODO: Make sure we're using the appropriate attributes for privacy/security.
   return (
     <a
+      {...props}
       className={clsx([classesForLink(background, unstyled, className)])}
       target={!!newTab && "_blank"}
       rel="noreferrer noopener"
-      {...props}
     >
       {children}
     </a>
