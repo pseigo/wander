@@ -25,7 +25,7 @@ export function CoordinatesRow({ latitude, longitude }) {
       <IconWithContent
         icon={<RowIcon name="explore" />}
         content={
-          <span className="text-[#686868]">
+          <span className="text-[.938rem] leading-[.938rem] text-[#686868]">
             {latitude.toFixed(5)}, {longitude.toFixed(5)}
           </span>
         }

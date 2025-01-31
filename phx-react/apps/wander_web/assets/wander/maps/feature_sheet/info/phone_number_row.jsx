@@ -37,7 +37,11 @@ export function PhoneNumberRow({ phoneNumber }) {
       <IconWithContent
         icon={<RowIcon name="call" />}
         content={
-          <ExternalLink newTab={false} href={telLink}>
+          <ExternalLink
+            newTab={false}
+            href={telLink}
+            className="text-[.938rem] leading-[.938rem]"
+          >
             {normalizedPhoneNumber}
           </ExternalLink>
         }

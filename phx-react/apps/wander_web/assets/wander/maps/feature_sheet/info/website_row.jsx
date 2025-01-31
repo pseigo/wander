@@ -34,7 +34,12 @@ export function WebsiteRow({ website }) {
       <IconWithContent
         icon={<RowIcon name="link" />}
         content={
-          <ExternalLink href={normalizedWebsite}>{conciseWebsite}</ExternalLink>
+          <ExternalLink
+            href={normalizedWebsite}
+            className="text-[.938rem] leading-[.938rem]"
+          >
+            {conciseWebsite}
+          </ExternalLink>
         }
       />
     </Row>
