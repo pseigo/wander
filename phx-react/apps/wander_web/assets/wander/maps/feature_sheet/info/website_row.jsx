@@ -46,7 +46,7 @@ function normalizeUrl(url) {
     url = `https://${url}`;
   }
 
-  url = URL.parse(url).toString();
+  url = new URL(url).toString();
   return url;
 }
 
