@@ -26,6 +26,8 @@ import { sampleCafe } from "/wander/maps/maplibre/sources";
 import { PanelGroup } from "/wander/maps/panels/panel_group";
 import { PointerPositionPanel } from "/wander/maps/panels/pointer_position_panel";
 import { ZoomLevelPanel } from "/wander/maps/panels/zoom_level_panel";
+import { BearingPanel } from "/wander/maps/panels/bearing_panel";
+import { PitchPanel } from "/wander/maps/panels/pitch_panel";
 import { FeatureSheet } from "/wander/maps/feature_sheet";
 import {
   FeatureSheetDebugPanel,
@@ -56,6 +58,8 @@ export function MapLibreMap({ cafes }) {
 
   const [pointerPosition, setPointerPosition] = useState(initialCenter);
   const [zoomLevel, setZoomLevel] = useState(initialZoomLevel);
+  const [bearing, setObservedBearing] = useState(0);
+  const [pitch, setObservedPitch] = useState(0);
 
   const [selectedFeature, setSelectedFeature] = useState(null);
   const [clickedAt, setClickedAt] = useState({ map: null, layer: null });
@@ -81,7 +85,13 @@ export function MapLibreMap({ cafes }) {
       setClickedAt,
       mapClickConsideredOutsideLayerTimerRef
     );
-    registerDebugInfoStateUpdaters(map, setPointerPosition, setZoomLevel);
+    registerDebugInfoStateUpdaters(
+      map,
+      setPointerPosition,
+      setZoomLevel,
+      setObservedBearing,
+      setObservedPitch
+    );
 
     return () => {
       MapLibre.deleteMap(mapRef.current);
@@ -136,6 +146,8 @@ export function MapLibreMap({ cafes }) {
       <PanelGroup position="bottom-left" stack="vertical">
         <PointerPositionPanel position={pointerPosition} />
         <ZoomLevelPanel zoomLevel={zoomLevel} />
+        <BearingPanel bearing={bearing} />
+        <PitchPanel pitch={pitch} />
       </PanelGroup>
       <PanelGroup position="top-left" stack="vertical">
         <FeatureSheetDebugPanel dY={sheetDY} headerHeight={sheetHeaderHeight} />
@@ -232,7 +244,13 @@ function registerDataLoadListener(map, setMapIsLoaded) {
   });
 }
 
-function registerDebugInfoStateUpdaters(map, setPointerPosition, setZoomLevel) {
+function registerDebugInfoStateUpdaters(
+  map,
+  setPointerPosition,
+  setZoomLevel,
+  setObservedBearing,
+  setObservedPitch
+) {
   map.on("mousemove", (e) => {
     const longitude = e.lngLat["lng"];
     const latitude = e.lngLat["lat"];
@@ -241,5 +259,13 @@ function registerDebugInfoStateUpdaters(map, setPointerPosition, setZoomLevel) {
   map.on("zoom", (_e) => {
     const zoomLevel = map.getZoom();
     setZoomLevel(zoomLevel);
+  });
+  map.on("rotate", (_e) => {
+    const bearing = map.getBearing();
+    setObservedBearing(bearing);
+  });
+  map.on("pitch", (_e) => {
+    const pitch = map.getPitch();
+    setObservedPitch(pitch);
   });
 }
