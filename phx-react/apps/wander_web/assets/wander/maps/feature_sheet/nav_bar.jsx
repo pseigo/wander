@@ -42,20 +42,20 @@ export function NavBar({ horizontalGutterClasses, className }) {
         />
         <TopTabBar.Button
           isActive={false}
-          label={"Notes"}
+          label={"Collections"}
           icon={
             <MaterialIcon
-              name="stylus_note"
+              name="collections_bookmark"
               className={topTabBarButtonIconClasses(false)}
             />
           }
         />
         <TopTabBar.Button
           isActive={false}
-          label={"Collections"}
+          label={"Notes"}
           icon={
             <MaterialIcon
-              name="collections_bookmark"
+              name="stylus_note"
               className={topTabBarButtonIconClasses(false)}
             />
           }
