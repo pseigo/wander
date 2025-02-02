@@ -38,28 +38,6 @@ export function Info({ feature }) {
 }
 
 function Rows({ feature }) {
-  useEffect(() => {
-    console.log("[FeatureSheet][mount] feature: ", feature);
-    console.log(
-      `[FeatureSheet][mount] feature.properties.opening_hours: '${feature.properties.opening_hours}'`
-    );
-    console.log(
-      `[FeatureSheet][mount] feature.properties.phone: '${feature.properties.phone}'`
-    );
-    console.log(
-      `[FeatureSheet][mount] feature.properties.website: '${feature.properties.website}'`
-    );
-    console.log(
-      `[FeatureSheet][mount] feature.properties['addr:housenumber']: '${feature.properties["addr:housenumber"]}'`
-    );
-    console.log(
-      `[FeatureSheet][mount] feature.properties['addr:street']: '${feature.properties["addr:street"]}'`
-    );
-    console.log(
-      `[FeatureSheet][mount] feature.properties['addr:postcode']: '${feature.properties["addr:postcode"]}'`
-    );
-  }, []);
-
   const openingHours = feature.properties.opening_hours;
   const phoneNumber = feature.properties.phone;
   const website = feature.properties.website;

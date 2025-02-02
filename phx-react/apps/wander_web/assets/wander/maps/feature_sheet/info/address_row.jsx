@@ -36,12 +36,6 @@ export function AddressRow({ address }) {
     [address]
   );
 
-  /*
-  useEffect(() => {
-    console.log("[AddressRow] conciseAddress: ", conciseAddress);
-  }, []);
-  */
-
   return (
     <Row>
       <Disclosure isInitiallyExpanded={false}>
@@ -138,7 +132,6 @@ function conciseAddressString(address) {
 
   const interspersed = intersperse(parts, ", ");
   const concise = interspersed.reduce((acc, e) => acc + e, "");
-  console.log("[conciseAddressString]", parts, address, concise);
   return concise;
 }
 
