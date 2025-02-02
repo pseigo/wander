@@ -16,6 +16,7 @@
 
 import { useMemo } from "react";
 
+import { intersperse } from "/wander/common/arrays";
 import { Disclosure } from "/wander/common/components/disclosure";
 
 import { IconWithContent, RowIcon } from "./icon_with_content";
@@ -257,19 +258,4 @@ function isValidAndNonEmptyString(str) {
 function conciseProvinceString(province) {
   // TODO: stub
   return province;
-}
-
-function intersperse(array, ie) {
-  const a2 = [];
-
-  for (let i = 0; i < array.length; i++) {
-    a2.push(array[i]);
-    a2.push(ie);
-  }
-
-  if (a2.length !== 0) {
-    a2.pop();
-  }
-
-  return a2;
 }
