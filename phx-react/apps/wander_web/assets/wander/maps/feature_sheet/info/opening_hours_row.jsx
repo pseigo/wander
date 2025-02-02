@@ -15,14 +15,20 @@
  */
 
 import { clsx } from "clsx";
-import { useMemo } from "react";
+import { memo } from "react";
 
+import { intersperse } from "/wander/common/arrays";
 import { Disclosure } from "/wander/common/components/disclosure";
 
+import { ConciseOpeningHours } from "../concise_opening_hours";
 import { IconWithContent, RowIcon } from "./icon_with_content";
 import { Row } from "./row";
 
-export function OpeningHoursRow() {
+/**
+ * @param {object} props
+ * @param {WeekdayWithTimeRangeStrs[]} props.openingHoursStrs
+ */
+export function OpeningHoursRow({ feature, openingHoursStrs }) {
   return (
     <Row>
       <Disclosure isInitiallyExpanded={false}>
@@ -30,7 +36,14 @@ export function OpeningHoursRow() {
           <IconWithContent
             icon={<RowIcon name="schedule" />}
             content={
-              !isExpanded ? <ConciseOpeningHours /> : <DetailedOpeningHours />
+              !isExpanded ? (
+                <ConciseOpeningHours feature={feature} compact={true} />
+              ) : (
+                <DetailedOpeningHours
+                  feature={feature}
+                  openingHoursStrs={openingHoursStrs}
+                />
+              )
             }
             flexAlignClasses={isExpanded ? "items-start" : undefined}
           />
@@ -40,26 +53,7 @@ export function OpeningHoursRow() {
   );
 }
 
-// [start] Row-specific stuff
-function ConciseOpeningHours({ feature }) {
-  return (
-    <div
-      className={clsx([
-        "flex flex-row gap-[5px]",
-        "text-[.938rem] leading-[.938rem]",
-      ])}
-    >
-      <span className={clsx(["font-semibold text-[#479768]"])}>Open</span>
-      <span aria-hidden="true">·</span>
-      <div className="flex flex-row gap-1 items-baseline">
-        <span>Closes 6pm</span>
-        <span className="text-[#8a8a8a] text-[.813rem]">(2h30m)</span>
-      </div>
-    </div>
-  );
-}
-
-function DetailedOpeningHours({ feature }) {
+const DetailedOpeningHours = memo(function DetailedOpeningHours({ feature, openingHoursStrs }) {
   return (
     <div
       className={clsx([
@@ -67,39 +61,62 @@ function DetailedOpeningHours({ feature }) {
         "text-[.938rem] leading-[.938rem]",
       ])}
     >
-      <div className={clsx(["flex flex-row gap-[.36rem] items-baseline"])}>
-        <span className={clsx(["text-normal font-semibold text-[#479768]"])}>
-          Open
-        </span>
-        <span className="text-[#8a8a8a]">(Closes in 2h30m)</span>
-      </div>
+      <ConciseOpeningHours feature={feature} compact={true} />
 
       <div
         className={clsx([
           "grid grid-cols-[repeat(2,max-content)] gap-x-[17px] gap-y-[.313rem]",
         ])}
       >
-        <span className="font-semibold">Tue</span>
-        <span className="font-semibold">7:30am – 6:00pm</span>
-
-        <span>Wed</span>
-        <span>7:30am – 6:00pm</span>
-
-        <span>Thu</span>
-        <span>7:30am – 6:00pm</span>
-
-        <span>Fri</span>
-        <span>7:30am – 6:00pm</span>
-
-        <span className="text-[#7d7d7d]">Sat</span>
-        <span className="text-[#7d7d7d] italic">Closed</span>
-
-        <span className="text-[#7d7d7d]">Sun</span>
-        <span className="text-[#7d7d7d] italic">Closed</span>
-
-        <span>Mon</span>
-        <span>7:30am – 6:00pm</span>
+        {openingHoursStrs.map((ohs, index) => (
+          <DetailedOpeningHoursRow
+            key={index}
+            isToday={index === 0}
+            weekdayWithTimeRangeStrs={ohs}
+          />
+        ))}
       </div>
     </div>
   );
-}
+});
+
+/**
+ * @param {WeekdayWithTimeRangeStrs} weekdayWithTimeRangeStrs
+ * @param {boolean} isToday - Whether to style the row with emphasis to show
+ *  that it corresponds to today. Defaults to `false`.
+ */
+const DetailedOpeningHoursRow = memo(function DetailedOpeningHoursRow({
+  isToday = false,
+  weekdayWithTimeRangeStrs,
+}) {
+  const { weekday, shortWeekday, timeRanges } = weekdayWithTimeRangeStrs;
+
+  const isClosedAllDay = timeRanges.length === 0;
+
+  const concatenatedTimeRanges = !isClosedAllDay
+    ? intersperse(timeRanges, ", ").reduce((acc, e) => acc + e, "")
+    : "Closed";
+
+  const weekdayClasses = clsx([
+    isToday && "font-semibold",
+    isClosedAllDay && "text-[#7d7d7d]",
+  ]);
+
+  const timeRangesClasses = clsx([
+    isToday && "font-semibold",
+    isClosedAllDay && "text-[#7d7d7d] italic",
+  ]);
+
+  const timeRangesAriaLabel = `Times this place is open ${(isToday && "today") || "on " + weekday}`;
+
+  return (
+    <>
+      <span aria-label={weekday} className={weekdayClasses}>
+        {shortWeekday}
+      </span>
+      <span aria-label={timeRangesAriaLabel} className={timeRangesClasses}>
+        {concatenatedTimeRanges}
+      </span>
+    </>
+  );
+});

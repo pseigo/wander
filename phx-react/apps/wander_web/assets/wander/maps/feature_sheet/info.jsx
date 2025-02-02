@@ -18,6 +18,7 @@ import { clsx } from "clsx";
 import { useEffect, useMemo, useState } from "react";
 
 import { Disclosure } from "/wander/common/components/disclosure";
+import { weekdaysWithTimeRangeStrs } from "/wander/maps/osm/opening_hours";
 
 import { AddressRow, MockAddressRow } from "./info/address_row";
 import { CoordinatesRow } from "./info/coordinates_row";
@@ -53,9 +54,19 @@ function Rows({ feature }) {
     postalCode: addrPostcode,
   };
 
+  const openingHoursStrs = useMemo(
+    () => weekdaysWithTimeRangeStrs(feature),
+    [feature]
+  );
+
   return (
     <div className={clsx(["flex flex-col gap-0", "divide-y border-[#e1e1e1]"])}>
-      {openingHours !== undefined && <OpeningHoursRow />}
+      {openingHours !== undefined && (
+        <OpeningHoursRow
+          feature={feature}
+          openingHoursStrs={openingHoursStrs}
+        />
+      )}
       {/*
       <MockAddressRow />
       */}

@@ -48,7 +48,8 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
     startMouseDrag,
     startTouchDrag,
   ] = useVerticalDrag(0);
-  const [_currentDetent] = useSheetDetents(
+
+  const [currentDetent] = useSheetDetents(
     setDY,
     completedDrag,
     setCompletedDrag,
@@ -98,6 +99,7 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
               feature={feature}
               onClose={onClose}
               titleShrinkProgress={titleShrinkProgress}
+              currentDetent={currentDetent}
               ref={headerRef}
             />
           </div>

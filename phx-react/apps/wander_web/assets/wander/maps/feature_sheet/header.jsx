@@ -15,20 +15,29 @@
  */
 
 import { clsx } from "clsx";
+import { memo } from "react";
 
-import { Icon } from "/wander/common/components/icon";
-
+import { ConciseOpeningHours } from "./concise_opening_hours";
 import { Actions } from "./header/actions";
 import { AmenityIcon } from "./header/amenity_icon";
 
-export function Header({ feature, onClose, titleShrinkProgress, ref }) {
+export function Header({
+  feature,
+  onClose,
+  titleShrinkProgress,
+  currentDetent,
+  ref,
+}) {
   return (
     <div className="sheet-header" ref={ref}>
       <Actions onClose={onClose} />
       <div className="flex flex-col gap-0">
         <Title feature={feature} titleShrinkProgress={titleShrinkProgress} />
         <ConciseInfo feature={feature} />
-        <ConciseStatus feature={feature} />
+        {feature.properties.opening_hours !== undefined &&
+          currentDetent === "small" && (
+            <ConciseOpeningHours feature={feature} className="mt-[.2rem]" />
+          )}
       </div>
     </div>
   );
@@ -38,7 +47,7 @@ export function Header({ feature, onClose, titleShrinkProgress, ref }) {
  * @param {Feature} feature
  * @param {float} titleShrinkProgress in `[0, 1.0]`
  */
-function Title({ feature, titleShrinkProgress }) {
+const Title = memo(function Title({ feature, titleShrinkProgress }) {
   const name = feature.properties.name ?? (
     <span className="italic">(name unknown)</span>
   );
@@ -63,9 +72,9 @@ function Title({ feature, titleShrinkProgress }) {
       {name}
     </h2>
   );
-}
+});
 
-function ConciseInfo({ feature }) {
+const ConciseInfo = memo(function ConciseInfo({ feature }) {
   return (
     <div
       className={clsx([
@@ -88,21 +97,4 @@ function ConciseInfo({ feature }) {
       </div>
     </div>
   );
-}
-
-function ConciseStatus({ feature }) {
-  return (
-    <div
-      className={clsx(["flex flex-row gap-[5px] mt-[.2rem]", "text-[1rem]"])}
-    >
-      <span className={clsx(["font-semibold text-[#479768]"])}>Open</span>
-
-      <span aria-hidden="true">·</span>
-
-      <div className="flex flex-row gap-1 items-baseline">
-        <span>Closes 6pm</span>
-        <span className="text-[#8a8a8a] text-[.813rem]">(2h30m)</span>
-      </div>
-    </div>
-  );
-}
+});
