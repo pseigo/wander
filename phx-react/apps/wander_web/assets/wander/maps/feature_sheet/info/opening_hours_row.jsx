@@ -53,7 +53,10 @@ export function OpeningHoursRow({ feature, openingHoursStrs }) {
   );
 }
 
-const DetailedOpeningHours = memo(function DetailedOpeningHours({ feature, openingHoursStrs }) {
+const DetailedOpeningHours = memo(function DetailedOpeningHours({
+  feature,
+  openingHoursStrs,
+}) {
   return (
     <div
       className={clsx([

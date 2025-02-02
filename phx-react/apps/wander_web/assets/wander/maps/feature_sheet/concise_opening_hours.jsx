@@ -44,7 +44,8 @@ export const ConciseOpeningHours = memo(function ConciseOpeningHours({
   const localeTag = undefined;
 
   const nextOpensOrClosesStr = createNextOpensOrClosesStr(openState, localeTag);
-  const untilNextOpenOrCloseDurationStr = createUntilNextOpenOrCloseDurationStr(openState);
+  const untilNextOpenOrCloseDurationStr =
+    createUntilNextOpenOrCloseDurationStr(openState);
   const [statusStr, classesForStatusStr] = createStatusStrAndClasses(openState);
 
   return (
@@ -91,7 +92,10 @@ function createNextOpensOrClosesStr(openState, localeTag) {
   let str = openState.isOpen ? "Closes " : "Opens ";
 
   const now = new Date();
-  const nextOpensOrClosesADifferentDay = !areOnSameDay(now, openState.nextOpensOrClosesAt);
+  const nextOpensOrClosesADifferentDay = !areOnSameDay(
+    now,
+    openState.nextOpensOrClosesAt
+  );
   if (nextOpensOrClosesADifferentDay) {
     const formatter = new Intl.DateTimeFormat(localeTag, { weekday: "short" });
     const shortWeekday = formatter.format(openState.nextOpensOrClosesAt);
@@ -104,10 +108,7 @@ function createNextOpensOrClosesStr(openState, localeTag) {
     hour: "numeric",
     minute: "numeric",
   };
-  const timeFormatter = new Intl.DateTimeFormat(
-    localeTag,
-    timeFormatOpts
-  );
+  const timeFormatter = new Intl.DateTimeFormat(localeTag, timeFormatOpts);
   const timeStr = timeFormatter.format(openState.nextOpensOrClosesAt);
   str += timeStr;
 

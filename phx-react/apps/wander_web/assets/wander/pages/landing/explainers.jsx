@@ -57,8 +57,8 @@ export function Explainers({ className }) {
           </Explainer.Point>
 
           <Explainer.Point>
-            <InternalLink href="/docs/notes">Take notes</InternalLink> when
-            you visit to remember how it went.{" "}
+            <InternalLink href="/docs/notes">Take notes</InternalLink> when you
+            visit to remember how it went.{" "}
             <PointNote>
               (Notes are{" "}
               <InternalLink href="/docs/notes/privacy">
