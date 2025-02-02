@@ -42,10 +42,10 @@ export function NavBar({ horizontalGutterClasses, className }) {
         />
         <TopTabBar.Button
           isActive={false}
-          label={"Check-Ins"}
+          label={"Notes"}
           icon={
             <MaterialIcon
-              name="beenhere"
+              name="stylus_note"
               className={topTabBarButtonIconClasses(false)}
             />
           }
