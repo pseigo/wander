@@ -234,10 +234,18 @@ function osm2pgsql.process_node(object)
 
   local geom = object:as_point()
 
-  if object.tags.cuisine == 'coffee_shop' or object.tags.amenity == 'cafe' then
+  if object.tags.cuisine == 'coffee_shop' or object.tags.amenity == 'cafe' or object.tags.cafe == 'board_game' then
+    local type = 'Coffee Shop'
+
+    if object.tags.cafe == 'board_game' then
+      type = 'Board Game Café'
+    elseif object.tags.amenity == 'cafe' then
+      type = 'Café'
+    end
+
     tables.cafe_nodes:insert({
       name = object.tags.name,
-      type = object.tags.amenity == 'cafe' and 'Café' or 'Coffee Shop',
+      type = type,
       opening_hours = object.tags.opening_hours,
       tags = object.tags,
       geom = geom
