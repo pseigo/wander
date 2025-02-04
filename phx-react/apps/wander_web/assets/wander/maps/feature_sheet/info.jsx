@@ -15,30 +15,45 @@
  */
 
 import { clsx } from "clsx";
-import { useEffect, useMemo, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 
 import { Disclosure } from "/wander/common/components/disclosure";
+import { ExternalLink } from "/wander/common/components/link";
+import { capitalize } from "/wander/common/strings";
 import { weekdaysWithTimeRangeStrs } from "/wander/maps/osm/opening_hours";
 
+import { Section } from "./info/section";
+import { Row } from "./info/row";
+import { IconWithContent, RowIcon } from "./info/icon_with_content";
 import { AddressRow, MockAddressRow } from "./info/address_row";
 import { CoordinatesRow } from "./info/coordinates_row";
 import { OpeningHoursRow } from "./info/opening_hours_row";
 import { PhoneNumberRow } from "./info/phone_number_row";
 import { WebsiteRow } from "./info/website_row";
+import { OsmIdRow } from "./info/osm_id_row";
+import { OsmTagsRow } from "./info/osm_tags_row";
 
 /**
  * @typedef {{houseNumber?: string, street?: string, city?: string, province?: string, postalCode?: string}} Address
  */
-
 export function Info({ feature }) {
   return (
     <div className={clsx(["w-full"])}>
-      <Rows feature={feature} />
+      <Sections feature={feature} />
     </div>
   );
 }
 
-function Rows({ feature }) {
+const Sections = memo(function Sections({ feature }) {
+  return (
+    <div className="flex flex-col gap-[18px]">
+      <MainSection feature={feature} />
+      <OsmSection feature={feature} />
+    </div>
+  );
+});
+
+const MainSection = memo(function MainSection({ feature }) {
   const openingHours = feature.properties.opening_hours;
   const phoneNumber = feature.properties.phone;
   const website = feature.properties.website;
@@ -60,7 +75,7 @@ function Rows({ feature }) {
   );
 
   return (
-    <div className={clsx(["flex flex-col gap-0", "divide-y border-[#e1e1e1]"])}>
+    <Section>
       {openingHours !== undefined && (
         <OpeningHoursRow
           feature={feature}
@@ -78,9 +93,9 @@ function Rows({ feature }) {
       )}
       {website !== undefined && <WebsiteRow website={website} />}
       <CoordinatesRow latitude={latitude} longitude={longitude} />
-    </div>
+    </Section>
   );
-}
+});
 
 /**
  * Returns `true` iff `address` has at least one defined field that is defined
@@ -100,3 +115,12 @@ function addressHasSomeValidNonEmptyParts(address) {
 
   return false;
 }
+
+const OsmSection = memo(function OsmSection({ feature }) {
+  return (
+    <Section title="OpenStreetMap" isLastSection={true}>
+      <OsmIdRow feature={feature} />
+      <OsmTagsRow feature={feature} />
+    </Section>
+  );
+});

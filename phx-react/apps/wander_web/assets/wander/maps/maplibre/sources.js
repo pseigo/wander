@@ -68,6 +68,9 @@ function cafeSource() {
       features: [],
       //features: pointFeatures,
     },
+    // INVARIANT: The property `promoteId` references MUST be an integer (not a
+    //  string). See: https://github.com/maplibre/maplibre-gl-js/discussions/3134#discussioncomment-7133626
+    promoteId: "@id",
   };
 
   return sourceSpec;

@@ -29,13 +29,18 @@ defmodule Wander.Osm do
   def to_geojson(osm_node)
 
   def to_geojson(%CafeNode{} = cafe) do
-    {:ok, geojson_geometry_2008} = Geo.JSON.encode(cafe.geom)
-    geojson_geometry = Map.drop(geojson_geometry_2008, ["crs"])
+    {:ok, geojson2008_geometry} = Geo.JSON.encode(cafe.geom)
+    geojson_geometry = Map.drop(geojson2008_geometry, ["crs"])
+
+    properties =
+      cafe.tags
+      |> Map.put("@id", cafe.node_id)
+      |> Map.put("@type", "node")
 
     %{
       id: "node/#{cafe.node_id}",
       type: "Feature",
-      properties: cafe.tags,
+      properties: properties,
       geometry: geojson_geometry
     }
   end

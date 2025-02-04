@@ -21,6 +21,7 @@ import { MaterialIcon } from "/wander/common/components/icon";
 export function IconWithContent({
   icon,
   content,
+  className,
   flexAlignClasses = "items-center",
 }) {
   return (
@@ -29,6 +30,7 @@ export function IconWithContent({
         //"h-[24px]", // whyyyyyyyyy is it 30px
         "mx-[10px] my-[10px]",
         "flex flex-row gap-[12px]",
+        className,
         flexAlignClasses,
       ])}
     >
