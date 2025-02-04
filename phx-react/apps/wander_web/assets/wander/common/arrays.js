@@ -17,6 +17,27 @@
 // TODO: unit test the functions in this module
 
 /**
+ * Wraps the argument in an array if it is not already an array.
+ *
+ * @example `wrap(1) // => [1]`
+ * @example `wrap([1]) // => [1]`
+ *
+ * @param {(array | any)} element_or_array
+ *
+ * @returns {array}
+ */
+export function wrap(element_or_array) {
+  if (
+    typeof element_or_array === "object" &&
+    element_or_array.constructor === Array
+  ) {
+    return element_or_array;
+  }
+
+  return [element_or_array];
+}
+
+/**
  * Returns a new array containing all the elements from `array`, but `withElement` in between each one.
  *
  * @example

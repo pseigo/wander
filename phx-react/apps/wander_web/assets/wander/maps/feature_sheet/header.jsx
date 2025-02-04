@@ -17,6 +17,8 @@
 import { clsx } from "clsx";
 import { memo } from "react";
 
+import * as Features from "/wander/maps/osm/features";
+
 import { ConciseOpeningHours } from "./concise_opening_hours";
 import { Actions } from "./header/actions";
 import { AmenityIcon } from "./header/amenity_icon";
@@ -75,6 +77,31 @@ const Title = memo(function Title({ feature, titleShrinkProgress }) {
 });
 
 const ConciseInfo = memo(function ConciseInfo({ feature }) {
+  const amenityIcons = [
+    Features.isWheelchairAccessible(feature) && (
+      <AmenityIcon key="accessible_forward" name="accessible_forward" />
+    ),
+    Features.hasToilets(feature) && <AmenityIcon key="wc" name="wc" />,
+    Features.hasBabyChangingStation(feature) && (
+      <AmenityIcon key="baby_changing_station" name="baby_changing_station" />
+    ),
+    Features.hasOutdoorSeating(feature) && (
+      <AmenityIcon key="deck" name="deck" />
+    ),
+    Features.hasIndoorSeating(feature) && (
+      <AmenityIcon key="table_bar" name="table_bar" />
+    ),
+    Features.hasExclusiveInternetAccess(feature) ? (
+      <AmenityIcon key="wifi_lock" name="wifi_lock" />
+    ) : (
+      Features.hasPublicInternetAccess(feature) && (
+        <AmenityIcon key="wifi" name="wifi" />
+      )
+    ),
+  ];
+
+  const hasAmenityIcons = amenityIcons.some((e) => e !== false);
+
   return (
     <div
       className={clsx([
@@ -84,17 +111,14 @@ const ConciseInfo = memo(function ConciseInfo({ feature }) {
       ])}
     >
       <span>Coffee Shop</span>
-      <span aria-hidden="true">·</span>
-      <div className="flex flex-row gap-[.12rem] items-baseline relative">
-        <AmenityIcon name="accessible_forward" />
-        <AmenityIcon name="wc" />
-        <AmenityIcon name="table_bar" />
-        <AmenityIcon name="deck" />
-        <AmenityIcon name="wifi_lock" />
-        {/*
-        <AmenityIcon name="hero-wifi-micro" />
-				*/}
-      </div>
+      {!!hasAmenityIcons && (
+        <>
+          <span aria-hidden="true">·</span>
+          <div className="flex flex-row gap-[.12rem] items-baseline relative">
+            {amenityIcons.map((e) => e)}
+          </div>
+        </>
+      )}
     </div>
   );
 });
