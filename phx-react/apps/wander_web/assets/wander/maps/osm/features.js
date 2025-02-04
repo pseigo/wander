@@ -127,7 +127,7 @@ export function hasInternetAccess(feature) {
  * listed, that will not be a match. For example,
  * `{toilets: ["yes", "customers"]}` will match iff the feature has the tag
  * "toilets=yes" or "toilets=customers" or "toilets=...;yes;..." or
- * "toilets=...;customers;...".
+ * "toilets=...;customers;..." or "toilets=...;yes;...;customers;...".
  *
  * Note that this function does not attempt to understand values in the
  * `tagsMatchList` like "yes;customers" as a list. You need to provide a
@@ -190,6 +190,9 @@ export function hasAnyTags(feature, tagsMatchList) {
  * Note that this function does not attempt to understand values in the
  * `tagsMatchList` like "bakery;sandwich" as a list. You need to provide a
  * JavaScript list like `["bakery", "sandwich"]` instead.
+ *
+ * **Time complexity**: `O(n * m)` where `n := feature.properties.length` and
+ * `m := tagsMatchList.length`.
  *
  * @param {Feature} feature
  * @param {FeatureTagsMatchList} tags
