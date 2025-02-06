@@ -80,7 +80,7 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
       <div
         className={clsx([
           "absolute top-full z-[20]",
-          "w-full h-full",
+          "w-full min-h-full",
           "pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]",
           "pt-px", // For `ResizeHandle`
 
