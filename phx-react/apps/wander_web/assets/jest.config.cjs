@@ -31,7 +31,8 @@ const config = {
   */
   transform: {
     "\\.[jt]sx?$": "@swc/jest"
-  }
+  },
+  coverageProvider: "babel"
 }
 
 module.exports = config;

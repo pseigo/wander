@@ -142,7 +142,7 @@ export default [
       "jest/prefer-to-contain": "warn",
       "jest/prefer-to-have-length": "warn",
       "jest/valid-describe-callback": "error",
-      "jest/valid-title": "error",
+      "jest/valid-title": ["error", {ignoreTypeOfTestName: true}],
       "jest/valid-expect": "error",
       "jest/valid-expect-in-promise": "error",
       // Our rules:

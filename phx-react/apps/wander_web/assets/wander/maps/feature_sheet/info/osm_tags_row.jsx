@@ -18,6 +18,7 @@ import { clsx } from "clsx";
 import { memo } from "react";
 
 import { Disclosure } from "/wander/common/components/disclosure";
+import * as Features from "/wander/maps/osm/features";
 
 import { Row } from "./row";
 import { IconWithContent, RowIcon } from "./icon_with_content";
@@ -26,11 +27,7 @@ import { IconWithContent, RowIcon } from "./icon_with_content";
  * @param {Feature} feature
  */
 export function OsmTagsRow({ feature }) {
-  const tags = Object.fromEntries(
-    Object.entries(feature.properties).filter(
-      ([key, _value]) => !key.startsWith("@")
-    )
-  );
+  const tags = Features.getTags(feature);
 
   return (
     <Row>

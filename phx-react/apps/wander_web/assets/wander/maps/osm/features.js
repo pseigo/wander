@@ -15,15 +15,15 @@
  */
 
 import { wrap } from "/wander/common/arrays";
-
-// TODO: unit test `hasAnyTags` and `hasAllTags`.
+import { isPlainObject } from "/wander/common/objects";
+import { isString } from "/wander/common/strings";
 
 /**
  * @typedef {(
  *   string |
  *   Object.<string, string | string[]> |
  *   Array.<string | Object.<string, string | string[]>>
- * )} FeatureTagsMatchList
+ * )} FeatureTagsMatchExpression
  *
  * @example `"shop"`
  * @example `["shop", "indoor_seating"]`
@@ -33,6 +33,7 @@ import { wrap } from "/wander/common/arrays";
  * @example `["shop", {amenity: "cafe", cuisine: ["bakery", "sandwich"]}]`
  */
 
+// istanbul ignore next
 /**
  * @param {Feature} feature
  *
@@ -42,6 +43,7 @@ export function isWheelchairAccessible(feature) {
   return hasAllTags(feature, { wheelchair: "yes" });
 }
 
+// istanbul ignore next
 /**
  * @param {Feature} feature
  *
@@ -54,6 +56,7 @@ export function hasToilets(feature) {
   });
 }
 
+// istanbul ignore next
 /**
  * @param {Feature} feature
  *
@@ -63,6 +66,7 @@ export function hasBabyChangingStation(feature) {
   return hasAllTags(feature, { changing_table: "yes" });
 }
 
+// istanbul ignore next
 /**
  * @param {Feature} feature
  *
@@ -75,6 +79,7 @@ export function hasOutdoorSeating(feature) {
   );
 }
 
+// istanbul ignore next
 /**
  * @param {Feature} feature
  *
@@ -84,6 +89,7 @@ export function hasIndoorSeating(feature) {
   return hasAnyTags(feature, { indoor_seating: ["yes", "bar_table"] });
 }
 
+// istanbul ignore next
 /**
  * @param {Feature} feature
  *
@@ -96,6 +102,7 @@ export function hasExclusiveInternetAccess(feature) {
   );
 }
 
+// istanbul ignore next
 /**
  * @param {Feature} feature
  *
@@ -108,6 +115,7 @@ export function hasPublicInternetAccess(feature) {
   );
 }
 
+// istanbul ignore next
 /**
  * @param {Feature} feature
  *
@@ -118,10 +126,30 @@ export function hasInternetAccess(feature) {
 }
 
 /**
- * Returns `true` iff `feature` has _at least one_ of the tags in the
- * `tagsMatchList`.
+ * Returns an object containing the `feature`'s tags, excluding meta-tags (keys
+ * starting with "@").
  *
- * If one of the `tagsMatchList` elements is an object, that element will only
+ * @param {Feature] feature
+ *
+ * @returns {{string: string}}
+ */
+export function getTags(feature) {
+  return Object.fromEntries(
+    Object.entries(feature.properties).filter(
+      ([key, _]) => !key.startsWith("@")
+    )
+  );
+}
+
+// TODO: Determine what `hasAnyTags` and `hasAllTags` should return for empty
+//  queries if a time comes where I do want to have empty queries, so I have a
+//  real use case to base the design off of.
+
+/**
+ * Returns `true` iff `feature` has _at least one_ of the tags in the
+ * `matchExpr`.
+ *
+ * If one of the `matchExpr` elements is an object, that element will only
  * match if (a) the feature has the tag, _and_ (b) the tag has _at least one_
  * of the values listed; if the feature has that tag, but none of the values
  * listed, that will not be a match. For example,
@@ -129,57 +157,62 @@ export function hasInternetAccess(feature) {
  * "toilets=yes" or "toilets=customers" or "toilets=...;yes;..." or
  * "toilets=...;customers;..." or "toilets=...;yes;...;customers;...".
  *
- * Note that this function does not attempt to understand values in the
- * `tagsMatchList` like "yes;customers" as a list. You need to provide a
- * JavaScript list like `["yes", "customers"]` instead.
+ * Note: This function _does_ understand OSM's "yes;customers" value
+ * lists for tags in the `feature`, but it _does NOT_ attempt to understand
+ * values in the `matchExpr` like "yes;customers" as a list. You need to
+ * provide JavaScript lists in your `matchExpr` instead, like
+ * `["yes", "customers"]`.
  *
- * **Time complexity**: `O(n * m)` where `n := feature.properties.length` and
- * `m := tagsMatchList.length`.
+ * ## Time complexity
+ *
+ * `O(n * m)` such that:
+ *
+ * - `n` is `feature.properties.length` plus the number of tag values.
+ *   (e.g., the value "yes" contributes 1 to `n`, "yes;customers" contributes 2.)
+ *
+ * - `m` is the number of bare keys plus the number of key-value pairs in the
+ *   `matchExpr`.
+ *   (e.g., `["cuisine", {amenity: ["parking", "cafe"]}]` contributes 3 to `m`.)
  *
  * @param {Feature} feature
- * @param {FeatureTagsMatchList} tagsMatchList
+ * @param {FeatureTagsMatchExpression} matchExpr
  *
  * @returns {boolean}
  */
-export function hasAnyTags(feature, tagsMatchList) {
-  const featureTags = feature.properties;
+export function hasAnyTags(feature, matchExpr) {
+  const featureTags = getTags(feature);
   const featureKeys = Object.keys(featureTags);
-  const bareKeys = extractBareKeys(tagsMatchList);
-  const matchObjs = extractMatchObjects(tagsMatchList);
 
-  for (const bareKey of bareKeys) {
-    if (featureKeys.includes(bareKey)) {
-      return true;
-    }
+  const bareKeys = extractBareKeys(matchExpr);
+
+  // Matches if feature has at least one tag matching a bare key.
+  if (bareKeys.some((key) => featureKeys.includes(key))) {
+    return true;
   }
 
-  for (const matchObj of matchObjs) {
-    for (const [matchObjKey, matchObjValueOrValues] of Object.entries(
-      matchObj
-    )) {
-      if (!featureKeys.includes(matchObjKey)) {
-        continue;
-      }
+  const matchObjs = extractMatchObjects(matchExpr);
 
-      const featureTagValues = splitListStr(featureTags[matchObjKey]);
-      const matchObjValues = wrap(matchObjValueOrValues);
+  // Matches if at least one `matchObj` matches.
+  return matchObjs.some((matchObj) => {
+    // prettier-ignore
+    const tags = Object.entries(matchObj)
+      .filter(([key, _]) => featureKeys.includes(key))
+      .map(([key, valueOrValues]) => [key, wrap(valueOrValues)]);
 
-      for (const matchObjValue of matchObjValues) {
-        if (featureTagValues.includes(matchObjValue)) {
-          return true;
-        }
-      }
-    }
-  }
+    // Matches if at least one value is in the feature's corresponding tag.
+    return tags.some(([key, values]) => {
+      const featureValuesForKey = osmTagValueStrToList(featureTags[key]);
 
-  return false;
+      return values.some((value) => featureValuesForKey.includes(value));
+    });
+  });
 }
 
 /**
  * Returns `true` iff `feature` has _all_ of the tags listed in the
- * `tagsMatchList`.
+ * `matchExpr`.
  *
- * If one of the `tagsMatchList` elements is an object, that element will only
+ * If one of the `matchExpr` elements is an object, that element will only
  * match if (a) the feature has the tag, _and_ (b) the tag has _all_ of the
  * values listed; if the feature has that tag, but is _missing_ one or more of
  * the values listed, that will not be a match. For example,
@@ -187,120 +220,111 @@ export function hasAnyTags(feature, tagsMatchList) {
  * "cuisine=bakery;sandwich" or some other list value containing both "bakery"
  * _and_ "sandwich", such as "cuisine=...;sandwich;...;bakery;...".
  *
- * Note that this function does not attempt to understand values in the
- * `tagsMatchList` like "bakery;sandwich" as a list. You need to provide a
- * JavaScript list like `["bakery", "sandwich"]` instead.
+ * Note: This function _does_ understand OSM's "bakery;sandwich" value
+ * lists for tags in the `feature`, but it _does NOT_ attempt to understand
+ * values in the `matchExpr` like "bakery;sandwich" as a list. You need to
+ * provide JavaScript lists in your `matchExpr` instead, like
+ * `["bakery", "sandwich"]`.
  *
- * **Time complexity**: `O(n * m)` where `n := feature.properties.length` and
- * `m := tagsMatchList.length`.
+ * ## Time complexity
+ *
+ * `O(n * m)` such that:
+ *
+ * - `n` is `feature.properties.length` plus the number of tag values.
+ *   (e.g., the value "yes" contributes 1 to `n`, "yes;customers" contributes 2.)
+ *
+ * - `m` is the number of bare keys plus the number of key-value pairs in the
+ *   `matchExpr`.
+ *   (e.g., `["cuisine", {amenity: ["parking", "cafe"]}]` contributes 3 to `m`.)
  *
  * @param {Feature} feature
- * @param {FeatureTagsMatchList} tags
+ * @param {FeatureTagsMatchExpression} matchExpr
  *
  * @returns {boolean}
  */
-export function hasAllTags(feature, tagsMatchList) {
-  const featureTags = feature.properties;
+export function hasAllTags(feature, matchExpr) {
+  const featureTags = getTags(feature);
   const featureKeys = Object.keys(featureTags);
-  const bareKeys = extractBareKeys(tagsMatchList);
-  const matchObjs = extractMatchObjects(tagsMatchList);
 
-  for (const bareKey of bareKeys) {
-    if (!featureKeys.includes(bareKey)) {
-      return false;
-    }
+  const bareKeys = extractBareKeys(matchExpr);
+
+  // Feature must have a tag for every bare key.
+  if (!bareKeys.every((key) => featureKeys.includes(key))) {
+    return false;
   }
 
-  for (const matchObj of matchObjs) {
-    for (const [matchObjKey, matchObjValueOrValues] of Object.entries(
-      matchObj
-    )) {
-      if (!featureKeys.includes(matchObjKey)) {
-        return false;
-      }
+  const matchObjs = extractMatchObjects(matchExpr);
 
-      const featureTagValues = splitListStr(featureTags[matchObjKey]);
-      const matchObjValues = wrap(matchObjValueOrValues);
+  // Every `matchObj` must match.
+  return matchObjs.every((matchObj) => {
+    // prettier-ignore
+    const tags = Object.entries(matchObj)
+      .map(([key, valueOrValues]) => [key, wrap(valueOrValues)]);
 
-      for (const matchObjValue of matchObjValues) {
-        if (!featureTagValues.includes(matchObjValue)) {
-          return false;
-        }
-      }
-    }
-  }
+    // Every value must be in the feature's corresponding tag.
+    return tags.every(([key, values]) => {
+      const featureValuesForKey = Object.hasOwn(featureTags, key)
+        ? osmTagValueStrToList(featureTags[key])
+        : [];
 
-  return true;
+      return values.every((value) => featureValuesForKey.includes(value));
+    });
+  });
 }
 
 /**
- * @param {FeatureTagsMatchList} tagsMatchList
+ * @param {FeatureTagsMatchExpression} matchExpr
  *
  * @returns {string[]}
  */
-function extractBareKeys(tagsMatchList) {
-  const bareKeys = [];
+function extractBareKeys(matchExpr) {
+  const isBareKey = (value) => isString(value);
 
-  if (typeof tagsMatchList === "string") {
-    bareKeys.push(tagsMatchList);
+  if (isBareKey(matchExpr)) {
+    return [matchExpr];
   }
 
-  if (
-    typeof tagsMatchList === "object" &&
-    tagsMatchList.constructor === Array
-  ) {
-    for (const e of tagsMatchList) {
-      if (typeof e === "string") {
-        bareKeys.push(e);
-      }
-    }
+  if (Array.isArray(matchExpr)) {
+    return matchExpr.filter((e) => isBareKey(e));
   }
 
-  return bareKeys;
+  return [];
 }
 
 /**
- * @param {FeatureTagsMatchList} tagsMatchList
+ * @param {FeatureTagsMatchExpression} matchExpr
  *
  * @returns {object[]}
  */
-function extractMatchObjects(tagsMatchList) {
-  const matchObjs = [];
+function extractMatchObjects(matchExpr) {
+  const isMatchObject = (value) => isPlainObject(value);
 
-  if (
-    typeof tagsMatchList === "object" &&
-    tagsMatchList.constructor === Object
-  ) {
-    matchObjs.push(tagsMatchList);
+  if (isMatchObject(matchExpr)) {
+    return [matchExpr];
   }
 
-  if (
-    typeof tagsMatchList === "object" &&
-    tagsMatchList.constructor === Array
-  ) {
-    for (const e of tagsMatchList) {
-      if (typeof e === "object" && e.constructor === Object) {
-        matchObjs.push(e);
-      }
-    }
+  if (Array.isArray(matchExpr)) {
+    return matchExpr.filter((e) => isMatchObject(e));
   }
 
-  return matchObjs;
+  return [];
 }
 
 /**
  * Splits a string like "bakery" or "bakery;sandwich" into a list like
  * `["bakery"]` or `["bakery", "sandwich"]` according to the `delimiter`.
  *
- * The resulting values also have leading and trailing whitespace removed.
+ * The resulting values also have any leading and trailing whitespace removed,
+ * and empty elements are filtered out.
  *
- * @param {string} listStr
+ * @param {string} str - An OSM tag value like "bakery" or "bakery;sandwich".
  * @param {string} delimiter - Defaults to ";".
  *
  * @return {string[]}
  */
-function splitListStr(listStr, delimiter = ";") {
-  let values = listStr.split(delimiter);
-  values = values.map((s) => s.trim());
-  return values;
+function osmTagValueStrToList(str, delimiter = ";") {
+  return str
+    .split(delimiter)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
 }
