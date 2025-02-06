@@ -400,6 +400,7 @@ describe("calling `hasAllTags/2`", () => {
         cuisine: "bakery; ;; sandwich ",
         internet_access: "yes",
         "internet_access:fee": "yes;customers",
+        opening_hours: "Mo-Fr 07:00-21:00; PH off",
       }
     };
 
@@ -421,6 +422,9 @@ describe("calling `hasAllTags/2`", () => {
       ["amenity", "cuisine", "internet_access", "internet_access:fee", { amenity: ["parking", "cafe"], cuisine: ["bakery", "sandwich"], internet_access: "yes", "internet_access:fee": ["yes", "customers"] }],
 
       [{ amenity: "parking" }, { amenity: "cafe" }, { cuisine: "bakery" }, { cuisine: "sandwich" }, "amenity", "cuisine", "internet_access", "internet_access:fee", { internet_access: "yes" }, { "internet_access:fee": ["yes", "customers"] }],
+
+      ["opening_hours", { opening_hours: ["Mo-Fr 07:00-21:00", "PH off"] }],
+      { opening_hours: "PH off" },
     ]);
 
     // prettier-ignore
@@ -429,6 +433,9 @@ describe("calling `hasAllTags/2`", () => {
       ["amenity", { amenity: "parking_space" }],
       { "internet_access:fee": ["yes", "no"] },
       [{ "internet_access:fee": ["yes", "customer"] }, "name"],
+
+      ["opening_hours", { opening_hours: "Mo-Fr 07:00-21:00; PH off" }],
+      ["opening_hours", { opening_hours: ["Mo-Fr 07:00-21:00", " PH off"] }],
     ]);
 
     // prettier-ignore
@@ -437,6 +444,8 @@ describe("calling `hasAllTags/2`", () => {
       { cuisine: " " },
       { cuisine: "" },
       { cuisine: " sandwich " },
+
+      { opening_hours: "Mo-Fr 07:00-21:00; PH off" },
     ]);
 
     describe("returns `true` for precisely matching query", () => {
