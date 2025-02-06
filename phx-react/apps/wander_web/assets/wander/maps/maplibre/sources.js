@@ -119,7 +119,7 @@ export function sampleCafe() {
     ...rawFeature.properties,
     "@type": osmType,
     "@id": osmId,
-  }
+  };
 
   const feature = {
     id: rawFeature.id,

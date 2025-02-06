@@ -15,26 +15,32 @@
  */
 
 import { clsx } from "clsx";
-import { memo, useEffect, useRef } from "react";
+import { memo, useEffect, useState, useRef } from "react";
 
 import { useElementHeightObserver } from "/wander/common/hooks/element_height_observer";
 import { useViewportHeight } from "/wander/common/hooks/viewport_height";
 
 import { useSheetDetents } from "./feature_sheet/sheet_detents";
 import { useVerticalDrag } from "./feature_sheet/vertical_drag";
+import { ResizeHandle } from "./feature_sheet/resize_handle";
 import { Header } from "./feature_sheet/header";
 import { NavBar } from "./feature_sheet/nav_bar";
 import { Info } from "./feature_sheet/info";
-import { ResizeHandle } from "./feature_sheet/resize_handle";
+import { Collections } from "./feature_sheet/collections";
+import { Notes } from "./feature_sheet/notes";
 
 const MemoHeader = memo(Header);
 const MemoNavBar = memo(NavBar);
 const MemoInfo = memo(Info);
+const MemoCollections = memo(Collections);
+const MemoNotes = memo(Notes);
 
 const horizontalGutterClasses = "px-[14px]";
 const verticalGutterClasses = "py-[14px]";
 
 export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
+  const [activeTab, setActiveTab] = useState("info");
+
   const [viewportHeight] = useViewportHeight();
   const headerRef = useRef(null);
   const [headerHeight] = useElementHeightObserver(headerRef);
@@ -74,7 +80,7 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
       <div
         className={clsx([
           "absolute top-full z-[20]",
-          "w-full min-h-full",
+          "w-full h-full",
           "pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]",
           "pt-px", // For `ResizeHandle`
 
@@ -105,11 +111,17 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
           </div>
 
           <MemoNavBar
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
             horizontalGutterClasses={horizontalGutterClasses}
             className="mt-[10px]"
           />
 
-          <MemoInfo feature={feature} />
+          {activeTab === "info" && (
+            <MemoInfo feature={feature} currentDetent={currentDetent} />
+          )}
+          {activeTab === "collections" && <MemoCollections feature={feature} />}
+          {activeTab === "notes" && <MemoNotes feature={feature} />}
         </div>
       </div>
     </div>

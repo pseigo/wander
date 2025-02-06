@@ -15,11 +15,17 @@
  */
 
 import { clsx } from "clsx";
+import { useState } from "react";
 
 import { MaterialIcon } from "/wander/common/components/icon";
 import { TopTabBar } from "/wander/common/components/top_tab_bar";
 
-export function NavBar({ horizontalGutterClasses, className }) {
+export function NavBar({
+  activeTab,
+  setActiveTab,
+  horizontalGutterClasses,
+  className,
+}) {
   return (
     <div
       className={clsx([
@@ -31,7 +37,8 @@ export function NavBar({ horizontalGutterClasses, className }) {
     >
       <TopTabBar>
         <TopTabBar.Button
-          isActive={true}
+          isActive={activeTab === "info"}
+          onClick={() => setActiveTab("info")}
           label={"Info"}
           icon={
             <MaterialIcon
@@ -41,7 +48,8 @@ export function NavBar({ horizontalGutterClasses, className }) {
           }
         />
         <TopTabBar.Button
-          isActive={false}
+          isActive={activeTab === "collections"}
+          onClick={() => setActiveTab("collections")}
           label={"Collections"}
           icon={
             <MaterialIcon
@@ -51,7 +59,8 @@ export function NavBar({ horizontalGutterClasses, className }) {
           }
         />
         <TopTabBar.Button
-          isActive={false}
+          isActive={activeTab === "notes"}
+          onClick={() => setActiveTab("notes")}
           label={"Notes"}
           icon={
             <MaterialIcon

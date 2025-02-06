@@ -27,7 +27,7 @@ export function TopTabBar({ children, className }) {
  * @param {string} props.label
  * @param {ReactElement} props.icon
  */
-TopTabBar.Button = function Button({ isActive = false, label, icon }) {
+TopTabBar.Button = function Button({ isActive = false, label, icon, onClick }) {
   return (
     <button
       aria-label={label}
@@ -43,6 +43,7 @@ TopTabBar.Button = function Button({ isActive = false, label, icon }) {
         "relative",
         "pb-[2px]",
       ])}
+      onClick={onClick}
     >
       {icon}
       <span className="text-[.813rem] mt-[-6px]">{label}</span>
