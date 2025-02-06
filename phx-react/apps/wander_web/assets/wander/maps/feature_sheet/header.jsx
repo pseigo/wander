@@ -81,9 +81,11 @@ const ConciseInfo = memo(function ConciseInfo({ feature }) {
     Features.isWheelchairAccessible(feature) && (
       <AmenityIcon key="accessible_forward" name="accessible_forward" />
     ),
-    Features.hasToilets(feature) && <AmenityIcon key="wc" name="wc" />,
-    Features.hasBabyChangingStation(feature) && (
-      <AmenityIcon key="baby_changing_station" name="baby_changing_station" />
+    Features.hasIndoorSeating(feature) && (
+      <AmenityIcon key="table_bar" name="table_bar" />
+    ),
+    Features.hasOutdoorSeating(feature) && (
+      <AmenityIcon key="deck" name="deck" />
     ),
     Features.hasExclusiveInternetAccess(feature) ? (
       <AmenityIcon key="wifi_lock" name="wifi_lock" />
@@ -92,11 +94,9 @@ const ConciseInfo = memo(function ConciseInfo({ feature }) {
         <AmenityIcon key="wifi" name="wifi" />
       )
     ),
-    Features.hasIndoorSeating(feature) && (
-      <AmenityIcon key="table_bar" name="table_bar" />
-    ),
-    Features.hasOutdoorSeating(feature) && (
-      <AmenityIcon key="deck" name="deck" />
+    Features.hasToilets(feature) && <AmenityIcon key="wc" name="wc" />,
+    Features.hasBabyChangingStation(feature) && (
+      <AmenityIcon key="baby_changing_station" name="baby_changing_station" />
     ),
   ];
 
