@@ -43,7 +43,7 @@ export function NavBar({
           icon={
             <MaterialIcon
               name="info"
-              className={topTabBarButtonIconClasses(true)}
+              className={topTabBarButtonIconClasses(activeTab === "info")}
             />
           }
         />
@@ -54,7 +54,9 @@ export function NavBar({
           icon={
             <MaterialIcon
               name="collections_bookmark"
-              className={topTabBarButtonIconClasses(false)}
+              className={topTabBarButtonIconClasses(
+                activeTab === "collections"
+              )}
             />
           }
         />
@@ -65,7 +67,7 @@ export function NavBar({
           icon={
             <MaterialIcon
               name="stylus_note"
-              className={topTabBarButtonIconClasses(false)}
+              className={topTabBarButtonIconClasses(activeTab === "notes")}
             />
           }
         />
@@ -78,6 +80,7 @@ function topTabBarButtonIconClasses(isActive) {
   return clsx([
     "w-[19px] h-[19px]",
     "opsz-20 grad-0 dark:grad-n25",
-    isActive ? "font-semibold fill" : "font-normal",
+    "font-normal",
+    isActive && "fill",
   ]);
 }
