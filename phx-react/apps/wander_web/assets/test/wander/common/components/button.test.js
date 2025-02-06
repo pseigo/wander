@@ -25,5 +25,5 @@ test("renders label", () => {
   render(<Button label={label} />);
 
   screen.getByText(label);
-  screen.getByRole("button", {name: label});
+  screen.getByRole("button", { name: label });
 });

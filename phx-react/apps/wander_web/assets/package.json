@@ -3,7 +3,7 @@
   "scripts": {
     "lint": "npx eslint",
     "format-check": "npx prettier wander --check",
-    "format": "npx prettier wander --write",
+    "format": "npx prettier wander test --write",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
