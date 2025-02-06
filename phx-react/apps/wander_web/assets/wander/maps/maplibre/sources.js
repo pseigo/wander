@@ -111,9 +111,19 @@ export function sampleCafe() {
     throw new Error("could not find a feature matching the search criteria");
   }
 
+  const [osmType, osmId] = rawFeature.id.split("/");
+
+  // The server puts the "@type" and "@id" properties as a string (like "node")
+  // and an integer, and that's how the React components expect it.
+  const properties = {
+    ...rawFeature.properties,
+    "@type": osmType,
+    "@id": osmId,
+  }
+
   const feature = {
-    id: rawFeature.properties["@id"],
-    properties: rawFeature.properties,
+    id: rawFeature.id,
+    properties: properties,
     geometry: rawFeature.geometry,
   };
 
