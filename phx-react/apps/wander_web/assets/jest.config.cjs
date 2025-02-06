@@ -32,7 +32,8 @@ const config = {
   transform: {
     "\\.[jt]sx?$": "@swc/jest"
   },
-  coverageProvider: "babel"
+  coverageProvider: "babel",
+  coverageDirectory: ".coverage"
 }
 
 module.exports = config;
