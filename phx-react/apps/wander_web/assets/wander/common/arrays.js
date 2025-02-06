@@ -16,25 +16,35 @@
 
 // TODO: unit test the functions in this module
 
+import { isString } from "/wander/common/strings";
+
+/**
+ * Returns `true` iff `value` is an array containing zero or more strings.
+ *
+ * @param {any} value
+ *
+ * @returns {boolean}
+ */
+export function isStringArray(value) {
+  return Array.isArray(value) && value.every((e) => isString(e));
+}
+
 /**
  * Wraps the argument in an array if it is not already an array.
  *
  * @example `wrap(1) // => [1]`
  * @example `wrap([1]) // => [1]`
  *
- * @param {(array | any)} element_or_array
+ * @param {(array | any)} elementOrArray
  *
  * @returns {array}
  */
-export function wrap(element_or_array) {
-  if (
-    typeof element_or_array === "object" &&
-    element_or_array.constructor === Array
-  ) {
-    return element_or_array;
+export function wrap(elementOrArray) {
+  if (Array.isArray(elementOrArray)) {
+    return elementOrArray;
   }
 
-  return [element_or_array];
+  return [elementOrArray];
 }
 
 /**

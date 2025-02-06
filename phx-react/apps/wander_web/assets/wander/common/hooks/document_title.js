@@ -16,6 +16,9 @@
 
 import { useState, useEffect } from "react";
 
+import { isStringArray, wrap } from "/wander/common/arrays";
+import { isString } from "/wander/common/strings";
+
 const siteName = "Wander";
 
 /**
@@ -121,37 +124,13 @@ export function toDocumentTitle(titleOrTitles, opts = { withSiteName: true }) {
  * @returns {string[]}
  */
 function normalizeTitleOrTitles(titleOrTitles, withSiteName) {
-  const errorPrefix =
-    "[toTitle/1][normalizeTitleOrTitles/2]: 'titleOrTitles' argument must be an 'Array' or 'String', but";
-
-  const type = typeof titleOrTitles;
-  switch (type) {
-    case "string":
-    case "object":
-      break;
-
-    default:
-      const error = `${errorPrefix} 'typeof titleOrTitles' is '${type}'`;
-      throw new Error(error);
+  if (!(isString(titleOrTitles) || isStringArray(titleOrTitles))) {
+    throw new Error(
+      "[toTitle/1][normalizeTitleOrTitles/2]: 'titleOrTitles' argument must be a 'string' or 'string[]'"
+    );
   }
 
-  /** @type {string[]} */
-  let titles = [];
-
-  const constructor = titleOrTitles.constructor;
-  switch (constructor) {
-    case String:
-      titles = [titleOrTitles];
-      break;
-
-    case Array:
-      titles = titleOrTitles;
-      break;
-
-    default:
-      const error = `${errorPrefix} 'titleOrTitles.constructor' is '${constructor}'`;
-      throw new Error(error);
-  }
+  const titles = wrap(titleOrTitles);
 
   if (withSiteName) {
     return [...titles, siteName];

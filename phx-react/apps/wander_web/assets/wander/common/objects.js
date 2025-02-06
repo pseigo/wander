@@ -17,34 +17,20 @@
 // TODO: unit test the functions in this module
 
 /**
- * Returns `true` iff `value` is a string.
+ * Returns `true` iff `value` is a plain object.
+ *
+ * A "plain object" is considered to be an object literal like `{a: 1, b: 2}`
+ * or an object created with `Object.create`.
  *
  * @param {any} value
  *
  * @returns {boolean}
  */
-export function isString(value) {
-  return typeof value === "string";
-}
-
-/**
- * Returns a copy of `str` with the first character uppercased.
- *
- * @example
- * ```js
- * import { capitalize } from "/wander/common/strings";
- * console.log(capitalize("hello")); //=> "Hello"
- * console.log(capitalize(""));      //=> ""
- * ```
- *
- * @param {string} str
- *
- * @returns {string}
- */
-export function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-export function randomLowerAlphaNumericString() {
-  return Math.random().toString(36).slice(2);
+export function isPlainObject(value) {
+  return (
+    value !== undefined &&
+    value !== null &&
+    typeof value === "object" &&
+    value.constructor === Object
+  );
 }
