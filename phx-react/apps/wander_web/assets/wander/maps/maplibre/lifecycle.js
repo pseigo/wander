@@ -15,8 +15,9 @@
  */
 
 import ML from "maplibre-gl";
+import { Protocol as PmtilesProtocol } from "pmtiles";
 
-import { rasterStyle, vectorStyle } from "/wander/maps/maplibre/styles";
+import { externalRasterStyle, externalVectorStyle, internalVectorStyle } from "/wander/maps/maplibre/styles";
 
 /**
  * @param {string} nodeId
@@ -26,10 +27,17 @@ import { rasterStyle, vectorStyle } from "/wander/maps/maplibre/styles";
  * @returns {ML.Map}
  */
 export function createMap(nodeId, initialCenter, initialZoomLevel) {
+  const pmtilesProtocol = new PmtilesProtocol();
+  ML.addProtocol("pmtiles", pmtilesProtocol.tile);
+
   const map = new ML.Map({
     container: nodeId,
-    style: vectorStyle,
+
+    //style: internalVectorStyle,
+    style: externalVectorStyle,
+
     //transformRequest: transformRequest,
+
     attributionControl: {
       compact: false,
       customAttribution: "Map and Place Data &copy; OpenStreetMap, ODbL",

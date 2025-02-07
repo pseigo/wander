@@ -10,6 +10,7 @@
     "clsx": "^2.1.1",
     "maplibre-gl": "^5.0.1",
     "opening_hours": "3.8.0",
+    "pmtiles": "4.2.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "wouter": "3.3.5"
