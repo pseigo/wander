@@ -147,7 +147,7 @@ export const internalVectorStyle = {
   name: "Blank",
   center: [0, 0],
   zoom: 0,
-  glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+  glyphs: `${location.protocol}//${location.host}/fonts/{fontstack}/{range}.pbf`,
   sources: {
     tiles: {
       type: "vector",
