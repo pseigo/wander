@@ -47,6 +47,85 @@ export const externalRasterStyle = {
   id: "blank",
 };
 
+const shortbreadLayers = [
+  {
+    id: "background",
+    type: "background",
+    paint: {
+      "background-color": "#f2f2f2",
+    },
+  },
+  {
+    id: "ocean",
+    type: "fill",
+    source: "tiles",
+    "source-layer": "ocean",
+    paint: { "fill-color": "#aad3df" },
+  },
+  {
+    id: "water_polygons",
+    type: "fill",
+    source: "tiles",
+    "source-layer": "water_polygons",
+    paint: { "fill-color": "#AAD3DF" },
+  },
+  {
+    id: "boundaries",
+    type: "fill",
+    source: "tiles",
+    "source-layer": "boundaries",
+    paint: { "fill-color": "#8d618b" },
+  },
+  {
+    id: "grass",
+    type: "fill",
+    source: "tiles",
+    "source-layer": "land",
+    filter: ["in", ["get", "kind"], "leisure-park"],
+    paint: { "fill-color": "#abe26f" },
+  },
+  {
+    id: "streets",
+    type: "line",
+    source: "tiles",
+    "source-layer": "streets",
+    layout: { visibility: "visible" },
+    paint: {
+      "line-color": [
+        "match",
+        ["get", "kind"],
+        "motorway",
+        "#e66e89",
+        ["trunk", "primary", "secondary"],
+        "#f4c37d",
+        "#ccccca",
+      ],
+    },
+  },
+  {
+    id: "buildings",
+    type: "fill",
+    source: "tiles",
+    "source-layer": "buildings",
+    paint: { "fill-color": "#e2d9d3" },
+  },
+  {
+    id: "places",
+    type: "symbol",
+    source: "tiles",
+    "source-layer": "place_labels",
+    layout: {
+      "text-field": ["get", "name"],
+      "text-font": ["Open Sans Semibold"],
+      "text-size": 16,
+    },
+    paint: {
+      "text-halo-width": 1,
+      "text-halo-color": "rgba(255, 255, 255, 1)",
+    },
+  },
+];
+
 export const externalVectorStyle = {
   version: 8,
   name: "Blank",
@@ -61,84 +140,7 @@ export const externalVectorStyle = {
       maxzoom: 14,
     },
   },
-  layers: [
-    {
-      id: "background",
-      type: "background",
-      paint: {
-        "background-color": "#f2f2f2",
-      },
-    },
-    {
-      id: "ocean",
-      type: "fill",
-      source: "tiles",
-      "source-layer": "ocean",
-      paint: { "fill-color": "#aad3df" },
-    },
-    {
-      id: "water_polygons",
-      type: "fill",
-      source: "tiles",
-      "source-layer": "water_polygons",
-      paint: { "fill-color": "#AAD3DF" },
-    },
-    {
-      id: "boundaries",
-      type: "fill",
-      source: "tiles",
-      "source-layer": "boundaries",
-      paint: { "fill-color": "#8d618b" },
-    },
-    {
-      id: "grass",
-      type: "fill",
-      source: "tiles",
-      "source-layer": "land",
-      filter: ["in", ["get", "kind"], "leisure-park"],
-      paint: { "fill-color": "#abe26f" },
-    },
-    {
-      id: "streets",
-      type: "line",
-      source: "tiles",
-      "source-layer": "streets",
-      layout: { visibility: "visible" },
-      paint: {
-        "line-color": [
-          "match",
-          ["get", "kind"],
-          "motorway",
-          "#e66e89",
-          ["trunk", "primary", "secondary"],
-          "#f4c37d",
-          "#ccccca",
-        ],
-      },
-    },
-    {
-      id: "buildings",
-      type: "fill",
-      source: "tiles",
-      "source-layer": "buildings",
-      paint: { "fill-color": "#e2d9d3" },
-    },
-    {
-      id: "places",
-      type: "symbol",
-      source: "tiles",
-      "source-layer": "place_labels",
-      layout: {
-        "text-field": ["get", "name"],
-        "text-font": ["Open Sans Semibold"],
-        "text-size": 16,
-      },
-      paint: {
-        "text-halo-width": 1,
-        "text-halo-color": "rgba(255, 255, 255, 1)",
-      },
-    },
-  ],
+  layers: shortbreadLayers,
   id: "blank",
 };
 
@@ -154,83 +156,6 @@ export const internalVectorStyle = {
       url: `pmtiles://${location.protocol}//${location.host}/map-tiles/alberta-shortbread.pmtiles`,
     },
   },
-  layers: [
-    {
-      id: "background",
-      type: "background",
-      paint: {
-        "background-color": "#f2f2f2",
-      },
-    },
-    {
-      id: "ocean",
-      type: "fill",
-      source: "tiles",
-      "source-layer": "ocean",
-      paint: { "fill-color": "#aad3df" },
-    },
-    {
-      id: "water_polygons",
-      type: "fill",
-      source: "tiles",
-      "source-layer": "water_polygons",
-      paint: { "fill-color": "#AAD3DF" },
-    },
-    {
-      id: "boundaries",
-      type: "fill",
-      source: "tiles",
-      "source-layer": "boundaries",
-      paint: { "fill-color": "#8d618b" },
-    },
-    {
-      id: "grass",
-      type: "fill",
-      source: "tiles",
-      "source-layer": "land",
-      filter: ["in", ["get", "kind"], "leisure-park"],
-      paint: { "fill-color": "#abe26f" },
-    },
-    {
-      id: "streets",
-      type: "line",
-      source: "tiles",
-      "source-layer": "streets",
-      layout: { visibility: "visible" },
-      paint: {
-        "line-color": [
-          "match",
-          ["get", "kind"],
-          "motorway",
-          "#e66e89",
-          ["trunk", "primary", "secondary"],
-          "#f4c37d",
-          "#ccccca",
-        ],
-      },
-    },
-    {
-      id: "buildings",
-      type: "fill",
-      source: "tiles",
-      "source-layer": "buildings",
-      paint: { "fill-color": "#e2d9d3" },
-    },
-    {
-      id: "places",
-      type: "symbol",
-      source: "tiles",
-      "source-layer": "place_labels",
-      layout: {
-        "text-field": ["get", "name"],
-        "text-font": ["Open Sans Semibold"],
-        "text-size": 16,
-      },
-      paint: {
-        "text-halo-width": 1,
-        "text-halo-color": "rgba(255, 255, 255, 1)",
-      },
-    },
-  ],
+  layers: shortbreadLayers,
   id: "blank",
 };
