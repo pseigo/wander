@@ -1,1 +1,9 @@
-{}
+{
+  "map": {
+    "tile": {
+      "region": "alberta",
+      "type": "vector",
+      "service_type": "external"
+    }
+  }
+}

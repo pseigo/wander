@@ -17,7 +17,13 @@
 import ML from "maplibre-gl";
 import { Protocol as PmtilesProtocol } from "pmtiles";
 
-import { externalRasterStyle, externalVectorStyle, internalVectorStyle } from "/wander/maps/maplibre/styles";
+import * as Config from "/wander/common/config";
+import { toMarkdownTable } from "/wander/common/strings/markdown_table";
+import {
+  externalRasterStyle,
+  externalVectorStyle,
+  createInternalVectorStyle,
+} from "/wander/maps/maplibre/styles";
 
 /**
  * @param {string} nodeId
@@ -30,14 +36,16 @@ export function createMap(nodeId, initialCenter, initialZoomLevel) {
   const pmtilesProtocol = new PmtilesProtocol();
   ML.addProtocol("pmtiles", pmtilesProtocol.tile);
 
+  const region = Config.get("map.tile.region");
+  const tileType = Config.get("map.tile.type");
+  const tileServiceType = Config.get("map.tile.service_type");
+
+  const styleSpec = getStyleSpec(region, tileType, tileServiceType);
+
   const map = new ML.Map({
     container: nodeId,
-
-    //style: internalVectorStyle,
-    style: externalVectorStyle,
-
+    style: styleSpec,
     //transformRequest: transformRequest,
-
     attributionControl: {
       compact: false,
       customAttribution: "Map and Place Data &copy; OpenStreetMap, ODbL",
@@ -61,6 +69,77 @@ export function createMap(nodeId, initialCenter, initialZoomLevel) {
 
   return map;
 }
+
+/**
+ * @param {string} region - e.g., "alberta"
+ * @param {("vector" | "raster")} tileType
+ * @param {("internal" | "external")} tileType
+ *
+ * @returns {(MapLibreGlJs.StyleSpecification | undefined)}
+ */
+function getStyleSpec(region, tileType, tileServiceType) {
+  const queryMappings = createStyleSpecQueryMappings(region);
+  const styleSpec = doGetStyleSpec(
+    { tileType, tileServiceType },
+    queryMappings
+  );
+
+  if (styleSpec === undefined) {
+    const validParamCombsTable = toMarkdownTable(
+      [
+        ["`tileServiceType`", "`tileType`"],
+        ...queryMappings.map(({ tileServiceType, tileType }) => [
+          `"${tileServiceType}"`,
+          `"${tileType}"`,
+        ]),
+      ],
+      { padding: 1 }
+    );
+
+    const description =
+      `there is no style spec for the given parameter combination \`tileServiceType="${tileServiceType}", tileType="${tileType}"\`. styles are available for the following parameter combinations:\n\n` +
+      validParamCombsTable;
+
+    throw new Error(description);
+  }
+
+  return styleSpec;
+}
+
+/**
+ * @param {{ region: string, tileType: string, tileServiceType: string }} query
+ *
+ * @returns {(MapLibreGlJs.StyleSpecification | undefined)}
+ */
+function doGetStyleSpec(query, queryMappings) {
+  const queryMapping = queryMappings.find(
+    ({ tileServiceType, tileType }) =>
+      tileServiceType === query.tileServiceType && tileType === query.tileType
+  );
+
+  return queryMapping?.style();
+}
+
+/**
+ * @param {string} region
+ */
+const createStyleSpecQueryMappings = (region) => [
+  {
+    tileServiceType: "internal",
+    tileType: "vector",
+    style: () => createInternalVectorStyle(region),
+  },
+  {
+    tileServiceType: "external",
+    tileType: "vector",
+    style: () => externalVectorStyle,
+  },
+  {
+    tileServiceType: "external",
+    tileType: "raster",
+    style: () => externalRasterStyle,
+  },
+];
 
 /**
  * @implements {ML.RequestTransformFunction}

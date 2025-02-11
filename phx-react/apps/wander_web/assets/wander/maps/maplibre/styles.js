@@ -144,18 +144,20 @@ export const externalVectorStyle = {
   id: "blank",
 };
 
-export const internalVectorStyle = {
-  version: 8,
-  name: "Blank",
-  center: [0, 0],
-  zoom: 0,
-  glyphs: `${location.protocol}//${location.host}/fonts/{fontstack}/{range}.pbf`,
-  sources: {
-    tiles: {
-      type: "vector",
-      url: `pmtiles://${location.protocol}//${location.host}/map-tiles/alberta-shortbread.pmtiles`,
+export function createInternalVectorStyle(region) {
+  return {
+    version: 8,
+    name: "Blank",
+    center: [0, 0],
+    zoom: 0,
+    glyphs: `${location.protocol}//${location.host}/fonts/{fontstack}/{range}.pbf`,
+    sources: {
+      tiles: {
+        type: "vector",
+        url: `pmtiles://${location.protocol}//${location.host}/map-tiles/${region}-shortbread.pmtiles`,
+      },
     },
-  },
-  layers: shortbreadLayers,
-  id: "blank",
-};
+    layers: shortbreadLayers,
+    id: "blank",
+  };
+}
