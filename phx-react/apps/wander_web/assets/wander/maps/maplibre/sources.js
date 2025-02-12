@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import * as Config from "/wander/common/config";
 import { cafes } from "/wander/maps/data/places";
 
 import { CAFES } from "./constants";
@@ -103,12 +104,29 @@ export function sampleCafe() {
     return geometryType === "Point" && Object.hasOwn(geometry, "coordinates");
   });
 
+  const findByName = Config.get(
+    "map.override_selected_feature_with.find_by.name",
+    "debug"
+  );
+
   const rawFeature = pointFeatures.find((feature) => {
-    return feature.properties.name === "Monogram Coffee";
+    return feature.properties.name === findByName;
   });
 
   if (rawFeature === undefined) {
-    throw new Error("could not find a feature matching the search criteria");
+    if (
+      Config.get("enabled", "debug") &&
+      Config.get("override_selected_feature", "debug")
+    ) {
+      throw new Error(
+        `could not find a feature matching the search criteria (name="${findByName}")`
+      );
+    } else {
+      return {
+        properties: { "@id": 0, "@type": "none" },
+        geometry: { coordinates: [0, 0] },
+      };
+    }
   }
 
   const [osmType, osmId] = rawFeature.id.split("/");

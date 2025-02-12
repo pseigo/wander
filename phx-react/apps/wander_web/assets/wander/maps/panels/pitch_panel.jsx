@@ -23,7 +23,6 @@ export function PitchPanel({ pitch }) {
       className={clsx([
         "text-black bg-[rgb(255_255_255_/_0.6)]",
         "dark:text-white dark:bg-[rgb(0_0_0_/_0.6)]",
-        //"rounded-tr-md",
       ])}
     >
       <div

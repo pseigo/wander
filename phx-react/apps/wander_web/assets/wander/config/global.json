@@ -4,6 +4,12 @@
       "region": "alberta",
       "type": "vector",
       "service_type": "external"
+    },
+    "initial": {
+      "center": [-114.0719, 51.0359],
+      "zoom": 11.5,
+      "bearing": 0,
+      "pitch": 8
     }
   }
 }

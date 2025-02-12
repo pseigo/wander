@@ -1,0 +1,24 @@
+{
+  "enabled": false,
+  "map": {
+    "panels": {
+      "pointer_position": false,
+      "zoom_level": false,
+      "bearing": false,
+      "pitch": false,
+      "feature_sheet": false
+    },
+    "override_selected_feature": false,
+    "override_selected_feature_with": {
+      "find_by": {
+        "name": "Monogram Coffee"
+      }
+    },
+    "feature_sheet": {
+      "initial": {
+        "tab": "info",
+        "detent": "small"
+      }
+    }
+  }
+}

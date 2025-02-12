@@ -16,6 +16,7 @@
 
 import { useEffect, useState } from "react";
 
+import * as Config from "/wander/common/config";
 import { getSafeAreaInset } from "/wander/common/documents";
 
 /**
@@ -81,7 +82,7 @@ export function useSheetDetents(
   headerHeight
 ) {
   const [detentDYs, setDetentDYs] = useState({ small: 0, medium: 0, large: 0 });
-  const [currentDetent, setCurrentDetent] = useState("small");
+  const [currentDetent, setCurrentDetent] = useState(initialDetent());
 
   // Update detent dYs when relevant element heights change, such as the
   // viewport or sheet header.
@@ -136,6 +137,21 @@ export function useSheetDetents(
   }, [completedDrag]);
 
   return [currentDetent];
+}
+
+/**
+ * @returns {SheetDetent}
+ */
+function initialDetent() {
+  const defaultDetent = "small";
+
+  if (Config.get("enabled", "debug") === true) {
+    return (
+      Config.get("map.feature_sheet.initial.detent", "debug") || defaultDetent
+    );
+  }
+
+  return defaultDetent;
 }
 
 function calculateSmallDetentDY(headerHeight) {

@@ -17,6 +17,7 @@
 import { clsx } from "clsx";
 import { useCallback, useEffect, useState } from "react";
 
+import * as Config from "/wander/common/config";
 import { getSafeAreaInset } from "/wander/common/documents";
 
 export function FeatureSheetDebugPanel({ dY, headerHeight }) {
@@ -51,7 +52,6 @@ export function FeatureSheetDebugPanel({ dY, headerHeight }) {
       className={clsx([
         "text-black bg-[rgb(255_255_255_/_0.6)]",
         "dark:text-white dark:bg-[rgb(0_0_0_/_0.6)]",
-        "rounded-br-md",
         "pl-[env(safe-area-inset-left)]",
       ])}
     >
@@ -75,7 +75,21 @@ export function useFeatureSheetDebugInfo() {
   const [headerHeight, setHeaderHeight] = useState(0);
 
   const getSetters = useCallback(() => {
-    return { dY: setDY, headerHeight: setHeaderHeight };
+    if (
+      Config.get("enabled", "debug") &&
+      Config.get("map.panels.feature_sheet", "debug")
+    ) {
+      return {
+        dY: setDY,
+        headerHeight: setHeaderHeight,
+      };
+    }
+
+    const noOp = () => {};
+    return {
+      dY: noOp,
+      headerHeight: noOp,
+    };
   }, [setDY, setHeaderHeight]);
 
   return [getSetters, dY, headerHeight];

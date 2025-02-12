@@ -18,6 +18,7 @@ import { clsx } from "clsx";
 import { useEffect, useRef, useState } from "react";
 import ML from "maplibre-gl";
 
+import * as Config from "/wander/common/config";
 import { randomLowerAlphaNumericString } from "/wander/common/strings";
 
 import * as MapLibre from "/wander/maps/maplibre";
@@ -140,32 +141,51 @@ export function MapLibreMap({ cafes }) {
     setClickedAt({ map: null, layer: null });
   }, [clickedAt]);
 
+  useGlobalConfig(mapRef);
+
   return (
     <div className="h-full static z-0">
-      {/*
-      <PanelGroup position="bottom-left" stack="vertical">
-        <PointerPositionPanel position={pointerPosition} />
-        <ZoomLevelPanel zoomLevel={zoomLevel} />
-        <BearingPanel bearing={bearing} />
-        <PitchPanel pitch={pitch} />
-      </PanelGroup>
-      <PanelGroup position="top-left" stack="vertical">
-        <FeatureSheetDebugPanel dY={sheetDY} headerHeight={sheetHeaderHeight} />
-      </PanelGroup>
-      */}
+      {Config.get("enabled", "debug") && (
+        <>
+          <PanelGroup position="bottom-left" stack="vertical">
+            {Config.get("map.panels.pointer_position", "debug") && (
+              <PointerPositionPanel position={pointerPosition} />
+            )}
+            {Config.get("map.panels.zoom_level", "debug") && (
+              <ZoomLevelPanel zoomLevel={zoomLevel} />
+            )}
+            {Config.get("map.panels.bearing", "debug") && (
+              <BearingPanel bearing={bearing} />
+            )}
+            {Config.get("map.panels.pitch", "debug") && (
+              <PitchPanel pitch={pitch} />
+            )}
+          </PanelGroup>
+          <PanelGroup position="top-left" stack="vertical">
+            {Config.get("map.panels.feature_sheet", "debug") && (
+              <FeatureSheetDebugPanel
+                dY={sheetDY}
+                headerHeight={sheetHeaderHeight}
+              />
+            )}
+          </PanelGroup>
+        </>
+      )}
 
-      {/*
-      <FeatureSheet
-        feature={sampleFeature}
-        getDebugInfoSetters={getSheetDebugInfoSetters}
-      />
-      */}
-      {selectedFeature !== null && (
+      {Config.get("enabled", "debug") &&
+      Config.get("map.override_selected_feature", "debug") ? (
         <FeatureSheet
-          feature={selectedFeature}
-          onClose={() => setSelectedFeature(null)}
+          feature={sampleFeature}
           getDebugInfoSetters={getSheetDebugInfoSetters}
         />
+      ) : (
+        selectedFeature != null && (
+          <FeatureSheet
+            feature={selectedFeature}
+            onClose={() => setSelectedFeature(null)}
+            getDebugInfoSetters={getSheetDebugInfoSetters}
+          />
+        )
       )}
 
       <div
@@ -268,4 +288,20 @@ function registerDebugInfoStateUpdaters(
     const pitch = map.getPitch();
     setObservedPitch(pitch);
   });
+}
+
+function useGlobalConfig(mapRef) {
+  useEffect(() => {
+    const center = Config.get("map.initial.center") || [-93.2277, 44.974];
+    const zoom = Config.get("map.initial.zoom") || 3.2;
+    const bearing = Config.get("map.initial.bearing") || 0;
+    const pitch = Config.get("map.initial.pitch") || 8;
+
+    mapRef.current.on("load", () => {
+      mapRef.current.setCenter(center);
+      mapRef.current.setZoom(zoom);
+      mapRef.current.setBearing(bearing);
+      mapRef.current.setPitch(pitch);
+    });
+  }, []);
 }

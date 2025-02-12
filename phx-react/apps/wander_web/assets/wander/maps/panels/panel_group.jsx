@@ -37,8 +37,11 @@ export function PanelGroup({ children, position, stack = "vertical" }) {
     // prettier-ignore
     <div
       className={clsx([
-        "absolute z-[10]", classesForPosition(position),
-        "flex", classesForStackDirection(stack),
+        "absolute z-[10]",
+        "flex",
+        "overflow-hidden",
+        classesForPosition(position),
+        classesForStackDirection(stack),
       ])}
     >
       {children}
@@ -54,16 +57,16 @@ export function PanelGroup({ children, position, stack = "vertical" }) {
 function classesForPosition(position) {
   switch (position) {
     case "top-left":
-      return "top-0 left-0";
+      return ["top-0 left-0", "rounded-br-md"];
 
     case "top-right":
-      return "top-0 right-0";
+      return ["top-0 right-0", "rounded-bl-md"];
 
     case "bottom-right":
-      return "bottom-0 right-0";
+      return ["bottom-0 right-0", "rounded-tl-md"];
 
     case "bottom-left":
-      return "bottom-0 left-0";
+      return ["bottom-0 left-0", "rounded-tr-md"];
   }
 
   throw new Error(

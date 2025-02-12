@@ -17,6 +17,7 @@
 import { isString } from "/wander/common/strings";
 
 import * as nsGlobal from "/wander/config/global.json";
+import * as nsDebug from "/wander/config/debug.json";
 
 import { ConfigNamespaceError } from "./config/config_namespace_error";
 
@@ -57,6 +58,9 @@ function loadConfig(namespace) {
   switch (namespace) {
     case "global":
       return nsGlobal;
+
+    case "debug":
+      return nsDebug;
 
     default:
       const description = isString(namespace)

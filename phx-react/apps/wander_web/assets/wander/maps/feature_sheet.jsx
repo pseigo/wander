@@ -17,6 +17,7 @@
 import { clsx } from "clsx";
 import { memo, useEffect, useState, useRef } from "react";
 
+import * as Config from "/wander/common/config";
 import { useElementHeightObserver } from "/wander/common/hooks/element_height_observer";
 import { useViewportHeight } from "/wander/common/hooks/viewport_height";
 
@@ -39,7 +40,7 @@ const horizontalGutterClasses = "px-[14px]";
 const verticalGutterClasses = "py-[14px]";
 
 export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
-  const [activeTab, setActiveTab] = useState("info");
+  const [activeTab, setActiveTab] = useState(initialTab());
 
   const [viewportHeight] = useViewportHeight();
   const headerRef = useRef(null);
@@ -63,7 +64,7 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
     headerHeight
   );
 
-  //useDebugInfoReporting(getDebugInfoSetters, dY, headerHeight);
+  useDebugInfoReporting(getDebugInfoSetters, dY, headerHeight);
 
   const titleShrinkProgress = calcTitleShrinkProgress(dY);
 
@@ -126,6 +127,19 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
       </div>
     </div>
   );
+}
+
+/**
+ * @returns {("info" | "collections" | "notes")}
+ */
+function initialTab() {
+  const defaultTab = "info";
+
+  if (Config.get("enabled", "debug")) {
+    return Config.get("map.feature_sheet.initial.tab", "debug") || defaultTab;
+  }
+
+  return defaultTab;
 }
 
 /**
