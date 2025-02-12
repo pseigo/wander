@@ -36,24 +36,7 @@
  * @throws {TypeError} if `lowerBound` or `upperBound` is not an integer
  */
 export function inclusiveRange(lowerBound, upperBound) {
-  if (!Number.isInteger(lowerBound)) {
-    throw new TypeError(
-      `\`lowerBound\` (\`${lowerBound}\`) must be an integer`
-    );
-  }
-  if (!Number.isInteger(upperBound)) {
-    throw new TypeError(
-      `\`upperBound\` (\`${upperBound}\`) must be an integer`
-    );
-  }
-  if (upperBound < lowerBound) {
-    throw new RangeError(
-      `\`upperBound\` (${upperBound}) must be greater than or equal to \`lowerBound\` (${lowerBound})`
-    );
-  }
-
-  const size = upperBound - lowerBound + 1;
-  return new Array(size).keys().map((e) => e + lowerBound);
+  return createRange(lowerBound, upperBound, upperBound - lowerBound + 1);
 }
 
 /**
@@ -78,6 +61,10 @@ export function inclusiveRange(lowerBound, upperBound) {
  * @throws {TypeError} if `lowerBound` or `upperBound` is not an integer
  */
 export function exclusiveRange(lowerBound, upperBound) {
+  return createRange(lowerBound, upperBound, upperBound - lowerBound);
+}
+
+function createRange(lowerBound, upperBound, size) {
   if (!Number.isInteger(lowerBound)) {
     throw new TypeError(
       `\`lowerBound\` (\`${lowerBound}\`) must be an integer`
@@ -94,6 +81,5 @@ export function exclusiveRange(lowerBound, upperBound) {
     );
   }
 
-  const size = upperBound - lowerBound;
   return new Array(size).keys().map((e) => e + lowerBound);
 }
