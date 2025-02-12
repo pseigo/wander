@@ -173,7 +173,7 @@ export function MapLibreMap({ cafes }) {
       )}
 
       {Config.get("enabled", "debug") &&
-      Config.get("map.override_selected_feature", "debug") ? (
+      Config.get("map.override_selected_feature.enabled", "debug") ? (
         <FeatureSheet
           feature={sampleFeature}
           getDebugInfoSetters={getSheetDebugInfoSetters}

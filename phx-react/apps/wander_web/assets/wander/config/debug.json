@@ -8,10 +8,12 @@
       "pitch": false,
       "feature_sheet": false
     },
-    "override_selected_feature": false,
-    "override_selected_feature_with": {
-      "find_by": {
-        "name": "Monogram Coffee"
+    "override_selected_feature": {
+      "enabled": false,
+      "with": {
+        "find_by": {
+          "name": "Monogram Coffee"
+        }
       }
     },
     "feature_sheet": {

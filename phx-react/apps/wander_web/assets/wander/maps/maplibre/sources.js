@@ -105,7 +105,7 @@ export function sampleCafe() {
   });
 
   const findByName = Config.get(
-    "map.override_selected_feature_with.find_by.name",
+    "map.override_selected_feature.with.find_by.name",
     "debug"
   );
 
@@ -116,7 +116,7 @@ export function sampleCafe() {
   if (rawFeature === undefined) {
     if (
       Config.get("enabled", "debug") &&
-      Config.get("override_selected_feature", "debug")
+      Config.get("map.override_selected_feature.enabled", "debug")
     ) {
       throw new Error(
         `could not find a feature matching the search criteria (name="${findByName}")`
