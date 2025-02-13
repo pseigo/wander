@@ -28,6 +28,7 @@ export function NavBar({
 }) {
   return (
     <div
+      data-testid="feature-sheet__nav_bar"
       className={clsx([
         "w-full",
         "border-b border-[#e1e1e1]",

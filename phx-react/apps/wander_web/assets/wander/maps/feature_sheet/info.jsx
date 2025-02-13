@@ -15,7 +15,7 @@
  */
 
 import { clsx } from "clsx";
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import { Disclosure } from "/wander/common/components/disclosure";
 import { ExternalLink } from "/wander/common/components/link";
@@ -36,10 +36,26 @@ import { OsmTagsRow } from "./info/osm_tags_row";
 /**
  * @typedef {{houseNumber?: string, street?: string, city?: string, province?: string, postalCode?: string}} Address
  */
-export function Info({ feature }) {
+export function Info({ feature, currentDetent }) {
+  const handleDragGesture = useCallback((e) => {
+    e.stopPropagation();
+  }, []);
+
   return (
-    <div className={clsx(["w-full"])}>
-      <Sections feature={feature} />
+    <div
+      data-testid="feature-sheet__info"
+      className={clsx([
+        "w-full h-full",
+        currentDetent !== "small" ? "overflow-y-scroll" : "overflow-y-hidden",
+      ])}
+      onPointerDown={handleDragGesture}
+      onTouchStart={handleDragGesture}
+      //onPointerMove={handleDragGesture}
+      onTouchMove={handleDragGesture}
+    >
+      <div className="mb-[14px] select-none">
+        <Sections feature={feature} />
+      </div>
     </div>
   );
 }

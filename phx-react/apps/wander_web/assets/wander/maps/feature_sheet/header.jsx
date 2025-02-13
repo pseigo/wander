@@ -31,7 +31,7 @@ export function Header({
   ref,
 }) {
   return (
-    <div className="sheet-header" ref={ref}>
+    <div data-testid="feature-sheet__header" ref={ref}>
       <Actions onClose={onClose} />
       <div className="flex flex-col gap-0">
         <Title feature={feature} titleShrinkProgress={titleShrinkProgress} />

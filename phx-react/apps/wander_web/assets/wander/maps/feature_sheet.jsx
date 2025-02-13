@@ -37,7 +37,6 @@ const MemoCollections = memo(Collections);
 const MemoNotes = memo(Notes);
 
 const horizontalGutterClasses = "px-[14px]";
-const verticalGutterClasses = "py-[14px]";
 
 export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
   const [activeTab, setActiveTab] = useState(initialTab());
@@ -70,18 +69,18 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
 
   return (
     <div
+      data-testid="feature-sheet__fullscreen-container"
       className={clsx([
-        "feature-sheet",
-        "overflow-hidden absolute",
-        "inset-0",
+        "absolute inset-0 overflow-hidden",
         "mb-[calc(-1*env(safe-area-inset-bottom))]",
         "touch-pan-y",
       ])}
     >
       <div
+        data-testid="feature-sheet"
         className={clsx([
           "absolute top-full z-[20]",
-          "w-full min-h-full",
+          "w-full h-[95vh] box-border overflow-y-hidden",
           "pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]",
           "pt-px", // For `ResizeHandle`
 
@@ -100,8 +99,14 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
       >
         <ResizeHandle />
 
-        <div className={verticalGutterClasses}>
-          <div className={horizontalGutterClasses}>
+        <div
+          data-testid="feature-sheet__content-container"
+          className={clsx(["h-full", "pt-[14px]", "flex flex-col gap-0"])}
+        >
+          <div
+            data-testid="feature-sheet__header-container"
+            className={horizontalGutterClasses}
+          >
             <MemoHeader
               feature={feature}
               onClose={onClose}
@@ -121,7 +126,9 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
           {activeTab === "info" && (
             <MemoInfo feature={feature} currentDetent={currentDetent} />
           )}
-          {activeTab === "collections" && <MemoCollections feature={feature} />}
+          {activeTab === "collections" && (
+            <MemoCollections feature={feature} currentDetent={currentDetent} />
+          )}
           {activeTab === "notes" && <MemoNotes feature={feature} />}
         </div>
       </div>

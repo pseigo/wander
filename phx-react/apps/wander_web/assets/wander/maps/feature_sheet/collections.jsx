@@ -15,11 +15,71 @@
  */
 
 import { clsx } from "clsx";
+import { memo, useCallback, useRef, useState } from "react";
 
-export function Collections({ _feature }) {
+import { Index } from "./collections/index";
+import { sampleCollections } from "./collections/sample_collections";
+
+/**
+ * @typedef {{
+ *   id: string,
+ *   owner_id: string,
+ *   name: string
+ * }} FeatureCollection
+ */
+
+export function Collections({ _feature, currentDetent }) {
+  const elementRef = useRef(null);
+  const allowingSheetDraggingRef = useRef(true);
+
+  const handleScroll = useCallback((_e) => {
+    const dY = elementRef.current.scrollTop;
+    //console.log("[collections][event:scroll] dY: ", dY);
+
+    if (dY === 0) {
+      allowingSheetDraggingRef.current = true;
+      //} else if (allowingSheetDragging.current) {
+    } else {
+      allowingSheetDraggingRef.current = false;
+    }
+  }, []);
+
+  const handleDragGesture = useCallback((e) => {
+    //console.log("[collections][drag_gesture]");
+    e.stopPropagation();
+
+    /*
+    if (currentDetent !== "large") {
+      //console.log("[collections][drag_gesture] preventing content scrolling");
+      e.preventDefault();
+      return;
+    }
+    */
+    /*
+    if (!allowingSheetDraggingRef.current) {
+      //console.log("[collections][drag_gesture] preventing sheet dragging");
+      e.stopPropagation();
+    }
+    */
+  }, []);
+
   return (
-    <div className={clsx(["w-full", "m-[14px]"])}>
-      <span className="text-[.938rem]">Coming soon... ⏳</span>
+    <div
+      data-testid="feature-sheet__collections"
+      className={clsx([
+        "w-full h-full",
+        currentDetent !== "small" ? "overflow-y-scroll" : "overflow-y-hidden",
+      ])}
+      onScroll={handleScroll}
+      onPointerDown={handleDragGesture}
+      onTouchStart={handleDragGesture}
+      //onPointerMove={handleDragGesture}
+      onTouchMove={handleDragGesture}
+      ref={elementRef}
+    >
+      <div className="mb-[14px] select-none">
+        <Index collections={sampleCollections} />
+      </div>
     </div>
   );
 }

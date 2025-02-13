@@ -18,7 +18,10 @@ import { clsx } from "clsx";
 
 export function Notes({ _feature }) {
   return (
-    <div className={clsx(["w-full", "m-[14px]"])}>
+    <div
+      data-testid="feature-sheet__notes"
+      className={clsx(["w-full", "m-[14px]"])}
+    >
       <span className="text-[.938rem]">Coming soon... ⏳</span>
     </div>
   );
