@@ -12,24 +12,12 @@ config :wander, SlRepo,
   show_sensitive_data_on_connection_error: true
 
 config :wander, PgRepo,
-  types: Wander.Repos.PostgresTypes,
-  username: "postgres",
-  password: "postgres_v5lmJseKtPBWce",
-  hostname: "localhost",
-  database: "wander_dev",
   stacktrace: true,
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 6
+  show_sensitive_data_on_connection_error: true
 
 config :wander, PgOsmRepo,
-  types: Wander.Repos.PostgresTypes,
-  username: "postgres",
-  password: "postgres_v5lmJseKtPBWce",
-  hostname: "localhost",
-  database: "osm",
   stacktrace: true,
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 12
+  show_sensitive_data_on_connection_error: true
 
 # For development, we disable any cache and enable
 # debugging and code reloading.

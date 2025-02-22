@@ -1,0 +1,3 @@
+Place .env files in this directory.
+
+`.env` is loaded in preference to `.{prod|qa|dev}.env`.

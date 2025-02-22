@@ -29,3 +29,6 @@ erl_crash.dump
 
 # ctags
 /tags
+
+/envs/*
+!/envs/.populate_with_env_files

@@ -1,4 +1,21 @@
 import Config
+import Dotenvy
+
+config_dir_prefix =
+  case System.fetch_env("RELEASE_ROOT") do
+    :error ->
+      ("#{__DIR__}/../envs/" |> Path.expand()) <> "/"
+
+    {:ok, value} ->
+      "#{value}/"
+  end
+
+source!([
+  "#{config_dir_prefix}.env",
+  "#{config_dir_prefix}.#{config_env()}.env",
+  "#{config_dir_prefix}.#{config_env()}.local.env",
+  System.get_env()
+])
 
 alias Wander.Repos.SlRepo
 alias Wander.Repos.PgRepo
@@ -10,43 +27,30 @@ alias Wander.Repos.PgOsmRepo
 # and secrets from environment variables or elsewhere. Do not define
 # any compile-time configuration in here, as it won't be applied.
 # The block below contains prod specific runtime configuration.
+sl_database_path = env!("SL_DATABASE_PATH", :string, Path.expand("../wander_dev.db", __DIR__))
+pg_database_url = env!("PG_DATABASE_URL", :string)
+
+config :wander, SlRepo,
+  database: sl_database_path,
+  pool_size: env!("POOL_SIZE", :integer, 5)
+
+maybe_ipv6 = if env!("ECTO_IPV6", :boolean, false), do: [:inet6], else: []
+
+config :wander, PgRepo,
+  types: Wander.Repos.PostgresTypes,
+  url: pg_database_url,
+  pool_size: env!("POOL_SIZE", :integer, 6),
+  socket_options: maybe_ipv6
+
+config :wander, PgOsmRepo,
+  types: Wander.Repos.PostgresTypes,
+  url: pg_database_url,
+  pool_size: env!("POOL_SIZE", :integer, 6),
+  socket_options: maybe_ipv6
+
+import Config
+
 if config_env() == :prod do
-  sl_database_path =
-    System.get_env("DATABASE_PATH") ||
-      raise """
-      environment variable DATABASE_PATH is missing.
-      For example: /etc/wander/wander.db
-      """
-
-  pg_database_url =
-    System.get_env("DATABASE_URL") ||
-      raise """
-      environment variable DATABASE_URL is missing.
-      For example: ecto://USER:PASS@HOST/DATABASE
-      """
-
-  config :wander, SlRepo,
-    database: sl_database_path,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "5")
-
-  maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
-
-  config :wander, PgRepo,
-    types: Wander.Repos.PostgresTypes,
-    # ssl: true,
-    database: pg_database_url,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "6"),
-    socket_options: maybe_ipv6
-
-  config :wander, PgOsmRepo,
-    types: Wander.Repos.PostgresTypes,
-    # ssl: true,
-    database: pg_database_url,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "12"),
-    socket_options: maybe_ipv6
-
-  import Config
-
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
   # want to use a different value for prod and you most likely don't want
