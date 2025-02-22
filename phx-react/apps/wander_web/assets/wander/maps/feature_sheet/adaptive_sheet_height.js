@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-import { clsx } from "clsx";
-import { memo } from "react";
+import { useEffect } from "react";
 
-import { Index } from "./collections/index";
-import { sampleCollections } from "./collections/sample_collections";
+export function useAdaptiveSheetHeight(setHeight, dY) {
+  /*
+  useEffect(() => {
+    console.log("[useAdaptiveSheetHeight] init", setHeight, dY);
+  }, []);
+  */
 
-/**
- * @typedef {{
- *   id: string,
- *   owner_id: string,
- *   name: string
- * }} FeatureCollection
- */
+  useEffect(() => {
+    updateSheetHeight(setHeight, dY);
+  }, [dY]);
+}
 
-export const Collections = memo(function Collections({ _feature }) {
-  return (
-    <div data-testid="feature-sheet__collections">
-      <Index collections={sampleCollections} />
-    </div>
-  );
-});
+function updateSheetHeight(setHeight, dY) {
+  const height = Math.max(10, Math.abs(dY));
+  setHeight(height);
+  //console.log("[useAdaptiveSheetHeight] updating height...", height, Math.abs(dY))
+}
