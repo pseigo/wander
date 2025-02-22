@@ -48,7 +48,7 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
     setCompletedDrag,
     startMouseDrag,
     startTouchDrag,
-  ] = useVerticalDrag(0);
+  ] = useVerticalDrag({ initialDY: 0 });
 
   const [currentDetent] = useSheetDetents(
     setDY,

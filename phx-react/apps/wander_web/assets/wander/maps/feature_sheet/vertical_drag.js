@@ -44,13 +44,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * - `startMouseDrag` - The listener to register on the draggable element's "mousedown" event.
  * - `startTouchDrag` - The listener to register on the draggable element's "touchstart" event.
  *
- * @param {integer} initialDY - Initial vertical displacement in pixels
- *  (negative is up, positive is down). Defaults to `0`.
+ * @param {object} opts
+ * @param {integer} opts.initialDY - Initial vertical displacement in pixels
+ *  (negative is up, positive is down). Defaults to `0` if `opts` is `undefined`.
  *
  * @returns {[integer, boolean, (CompletedDrag | null), React.Dispatch, mouseDownListener, touchStartListener]}
  *  `[dY, isDragging, completedDrag, setCompletedDrag, startMouseDrag, startTouchDrag]`
  */
-export function useVerticalDrag(initialDY = 0) {
+export function useVerticalDrag(opts = { initialDY: 0 }) {
+  const { initialDY } = opts;
+
   // State used outside of renders.
   const dragRef = useRef({
     dY: initialDY,
