@@ -20,7 +20,7 @@ import { useEffect, useRef, useState } from "react";
  * A hook to read an element's current height. Uses `ResizeObserver`
  * internally.
  *
- * `elementRef` must be non-null by the time the component's effects run.
+ * `elementRef.current` must be non-null by the time the component's effects run.
  *
  * @param {React.RefObject} elementRef
  *
