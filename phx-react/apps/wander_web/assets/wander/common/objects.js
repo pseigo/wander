@@ -34,3 +34,18 @@ export function isPlainObject(value) {
     value.constructor === Object
   );
 }
+
+/**
+ * Returns `true` iff `value` is an object.
+ *
+ * An object is considered to be any value where `typeof value === "object"`,
+ * except for `null` (even though `typeof null === "object"` for historical
+ * reasons).
+ *
+ * @param {any} value
+ *
+ * @returns {boolean}
+ */
+export function isObject(value) {
+  return value !== null && typeof value === "object";
+}
