@@ -21,14 +21,14 @@ import { MaterialIcon } from "/wander/common/components/icon";
 
 import { SampleInnerScrollContainer } from "../sample_inner_scroll_container";
 
-export function Index({ collections }) {
+export const Index = memo(function Index({ collections }) {
   return (
     <>
       <Sections collections={collections} />
       <SampleInnerScrollContainer />
     </>
   );
-}
+});
 
 const Sections = memo(function Sections({ collections }) {
   return (
@@ -52,6 +52,7 @@ const Section = memo(function Section({
 }) {
   const content = (
     <div
+      data-testid="feature-sheet__collections__section"
       className={clsx([
         "flex flex-col gap-0",
         "divide-y border-t border-[#e1e1e1]",

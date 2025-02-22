@@ -28,7 +28,7 @@ import { sampleCollections } from "./collections/sample_collections";
  * }} FeatureCollection
  */
 
-export function Collections({ _feature, currentDetent }) {
+export const Collections = memo(function Collections({_feature, currentDetent}) {
   const elementRef = useRef(null);
   const allowingSheetDraggingRef = useRef(true);
 
@@ -82,4 +82,4 @@ export function Collections({ _feature, currentDetent }) {
       </div>
     </div>
   );
-}
+});

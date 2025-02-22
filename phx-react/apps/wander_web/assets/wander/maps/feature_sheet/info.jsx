@@ -36,7 +36,7 @@ import { OsmTagsRow } from "./info/osm_tags_row";
 /**
  * @typedef {{houseNumber?: string, street?: string, city?: string, province?: string, postalCode?: string}} Address
  */
-export function Info({ feature, currentDetent }) {
+export const Info = memo(function Info({ feature, currentDetent }) {
   const handleDragGesture = useCallback((e) => {
     e.stopPropagation();
   }, []);
@@ -58,7 +58,7 @@ export function Info({ feature, currentDetent }) {
       </div>
     </div>
   );
-}
+});
 
 const Sections = memo(function Sections({ feature }) {
   return (

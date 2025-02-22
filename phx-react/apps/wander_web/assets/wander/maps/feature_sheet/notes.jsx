@@ -15,8 +15,9 @@
  */
 
 import { clsx } from "clsx";
+import { memo } from "react";
 
-export function Notes({ _feature }) {
+export const Notes = memo(function Notes({ _feature }) {
   return (
     <div
       data-testid="feature-sheet__notes"
@@ -25,4 +26,4 @@ export function Notes({ _feature }) {
       <span className="text-[.938rem]">Coming soon... ⏳</span>
     </div>
   );
-}
+});

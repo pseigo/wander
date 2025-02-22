@@ -30,20 +30,15 @@ import { Info } from "./feature_sheet/info";
 import { Collections } from "./feature_sheet/collections";
 import { Notes } from "./feature_sheet/notes";
 
-const MemoHeader = memo(Header);
-const MemoNavBar = memo(NavBar);
-const MemoInfo = memo(Info);
-const MemoCollections = memo(Collections);
-const MemoNotes = memo(Notes);
-
 const horizontalGutterClasses = "px-[14px]";
 
 export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
-  const [activeTab, setActiveTab] = useState(initialTab());
 
   const [viewportHeight] = useViewportHeight();
   const headerRef = useRef(null);
   const [headerHeight] = useElementHeightObserver(headerRef);
+
+  const [currentTab, setCurrentTab] = useState(initialTab());
 
   const [
     dY,
@@ -107,7 +102,7 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
             data-testid="feature-sheet__header-container"
             className={horizontalGutterClasses}
           >
-            <MemoHeader
+            <Header
               feature={feature}
               onClose={onClose}
               titleShrinkProgress={titleShrinkProgress}
@@ -116,20 +111,13 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
             />
           </div>
 
-          <MemoNavBar
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
+          <NavBar
+            currentTab={currentTab}
+            setCurrentTab={setCurrentTab}
             horizontalGutterClasses={horizontalGutterClasses}
             className="mt-[10px]"
           />
-
-          {activeTab === "info" && (
-            <MemoInfo feature={feature} currentDetent={currentDetent} />
-          )}
-          {activeTab === "collections" && (
-            <MemoCollections feature={feature} currentDetent={currentDetent} />
-          )}
-          {activeTab === "notes" && <MemoNotes feature={feature} />}
+          {detailForTab(currentTab, feature, currentDetent)}
         </div>
       </div>
     </div>
@@ -147,6 +135,28 @@ function initialTab() {
   }
 
   return defaultTab;
+}
+
+/**
+ * @param {("info" | "collections" | "notes")} tab
+ * @param {Feature} feature
+ * @param {SheetDetent} currentDetent
+ *
+ * @returns {ReactNode}
+ */
+function detailForTab(tab, feature, currentDetent) {
+  switch (tab) {
+    case "info":
+      return <Info feature={feature} currentDetent={currentDetent} />;
+
+    case "collections":
+      return <Collections feature={feature} currentDetent={currentDetent} />;
+
+    case "notes":
+      return <Notes feature={feature} />;
+  }
+
+  throw new Error(`unknown tab '${tab}'`);
 }
 
 /**

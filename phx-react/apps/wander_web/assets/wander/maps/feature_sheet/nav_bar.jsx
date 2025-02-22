@@ -15,14 +15,14 @@
  */
 
 import { clsx } from "clsx";
-import { useState } from "react";
+import { memo, useState } from "react";
 
 import { MaterialIcon } from "/wander/common/components/icon";
 import { TopTabBar } from "/wander/common/components/top_tab_bar";
 
-export function NavBar({
-  activeTab,
-  setActiveTab,
+export const NavBar = memo(function NavBar({
+  currentTab,
+  setCurrentTab,
   horizontalGutterClasses,
   className,
 }) {
@@ -38,44 +38,44 @@ export function NavBar({
     >
       <TopTabBar>
         <TopTabBar.Button
-          isActive={activeTab === "info"}
-          onClick={() => setActiveTab("info")}
+          isActive={currentTab === "info"}
+          onClick={() => setCurrentTab("info")}
           label={"Info"}
           icon={
             <MaterialIcon
               name="info"
-              className={topTabBarButtonIconClasses(activeTab === "info")}
+              className={topTabBarButtonIconClasses(currentTab === "info")}
             />
           }
         />
         <TopTabBar.Button
-          isActive={activeTab === "collections"}
-          onClick={() => setActiveTab("collections")}
+          isActive={currentTab === "collections"}
+          onClick={() => setCurrentTab("collections")}
           label={"Collections"}
           icon={
             <MaterialIcon
               name="collections_bookmark"
               className={topTabBarButtonIconClasses(
-                activeTab === "collections"
+                currentTab === "collections"
               )}
             />
           }
         />
         <TopTabBar.Button
-          isActive={activeTab === "notes"}
-          onClick={() => setActiveTab("notes")}
+          isActive={currentTab === "notes"}
+          onClick={() => setCurrentTab("notes")}
           label={"Notes"}
           icon={
             <MaterialIcon
               name="stylus_note"
-              className={topTabBarButtonIconClasses(activeTab === "notes")}
+              className={topTabBarButtonIconClasses(currentTab === "notes")}
             />
           }
         />
       </TopTabBar>
     </div>
   );
-}
+});
 
 function topTabBarButtonIconClasses(isActive) {
   return clsx([

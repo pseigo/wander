@@ -23,7 +23,7 @@ import { ConciseOpeningHours } from "./concise_opening_hours";
 import { Actions } from "./header/actions";
 import { AmenityIcon } from "./header/amenity_icon";
 
-export function Header({
+export const Header = memo(function Header({
   feature,
   onClose,
   titleShrinkProgress,
@@ -43,7 +43,7 @@ export function Header({
       </div>
     </div>
   );
-}
+});
 
 /**
  * @param {Feature} feature
