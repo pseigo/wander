@@ -15,14 +15,16 @@
  */
 
 import { clsx } from "clsx";
-import { memo, useEffect, useState, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import * as Config from "/wander/common/config";
 import { useElementHeightObserver } from "/wander/common/hooks/element_height_observer";
 import { useViewportHeight } from "/wander/common/hooks/viewport_height";
 
+import { FEATURE_SHEET_ELEMENT_ID } from "./feature_sheet/constants";
 import { useSheetDetents } from "./feature_sheet/sheet_detents";
 import { useVerticalDrag } from "./feature_sheet/vertical_drag";
+import { ScrollableContent } from "./feature_sheet/scrollable_content";
 import { ResizeHandle } from "./feature_sheet/resize_handle";
 import { Header } from "./feature_sheet/header";
 import { NavBar } from "./feature_sheet/nav_bar";
@@ -33,11 +35,15 @@ import { Notes } from "./feature_sheet/notes";
 const horizontalGutterClasses = "px-[14px]";
 
 export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
+  const headerRef = useRef(null);
 
   const [viewportHeight] = useViewportHeight();
-  const headerRef = useRef(null);
   const [headerHeight] = useElementHeightObserver(headerRef);
 
+  const height = useMemo(
+    () => Math.floor(0.95 * viewportHeight),
+    [viewportHeight]
+  );
   const [currentTab, setCurrentTab] = useState(initialTab());
 
   const [
@@ -72,19 +78,21 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
       ])}
     >
       <div
+        id={FEATURE_SHEET_ELEMENT_ID}
         data-testid="feature-sheet"
         className={clsx([
           "absolute top-full z-[20]",
-          "w-full h-[95vh] box-border overflow-y-hidden",
+          "w-full min-h-touch h-[95vh] box-border overflow-y-hidden",
           "pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]",
           "pt-px", // For `ResizeHandle`
 
-          "border-t rounded-[14px]",
+          "border-t rounded-t-[14px]",
           "shadow-[0_0_4.5px_4px_rgb(0_0_0_/_.1)]",
 
           "text-black bg-[#fafafa] border-[#f4f4f4]",
 
           isDragging && "select-none",
+          "will-change-transform",
         ])}
         onMouseDown={startMouseDrag}
         onTouchStart={startTouchDrag}
@@ -117,7 +125,16 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
             horizontalGutterClasses={horizontalGutterClasses}
             className="mt-[10px]"
           />
-          {detailForTab(currentTab, feature, currentDetent)}
+          <ScrollableContent
+            key={currentTab}
+            isDragging={isDragging}
+            currentDetent={currentDetent}
+            sheetDY={dY}
+            sheetHeight={height}
+            sheetHeaderHeight={headerHeight}
+          >
+            {detailForTab(currentTab, feature)}
+          </ScrollableContent>
         </div>
       </div>
     </div>
@@ -140,17 +157,16 @@ function initialTab() {
 /**
  * @param {("info" | "collections" | "notes")} tab
  * @param {Feature} feature
- * @param {SheetDetent} currentDetent
  *
  * @returns {ReactNode}
  */
-function detailForTab(tab, feature, currentDetent) {
+function detailForTab(tab, feature) {
   switch (tab) {
     case "info":
-      return <Info feature={feature} currentDetent={currentDetent} />;
+      return <Info feature={feature} />;
 
     case "collections":
-      return <Collections feature={feature} currentDetent={currentDetent} />;
+      return <Collections feature={feature} />;
 
     case "notes":
       return <Notes feature={feature} />;

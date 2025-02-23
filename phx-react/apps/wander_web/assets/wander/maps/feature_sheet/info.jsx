@@ -36,26 +36,10 @@ import { OsmTagsRow } from "./info/osm_tags_row";
 /**
  * @typedef {{houseNumber?: string, street?: string, city?: string, province?: string, postalCode?: string}} Address
  */
-export const Info = memo(function Info({ feature, currentDetent }) {
-  const handleDragGesture = useCallback((e) => {
-    e.stopPropagation();
-  }, []);
-
+export const Info = memo(function Info({ feature }) {
   return (
-    <div
-      data-testid="feature-sheet__info"
-      className={clsx([
-        "w-full h-full",
-        currentDetent !== "small" ? "overflow-y-scroll" : "overflow-y-hidden",
-      ])}
-      onPointerDown={handleDragGesture}
-      onTouchStart={handleDragGesture}
-      //onPointerMove={handleDragGesture}
-      onTouchMove={handleDragGesture}
-    >
-      <div className="mb-[14px] select-none">
-        <Sections feature={feature} />
-      </div>
+    <div data-testid="feature-sheet__info">
+      <Sections feature={feature} />
     </div>
   );
 });

@@ -14,24 +14,4 @@
  * limitations under the License.
  */
 
-import { clsx } from "clsx";
-import { memo } from "react";
-
-import { Index } from "./collections/index";
-import { sampleCollections } from "./collections/sample_collections";
-
-/**
- * @typedef {{
- *   id: string,
- *   owner_id: string,
- *   name: string
- * }} FeatureCollection
- */
-
-export const Collections = memo(function Collections({ _feature }) {
-  return (
-    <div data-testid="feature-sheet__collections">
-      <Index collections={sampleCollections} />
-    </div>
-  );
-});
+export const FEATURE_SHEET_ELEMENT_ID = "feature-sheet";
