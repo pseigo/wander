@@ -52,7 +52,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
  *  `[dY, isDragging, completedDrag, setCompletedDrag, startMouseDrag, startTouchDrag]`
  */
 export function useVerticalDrag(opts = { initialDY: 0 }) {
-  const { initialDY } = opts;
+  const { initialDY, minDY } = opts;
 
   // State used outside of renders.
   const dragRef = useRef({
@@ -81,8 +81,8 @@ export function useVerticalDrag(opts = { initialDY: 0 }) {
   // Event listeners that should fire even if the cursor leaves the draggable
   // DOM Element.
   useEffect(() => {
-    const curriedOnMouseMove = (e) => onMouseMove(e, dragRef, setDY);
-    const curriedOnTouchMove = (e) => onTouchMove(e, dragRef, setDY);
+    const curriedOnMouseMove = (e) => onMouseMove(e, dragRef, setDY, minDY);
+    const curriedOnTouchMove = (e) => onTouchMove(e, dragRef, setDY, minDY);
 
     const curriedOnMouseUp = (e) =>
       onMouseUp(e, dragRef, setIsDragging, setCompletedDrag);
@@ -204,9 +204,9 @@ function onContextMenu(e, dragRef, setIsDragging, setCompletedDrag) {
   onDragEnd(e, dragRef, setIsDragging, setCompletedDrag);
 }
 
-function onMouseMove(e, dragRef, setDY) {
+function onMouseMove(e, dragRef, setDY, minDY) {
   //console.log("[useVerticalDrag] mousemove (dragging!)", e);
-  onDragMove(e, e.clientY, dragRef, setDY);
+  onDragMove(e, e.clientY, dragRef, setDY, minDY);
 }
 
 function onMouseUp(e, dragRef, setIsDragging, setCompletedDrag) {
@@ -223,10 +223,10 @@ function onTouchStart(e, dragRef, setIsDragging) {
   onDragStart(e, clientY, dragRef, setIsDragging);
 }
 
-function onTouchMove(e, dragRef, setDY) {
+function onTouchMove(e, dragRef, setDY, minDY) {
   const clientY = e.touches.item(0).clientY;
   //console.log("[useVerticalDrag] touchmove (dragging!)", e, clientY);
-  onDragMove(e, clientY, dragRef, setDY);
+  onDragMove(e, clientY, dragRef, setDY, minDY);
 }
 
 function onTouchEnd(e, dragRef, setIsDragging, setCompletedDrag) {
@@ -247,15 +247,16 @@ function onDragStart(e, clientY, dragRef, setIsDragging) {
   dragRef.current.draggingStartedAt = window.performance.now();
 }
 
-function onDragMove(e, clientY, dragRef, setDY) {
+function onDragMove(e, clientY, dragRef, setDY, minDY) {
   if (dragRef.current.isDragging === false) {
     return;
   }
   //console.log("[useVerticalDrag] dragmove (dragging!)", e, e.currentTarget);
 
   const newY = clientY;
-  const newDY =
+  const unboundedNewDY =
     newY - dragRef.current.draggingInitialY + dragRef.current.draggingInitialDY;
+  const newDY = minDY ? Math.max(minDY, unboundedNewDY) : unboundedNewDY;
 
   dragRef.current.dY = newDY;
   setDY(newDY);
