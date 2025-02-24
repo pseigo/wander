@@ -63,7 +63,7 @@ const Section = memo(function Section({
     </div>
   );
 
-  return title !== undefined && title !== null ? (
+  return title != null ? (
     <div className="flex flex-col gap-[3px]">
       <SectionTitle text={title} />
       {content}

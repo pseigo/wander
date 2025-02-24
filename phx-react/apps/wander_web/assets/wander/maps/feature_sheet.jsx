@@ -78,8 +78,8 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
       ])}
     >
       <div
-        id={FEATURE_SHEET_ELEMENT_ID}
         data-testid="feature-sheet"
+        id={FEATURE_SHEET_ELEMENT_ID}
         className={clsx([
           "absolute top-full z-[20]",
           "w-full min-h-touch h-[95vh] box-border overflow-y-hidden",
@@ -208,6 +208,7 @@ function useDebugInfoReporting(getDebugInfoSetters, dY, headerHeight) {
   }, [headerHeight]);
 }
 
+// eslint-disable-next-line no-unused-vars
 function VerticalDragDebugInfo({ isDragging, dY }) {
   return (
     <p className="text-xs mt-2 text-gray-500">

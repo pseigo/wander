@@ -15,11 +15,12 @@
  */
 
 import { render, screen } from "@testing-library/react";
-import { Button } from "/wander/common/components/button";
+import { Button } from "/wander/common/components/button"; // eslint-disable-line no-unused-vars
 //import { Button } from "../../wander/common/components/button";
 //import { test, toBe } from "jest";
 //import { test, describe, it } from "@jest/globals";
 
+// eslint-disable-next-line jest/expect-expect
 test("renders label", () => {
   const label = "Some Action";
   render(<Button label={label} />);

@@ -20,7 +20,7 @@ import * as L from "/vendor/leaflet/leaflet-src.esm.js";
 
 import { randomLowerAlphaNumericString } from "/wander/common/strings";
 
-export function LeafletMap({ sizeClasses }) {
+export function LeafletMap() {
   const mapNodeId = useRef(`LeafletMap-${randomLowerAlphaNumericString()}`);
   const mapRef = useRef(null);
 

@@ -16,7 +16,6 @@
 
 import { clsx } from "clsx";
 import { useEffect, useRef, useState } from "react";
-import ML from "maplibre-gl";
 
 import * as Config from "/wander/common/config";
 import { randomLowerAlphaNumericString } from "/wander/common/strings";
@@ -209,7 +208,7 @@ function registerInteractionListeners(
     map.getCanvas().style.cursor = "";
   });
 
-  map.on("click", (e) => {
+  map.on("click", (_e) => {
     //console.log("[map clicked]", e);
     //const rawFeatures = e.features;
     //console.log("[map clicked](cont'd)", rawFeatures);

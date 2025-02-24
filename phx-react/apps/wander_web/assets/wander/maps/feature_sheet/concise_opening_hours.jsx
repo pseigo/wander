@@ -15,7 +15,7 @@
  */
 
 import { clsx } from "clsx";
-import { useRef, useState, memo } from "react";
+import { memo } from "react";
 
 import { areOnSameDay } from "/wander/common/date_times";
 

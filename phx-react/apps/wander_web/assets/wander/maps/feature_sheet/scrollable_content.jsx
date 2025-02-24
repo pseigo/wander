@@ -120,23 +120,15 @@ function useScrolling(scrollContainerRef) {
 
   const handleScroll = useCallback((_e) => {
     const scrollTop = scrollContainerRef.current.scrollTop;
-    const scrollTopMax = scrollContainerRef.current.scrollTopMax;
-    console.log(
-      "[collections][event:scroll] scrollTop: ",
-      scrollTop,
-      scrollTopMax
-    );
 
     if (scrollTop === 0) {
       allowingSheetDraggingRef.current = true;
-      //} else if (allowingSheetDragging.current) {
     } else {
       allowingSheetDraggingRef.current = false;
     }
   }, []);
 
   const handleDragGesture = useCallback((e) => {
-    //console.log("[collections][drag_gesture]");
     e.stopPropagation();
 
     /*
@@ -145,8 +137,6 @@ function useScrolling(scrollContainerRef) {
       e.preventDefault();
       return;
     }
-    */
-    /*
     if (!allowingSheetDraggingRef.current) {
       //console.log("[collections][drag_gesture] preventing sheet dragging");
       e.stopPropagation();
@@ -220,19 +210,13 @@ function useResizing(
           scrollHeight: scrollHeight,
           scrollTop: scrollTop,
           initialSheetDY: sheetDY,
-          initialVisibleContentAreaHeight: visibleContentAreaHeight,
           shouldStickToBottom:
             scrollTop >= scrollHeight - visibleContentAreaHeight,
         };
       }
 
-      const {
-        scrollHeight,
-        scrollTop,
-        initialSheetDY,
-        initialVisibleContentAreaHeight,
-        shouldStickToBottom,
-      } = dragState.current;
+      const { scrollHeight, scrollTop, initialSheetDY, shouldStickToBottom } =
+        dragState.current;
 
       const hiddenContentAreaHeight =
         fullContentAreaHeight - visibleContentAreaHeight;

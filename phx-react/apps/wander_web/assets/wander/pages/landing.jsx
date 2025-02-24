@@ -33,7 +33,7 @@ import { Explainers } from "./landing/explainers";
 
 export function LandingPage(_props) {
   const [_location, navigate] = useLocation();
-  const [_documentTitle, _setDocumentTitle] = useDocumentTitle(
+  useDocumentTitle(
     toDocumentTitle("Wander: Browse places in your city", {
       withSiteName: false,
     })

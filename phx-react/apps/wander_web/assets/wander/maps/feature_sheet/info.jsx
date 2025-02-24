@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-import { clsx } from "clsx";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+//import { clsx } from "clsx";
+import { memo, useMemo } from "react";
 
-import { Disclosure } from "/wander/common/components/disclosure";
-import { ExternalLink } from "/wander/common/components/link";
-import { capitalize } from "/wander/common/strings";
+//import { Disclosure } from "/wander/common/components/disclosure";
+//import { ExternalLink } from "/wander/common/components/link";
+//import { capitalize } from "/wander/common/strings";
 import { weekdaysWithTimeRangeStrs } from "/wander/maps/osm/opening_hours";
 
 import { Section } from "./info/section";
-import { Row } from "./info/row";
-import { IconWithContent, RowIcon } from "./info/icon_with_content";
-import { AddressRow, MockAddressRow } from "./info/address_row";
+//import { Row } from "./info/row";
+//import { IconWithContent, RowIcon } from "./info/icon_with_content";
+import { AddressRow } from "./info/address_row";
 import { CoordinatesRow } from "./info/coordinates_row";
 import { OpeningHoursRow } from "./info/opening_hours_row";
 import { PhoneNumberRow } from "./info/phone_number_row";

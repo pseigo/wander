@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { clsx } from "clsx";
-
 import { ExternalLink } from "/wander/common/components/link";
 import { capitalize } from "/wander/common/strings";
 

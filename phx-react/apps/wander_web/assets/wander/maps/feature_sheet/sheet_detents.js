@@ -91,13 +91,10 @@ export function useSheetDetents(
     const mediumDetentDY = calculateMediumDetentDY(viewportHeight);
     const largeDetentDY = calculateLargeDetentDY(viewportHeight);
 
-    setDetentDYs((detentDYs) => {
-      const newDetentDYs = {
-        small: smallDetentDY,
-        medium: mediumDetentDY,
-        large: largeDetentDY,
-      };
-      return newDetentDYs;
+    setDetentDYs({
+      small: smallDetentDY,
+      medium: mediumDetentDY,
+      large: largeDetentDY,
     });
   }, [viewportHeight, headerHeight]);
 

@@ -52,7 +52,7 @@ TopTabBar.Button = function Button({ isActive = false, label, icon, onClick }) {
   );
 };
 
-const ActiveTabIndicator = memo(function ActiveTabIndicator({ width }) {
+const ActiveTabIndicator = memo(function ActiveTabIndicator() {
   return (
     <div
       aria-hidden="true"

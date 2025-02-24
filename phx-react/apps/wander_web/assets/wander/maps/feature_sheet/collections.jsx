@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { clsx } from "clsx";
 import { memo } from "react";
 
 import { Index } from "./collections/index";

@@ -21,12 +21,17 @@ import jest from "eslint-plugin-jest";
 
 export default [
   {
+    ignores: [
+      "vendor/**",
+      ".coverage/**"
+    ]
+  },
+  {
     name: "wander",
     files: [
       "*.config.{js,cjs}",
       "wander/**/*.{js,jsx,ts,tsx}"
     ],
-    ignores: [],
     languageOptions: {
       sourceType: "module",
       ecmaVersion: 2020,
@@ -49,7 +54,10 @@ export default [
       }
     },
     rules: {
-      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+      "no-unused-vars": ["warn", {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }],
       "no-undef": "warn",
 
       // [start] React
@@ -118,7 +126,10 @@ export default [
     },
     settings: {},
     rules: {
-      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+      "no-unused-vars": ["warn", {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }],
       "no-undef": "warn",
 
       // [start] Jest

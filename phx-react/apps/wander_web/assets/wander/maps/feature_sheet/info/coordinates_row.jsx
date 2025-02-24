@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { ExternalLink } from "/wander/common/components/link";
-
 import { IconWithContent, RowIcon } from "./icon_with_content";
 import { Row } from "./row";
 

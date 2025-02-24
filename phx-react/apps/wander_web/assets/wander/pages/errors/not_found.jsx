@@ -24,17 +24,15 @@ import {
 
 export function NotFoundErrorPage() {
   const [location, _navigate] = useLocation();
-  const [_documentTitle, _setDocumentTitle] = useDocumentTitle(
-    toDocumentTitle(["Not Found", "Error"])
-  );
+  useDocumentTitle(toDocumentTitle(["Not Found", "Error"]));
 
   return (
     <div className="px-touch/2 pt-10">
       <div className="max-w-[600px] mx-[auto]">
         <h1 className="text-3xl mb-4">Not Found (404)</h1>
         <p className="mb-4">
-          Sorry, something went wrong. This page is either missing or doesn't
-          exist.
+          Sorry, something went wrong. This page is either missing or
+          doesn&apos;t exist.
         </p>
         <p className="indent-4 mb-12">
           <code>{location}</code>

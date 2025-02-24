@@ -36,4 +36,5 @@ const config = {
   coverageDirectory: ".coverage"
 }
 
+// eslint-disable-next-line no-undef
 module.exports = config;

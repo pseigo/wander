@@ -154,6 +154,7 @@ const createStyleSpecQueryMappings = (region) => [
  * @see https://maplibre.org/maplibre-gl-js/docs/API/enumerations/ResourceType/
  * @see https://maplibre.org/maplibre-gl-js/docs/API/type-aliases/RequestParameters/
  */
+// eslint-disable-next-line no-unused-vars
 function transformRequest(url, resourceType = null) {
   // [start] Example
   const prefix = "https://vector.openstreetmap.org/shortbread_v1/";

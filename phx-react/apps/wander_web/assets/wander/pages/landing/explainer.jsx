@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { clsx } from "clsx";
-
 export function Explainer({ children, id }) {
   return (
     <div id={id} className="mb-14 last:mb-0">

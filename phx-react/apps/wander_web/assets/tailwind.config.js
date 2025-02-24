@@ -17,11 +17,13 @@
 // See the Tailwind configuration guide for advanced usage
 // https://tailwindcss.com/docs/configuration
 
+/* eslint-disable no-undef */
 const plugin = require("tailwindcss/plugin")
 const fs = require("fs")
 const path = require("path")
+/* eslint-enable no-undef */
 
-module.exports = {
+const config = {
   content: [
     "./wander/**/*.js",
     "./wander/**/*.jsx",
@@ -55,7 +57,9 @@ module.exports = {
     },
   },
   plugins: [
+    // eslint-disable-next-line no-undef
     require("@tailwindcss/forms"),
+
     // Allows prefixing tailwind classes with LiveView classes to add rules
     // only when LiveView classes are applied, for example:
     //
@@ -69,6 +73,7 @@ module.exports = {
     // See the Phoenix app's `CoreComponents.icon/1` for more information.
     //
     plugin(function({matchComponents, theme}) {
+      // eslint-disable-next-line no-undef
       let iconsDir = path.join(__dirname, "../../../deps/heroicons/optimized")
       let values = {}
       let icons = [
@@ -108,3 +113,6 @@ module.exports = {
     })
   ]
 }
+
+// eslint-disable-next-line no-undef
+module.exports = config;

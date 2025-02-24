@@ -71,6 +71,7 @@ const DetailedOpeningHours = memo(function DetailedOpeningHours({
           "grid grid-cols-[repeat(2,max-content)] gap-x-[17px] gap-y-[.313rem]",
         ])}
       >
+        {/* eslint-disable react/no-array-index-key */}
         {openingHoursStrs.map((ohs, index) => (
           <DetailedOpeningHoursRow
             key={index}
@@ -78,6 +79,7 @@ const DetailedOpeningHours = memo(function DetailedOpeningHours({
             weekdayWithTimeRangeStrs={ohs}
           />
         ))}
+        {/* eslint-enable react/no-array-index-key */}
       </div>
     </div>
   );

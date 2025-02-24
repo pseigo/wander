@@ -49,7 +49,7 @@ export const Header = memo(function Header({
  * @param {Feature} feature
  * @param {float} titleShrinkProgress in `[0, 1.0]`
  */
-const Title = memo(function Title({ feature, titleShrinkProgress }) {
+const Title = memo(function Title({ feature, _titleShrinkProgress }) {
   const name = feature.properties.name ?? (
     <span className="italic">(name unknown)</span>
   );

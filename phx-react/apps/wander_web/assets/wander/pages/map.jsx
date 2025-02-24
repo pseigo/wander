@@ -15,32 +15,21 @@
  */
 
 import { clsx } from "clsx";
-import { useLocation } from "wouter";
 
-import { Button } from "/wander/common/components/button";
 import {
   useDocumentTitle,
   toDocumentTitle,
 } from "/wander/common/hooks/document_title";
-import { LeafletMap } from "/wander/maps/leaflet_map";
 import { MapLibreMap } from "/wander/maps/maplibre_map";
 
 import { useOsmCafes } from "./map/osm_pois";
 
 export function MapPage(_props) {
-  const [_location, navigate] = useLocation();
-  const [_documentTitle, _setDocumentTitle] = useDocumentTitle(
-    toDocumentTitle("Map")
-  );
+  useDocumentTitle(toDocumentTitle("Map"));
   const [cafes] = useOsmCafes();
 
   return (
     <div className={clsx(["w-full h-full", "dark:text-black"])}>
-      {/*
-      <Button label="Go Home" onClick={() => navigate("/")} />
-      <LeafletMap />
-      */}
-
       <MapLibreMap cafes={cafes} />
 
       <style>{`

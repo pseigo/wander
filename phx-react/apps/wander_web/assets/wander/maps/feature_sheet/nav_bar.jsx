@@ -15,7 +15,7 @@
  */
 
 import { clsx } from "clsx";
-import { memo, useState } from "react";
+import { memo } from "react";
 
 import { MaterialIcon } from "/wander/common/components/icon";
 import { TopTabBar } from "/wander/common/components/top_tab_bar";
