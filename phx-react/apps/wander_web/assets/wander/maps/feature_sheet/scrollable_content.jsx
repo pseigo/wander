@@ -115,7 +115,13 @@ export const ScrollableContent = memo(function ScrollableContent({
 /**
  * @param {React.RefObject<HTMLElement>} scrollContainerRef
  */
-function useScrolling(scrollContainerRef) {
+function useScrolling(_scrollContainerRef) {
+  const handleDragGesture = useCallback((e) => e.stopPropagation(), []);
+  const handleScroll = useCallback((_e) => {}, []); // no-op
+
+  return [handleDragGesture, handleScroll];
+
+  /*
   const allowingSheetDraggingRef = useRef(true);
 
   const handleScroll = useCallback((_e) => {
@@ -129,22 +135,16 @@ function useScrolling(scrollContainerRef) {
   }, []);
 
   const handleDragGesture = useCallback((e) => {
-    e.stopPropagation();
-
-    /*
     if (currentDetent !== "large") {
       //console.log("[collections][drag_gesture] preventing content scrolling");
       e.preventDefault();
-      return;
     }
-    if (!allowingSheetDraggingRef.current) {
+    else if (!allowingSheetDraggingRef.current) {
       //console.log("[collections][drag_gesture] preventing sheet dragging");
       e.stopPropagation();
     }
-    */
   }, []);
-
-  return [handleDragGesture, handleScroll];
+  */
 }
 
 /**
