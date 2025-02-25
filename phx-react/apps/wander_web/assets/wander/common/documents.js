@@ -21,7 +21,9 @@
  * page where this function is called. It's a tiny file, so consider importing
  * it into the global stylesheet for your application.
  *
+ * @see https://drafts.csswg.org/css-env/#safe-area-insets
  * @see https://webkit.org/blog/7929/designing-websites-for-iphone-x/
+ * @see https://m3.material.io/foundations/layout/understanding-layout/hardware-considerations#8a709768-dc91-4fe5-beb9-be1e2206dd8b
  *
  * @param {("top" | "right" | "bottom" | "left")} side
  *
@@ -35,9 +37,9 @@ export function getSafeAreaInset(side) {
   }
 
   const propertyName = `--safe-area-inset-${side}`;
-  const propertyValue = getComputedStyle(
-    document.documentElement
-  ).getPropertyValue(propertyName);
+  const propertyValue = window
+    .getComputedStyle(document.documentElement)
+    .getPropertyValue(propertyName);
 
   if (propertyValue === "") {
     throw new Error(

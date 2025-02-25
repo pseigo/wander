@@ -102,7 +102,7 @@ export const ScrollableContent = memo(function ScrollableContent({
         >
           <div
             data-testid="feature-sheet__scrollable-content__content-container"
-            className="mb-[14px] select-none"
+            className="mb-[calc(14px+env(safe-area-inset-bottom))] select-none"
           >
             {children}
           </div>
@@ -241,7 +241,9 @@ function useResizing(
       //
       //  It's important to test scroll positions at (1) the top and bottom,
       //  (2) _near_ the top and bottom, and (3) in the middle, pulling from
-      //  the smallest to the largest detent and vice versa, for content that:
+      //  the smallest to the largest detent and vice versa, and on screens
+      //  with zero and non-zero value for `env(safe-area-inset-bottom)` (CSS),
+      //  for content that:
       //
       //  (a) does not overflow the `visibleContentAreaHeight`,
       //  (b) overflows `visibleContentAreaHeight` but not

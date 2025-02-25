@@ -15,36 +15,18 @@
  */
 
 import { clsx } from "clsx";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import * as Config from "/wander/common/config";
-import { getSafeAreaInset } from "/wander/common/documents";
+import { useSafeAreaInsets } from "/wander/common/hooks/safe_area_insets";
 
 export function FeatureSheetDebugPanel({ dY, headerHeight }) {
-  const [safeAreaInsets, setSafeAreaInsets] = useState({
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-  });
-
-  useEffect(() => {
-    const onResize = () => {
-      const insets = {
-        top: getSafeAreaInset("top"),
-        right: getSafeAreaInset("right"),
-        bottom: getSafeAreaInset("bottom"),
-        left: getSafeAreaInset("left"),
-      };
-      //console.log("insets updated", insets);
-      setSafeAreaInsets(insets);
-    };
-
-    onResize();
-
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+  const [
+    safeAreaInsetTop,
+    safeAreaInsetRight,
+    safeAreaInsetBottom,
+    safeAreaInsetLeft,
+  ] = useSafeAreaInsets();
 
   return (
     <div
@@ -63,8 +45,8 @@ export function FeatureSheetDebugPanel({ dY, headerHeight }) {
         ])}
       >
         dY: {dY}; Height: {headerHeight.toFixed(1)}; Safe insets (T/R/B/L):{" "}
-        {safeAreaInsets.top}/{safeAreaInsets.right}/{safeAreaInsets.bottom}/
-        {safeAreaInsets.left}
+        {safeAreaInsetTop}/{safeAreaInsetRight}/{safeAreaInsetBottom}/
+        {safeAreaInsetLeft}
       </div>
     </div>
   );

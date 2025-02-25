@@ -17,7 +17,7 @@
 import { useEffect, useState } from "react";
 
 import * as Config from "/wander/common/config";
-import { getSafeAreaInset } from "/wander/common/documents";
+import { useSafeAreaInsetBottom } from "/wander/common/hooks/safe_area_insets";
 
 /**
  * A 'detent' represents a particular dY (vertical displacement in pixels) that
@@ -79,24 +79,30 @@ export function useSheetDetents(
   completedDrag,
   setCompletedDrag,
   viewportHeight,
+  sheetHeight,
   headerHeight
 ) {
+  const safeAreaInsetBottom = useSafeAreaInsetBottom();
+
   const [detentDYs, setDetentDYs] = useState({ small: 0, medium: 0, large: 0 });
   const [currentDetent, setCurrentDetent] = useState(initialDetent());
 
   // Update detent dYs when relevant element heights change, such as the
   // viewport or sheet header.
   useEffect(() => {
-    const smallDetentDY = calculateSmallDetentDY(headerHeight);
+    const smallDetentDY = calculateSmallDetentDY(
+      headerHeight,
+      safeAreaInsetBottom
+    );
     const mediumDetentDY = calculateMediumDetentDY(viewportHeight);
-    const largeDetentDY = calculateLargeDetentDY(viewportHeight);
+    const largeDetentDY = calculateLargeDetentDY(sheetHeight);
 
     setDetentDYs({
       small: smallDetentDY,
       medium: mediumDetentDY,
       large: largeDetentDY,
     });
-  }, [viewportHeight, headerHeight]);
+  }, [viewportHeight, sheetHeight, headerHeight, safeAreaInsetBottom]);
 
   // Adjust current dY when the current detent or detentDYs change.
   useEffect(() => {
@@ -151,25 +157,18 @@ function initialDetent() {
   return defaultDetent;
 }
 
-function calculateSmallDetentDY(headerHeight) {
+function calculateSmallDetentDY(headerHeight, safeAreaInsetBottom) {
   const pixelsAbove = 15; // sheet content padding (14px) + drag handle breathing room (1px)
   const pixelsBelow = 10; // navbar margin-top (10px)
-  const safeAreaInsetBottom = getSafeAreaInset("bottom");
-  const detentDY =
-    -1 * (pixelsAbove + headerHeight + pixelsBelow + safeAreaInsetBottom);
-  return detentDY;
+  return -1 * (pixelsAbove + headerHeight + pixelsBelow + safeAreaInsetBottom);
 }
 
 function calculateMediumDetentDY(viewportHeight) {
-  const detentDY = -1 * Math.floor(viewportHeight / 2);
-  return detentDY;
+  return -1 * Math.floor(viewportHeight / 2);
 }
 
-function calculateLargeDetentDY(viewportHeight) {
-  const safeAreaInsetBottom = getSafeAreaInset("bottom");
-  const breathingRoom = 40;
-  const detentDY = -1 * (viewportHeight + safeAreaInsetBottom - breathingRoom);
-  return detentDY;
+function calculateLargeDetentDY(sheetHeight) {
+  return -1 * sheetHeight;
 }
 
 function detentZoneOfDY(dY, detentDYs) {

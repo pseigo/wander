@@ -18,6 +18,7 @@ import { clsx } from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import * as Config from "/wander/common/config";
+import { useSafeAreaInsetBottom } from "/wander/common/hooks/safe_area_insets";
 import { useElementHeightObserver } from "/wander/common/hooks/element_height_observer";
 import { useViewportHeight } from "/wander/common/hooks/viewport_height";
 
@@ -40,9 +41,10 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
   const [viewportHeight] = useViewportHeight();
   const [headerHeight] = useElementHeightObserver(headerRef);
 
+  const safeAreaInsetBottom = useSafeAreaInsetBottom();
   const height = useMemo(
-    () => Math.floor(0.95 * viewportHeight),
-    [viewportHeight]
+    () => Math.floor(0.95 * viewportHeight + safeAreaInsetBottom),
+    [viewportHeight, safeAreaInsetBottom]
   );
   const minDY = useMemo(() => -1 * height, [height]);
 
@@ -63,6 +65,7 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
     completedDrag,
     setCompletedDrag,
     viewportHeight,
+    height,
     headerHeight
   );
 
