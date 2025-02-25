@@ -170,7 +170,16 @@ function useResizing(
     return outerTransformContainer !== null
       ? getOffsetFromSheetTop(outerTransformContainer)
       : 0;
-  }, [outerTransformContainerRef.current, sheetHeaderHeight]);
+  }, [
+    // No change-tracking for refs, but still important to refresh this memo'd
+    // value when this element ref is populated after the component's first
+    // render (is there a better idiom to solve this problem?).
+    outerTransformContainerRef.current,
+
+    // The sheet header dynamically resizes across detents (concise opening
+    // hours visbility, title size and wrapping, etc.).
+    sheetHeaderHeight,
+  ]);
 
   const fullContentAreaHeight = useMemo(
     () => sheetHeight - offsetFromSheetTop,
@@ -179,7 +188,7 @@ function useResizing(
 
   const visibleContentAreaHeight = useMemo(
     () => Math.min(-1 * sheetDY, sheetHeight) - offsetFromSheetTop,
-    [sheetDY, offsetFromSheetTop]
+    [sheetDY, sheetHeight, offsetFromSheetTop]
   );
 
   const visibleContentAreaHeightRatio = useMemo(
