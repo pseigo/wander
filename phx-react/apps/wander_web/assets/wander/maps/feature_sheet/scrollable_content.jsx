@@ -238,12 +238,6 @@ function useResizing(
       //  Performance optimizations are nice when possible, but correctness and
       //  readability must be prioritized first.
 
-      const hiddenContentAreaHeight =
-        fullContentAreaHeight - visibleContentAreaHeight;
-
-      const initialScrollBottomGapHeight =
-        scrollHeight - scrollTop - visibleContentAreaHeight;
-
       const maybeStickToBottom = shouldStickToBottom
         ? sheetDY - initialSheetDY
         : 0;
@@ -267,6 +261,12 @@ function useResizing(
       }
       else if (fullHeightWillDisruptLongScrollPosition)
       {
+        const hiddenContentAreaHeight =
+          fullContentAreaHeight - visibleContentAreaHeight;
+
+        const initialScrollBottomGapHeight =
+          scrollHeight - scrollTop - visibleContentAreaHeight;
+
         verticalDisplacement = -1 * (
           hiddenContentAreaHeight -
             initialScrollBottomGapHeight +
