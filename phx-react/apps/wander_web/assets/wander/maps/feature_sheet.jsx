@@ -44,6 +44,8 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
     () => Math.floor(0.95 * viewportHeight),
     [viewportHeight]
   );
+  const minDY = useMemo(() => -1 * height, [height]);
+
   const [currentTab, setCurrentTab] = useState(initialTab());
 
   const [
@@ -54,7 +56,7 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
     setCompletedDrag,
     startMouseDrag,
     startTouchDrag,
-  ] = useVerticalDrag({ initialDY: 0, minDY: -1 * height });
+  ] = useVerticalDrag({ initialDY: 0, minDY: minDY });
 
   const [currentDetent] = useSheetDetents(
     setDY,

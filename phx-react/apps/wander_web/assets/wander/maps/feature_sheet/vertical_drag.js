@@ -45,8 +45,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * - `startTouchDrag` - The listener to register on the draggable element's "touchstart" event.
  *
  * @param {object} opts
- * @param {integer} opts.initialDY - Initial vertical displacement in pixels
+ * @param {number} opts.initialDY - Initial vertical displacement in pixels
  *  (negative is up, positive is down). Defaults to `0` if `opts` is `undefined`.
+ * @param {number} opts.minDY - Lower bound to enforce for vertical
+ *  displacement. Optional.
  *
  * @returns {[integer, boolean, (CompletedDrag | null), React.Dispatch, mouseDownListener, touchStartListener]}
  *  `[dY, isDragging, completedDrag, setCompletedDrag, startMouseDrag, startTouchDrag]`
@@ -80,10 +82,26 @@ export function useVerticalDrag(opts = { initialDY: 0 }) {
 
   // Event listeners that should fire even if the cursor leaves the draggable
   // DOM Element.
-  useEffect(() => {
-    const curriedOnMouseMove = (e) => onMouseMove(e, dragRef, setDY, minDY);
-    const curriedOnTouchMove = (e) => onTouchMove(e, dragRef, setDY, minDY);
+  const curriedOnMouseMove = useCallback(
+    (e) => onMouseMove(e, dragRef, setDY, minDY),
+    [minDY]
+  );
+  const curriedOnTouchMove = useCallback(
+    (e) => onTouchMove(e, dragRef, setDY, minDY),
+    [minDY]
+  );
 
+  useEffect(() => {
+    window.addEventListener("mousemove", curriedOnMouseMove);
+    return () => window.removeEventListener("mousemove", curriedOnMouseMove);
+  }, [curriedOnMouseMove]);
+
+  useEffect(() => {
+    window.addEventListener("touchmove", curriedOnTouchMove);
+    return () => window.removeEventListener("touchmove", curriedOnTouchMove);
+  }, [curriedOnTouchMove]);
+
+  useEffect(() => {
     const curriedOnMouseUp = (e) =>
       onMouseUp(e, dragRef, setIsDragging, setCompletedDrag);
     const curriedOnTouchEnd = (e) =>
@@ -91,9 +109,6 @@ export function useVerticalDrag(opts = { initialDY: 0 }) {
 
     const curriedOnContextMenu = (e) =>
       onContextMenu(e, dragRef, setIsDragging, setCompletedDrag);
-
-    window.addEventListener("mousemove", curriedOnMouseMove);
-    window.addEventListener("touchmove", curriedOnTouchMove);
 
     window.addEventListener("mouseup", curriedOnMouseUp);
     window.addEventListener("touchend", curriedOnTouchEnd);
@@ -107,9 +122,6 @@ export function useVerticalDrag(opts = { initialDY: 0 }) {
       window.removeEventListener("touchcancel", curriedOnTouchEnd);
       window.removeEventListener("touchend", curriedOnTouchEnd);
       window.removeEventListener("mouseup", curriedOnMouseUp);
-
-      window.removeEventListener("touchmove", curriedOnTouchMove);
-      window.removeEventListener("mousemove", curriedOnMouseMove);
     };
   }, []);
 
