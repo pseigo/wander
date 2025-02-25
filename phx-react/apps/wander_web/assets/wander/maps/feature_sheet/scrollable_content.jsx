@@ -148,10 +148,16 @@ function useScrolling(_scrollContainerRef) {
 }
 
 /**
- * @param {React.Dispatch<React.SetStateAction<int>>} setHeight
+ * @param {number} height
+ * @param {React.Dispatch<React.SetStateAction<number>>} setHeight
+ * @param {React.Dispatch<React.SetStateAction<number>>} setOuterContainerTransform
+ * @param {React.Dispatch<React.SetStateAction<number>>} setInnerContainerTransform
+ * @param {React.RefObject<HTMLElement>} outerTransformContainerRef
+ * @param {React.RefObject<HTMLElement>} scrollContainerRef
  * @param {boolean} isDragging
- * @param {int} sheetDY
- * @param {int} yOffsetFromSheetTop
+ * @param {number} sheetDY
+ * @param {number} sheetHeight
+ * @param {number} sheetHeaderHeight
  */
 function useResizing(
   height,
