@@ -218,25 +218,61 @@ function useResizing(
       const { scrollHeight, scrollTop, initialSheetDY, shouldStickToBottom } =
         dragState.current;
 
+      // TODO: Perfect the scroll translation algorithm.
+      //
+      //  As it currently stands, this seems to work well enough (essential
+      //  interactivity works), but does not behave as we would like (visually)
+      //  in all situations.
+      //
+      //  It's important to test scroll positions at (1) the top and bottom,
+      //  (2) _near_ the top and bottom, and (3) in the middle, pulling from
+      //  the smallest to the largest detent and vice versa, for content that:
+      //
+      //  (a) does not overflow the `visibleContentAreaHeight`,
+      //  (b) overflows `visibleContentAreaHeight` but not
+      //   `fullContentAreaHeight`, and
+      //  (c) overflows `fullContentAreaHeight`,
+      //
+      //  ... because a solution for one case may not work for all cases.
+      //
+      //  Performance optimizations are nice when possible, but correctness and
+      //  readability must be prioritized first.
+
       const hiddenContentAreaHeight =
         fullContentAreaHeight - visibleContentAreaHeight;
+
       const initialScrollBottomGapHeight =
         scrollHeight - scrollTop - visibleContentAreaHeight;
 
-      const nudgeHeight =
-        hiddenContentAreaHeight - initialScrollBottomGapHeight;
       const maybeStickToBottom = shouldStickToBottom
         ? sheetDY - initialSheetDY
         : 0;
 
       const isOverflowing = scrollHeight > fullContentAreaHeight;
-      const fullHeightWillDisruptScrollPosition =
-        scrollTop >= scrollHeight - fullContentAreaHeight;
 
-      const verticalDisplacement =
-        isOverflowing && fullHeightWillDisruptScrollPosition
-          ? -1 * (nudgeHeight + maybeStickToBottom)
-          : 0;
+      const fullHeightWillDisruptShortScrollPosition =
+        !isOverflowing &&
+        scrollHeight > visibleContentAreaHeight &&
+        scrollHeight < fullContentAreaHeight &&
+        scrollTop > 0;
+
+      const fullHeightWillDisruptLongScrollPosition =
+        isOverflowing && scrollTop >= scrollHeight - fullContentAreaHeight;
+
+      let verticalDisplacement = 0;
+      // prettier-ignore
+      if (fullHeightWillDisruptShortScrollPosition)
+      {
+        verticalDisplacement = -1 * (scrollTop + maybeStickToBottom);
+      }
+      else if (fullHeightWillDisruptLongScrollPosition)
+      {
+        verticalDisplacement = -1 * (
+          hiddenContentAreaHeight -
+            initialScrollBottomGapHeight +
+            maybeStickToBottom
+        );
+      }
 
       setHeight("100%");
       setOuterContainerTransform(`scaleY(${visibleContentAreaHeightRatio})`);
