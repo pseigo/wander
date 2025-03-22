@@ -38,14 +38,16 @@ const horizontalGutterClasses = "px-[14px]";
 export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
   const headerRef = useRef(null);
 
-  const [viewportHeight] = useViewportHeight();
+  const viewportHeight = useViewportHeight();
+  const safeAreaInsetBottom = useSafeAreaInsetBottom();
+
   const [headerHeight] = useElementHeightObserver(headerRef);
 
-  const safeAreaInsetBottom = useSafeAreaInsetBottom();
   const height = useMemo(
     () => Math.floor(0.95 * viewportHeight + safeAreaInsetBottom),
     [viewportHeight, safeAreaInsetBottom]
   );
+
   const minDY = useMemo(() => -1 * height, [height]);
 
   const [currentTab, setCurrentTab] = useState(initialTab());
@@ -87,7 +89,7 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
         id={FEATURE_SHEET_ELEMENT_ID}
         className={clsx([
           "absolute top-full z-[20]",
-          "w-full min-h-touch h-[95vh] box-border overflow-y-hidden",
+          "w-full min-h-touch box-border overflow-y-hidden",
           "pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]",
           "pt-px", // For `ResizeHandle`
 
@@ -102,6 +104,7 @@ export function FeatureSheet({ feature, onClose, getDebugInfoSetters }) {
         onMouseDown={startMouseDrag}
         onTouchStart={startTouchDrag}
         style={{
+          height: height,
           transform: `translateY(${dY}px)`,
         }}
       >

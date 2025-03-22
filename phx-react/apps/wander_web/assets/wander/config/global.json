@@ -3,13 +3,13 @@
     "tile": {
       "region": "alberta",
       "type": "vector",
-      "service_type": "external"
+      "service_type": "internal"
     },
     "initial": {
       "center": [-114.0719, 51.0359],
-      "zoom": 11.5,
-      "bearing": 0,
-      "pitch": 8
+      "zoom": 12.8,
+      "bearing": -7,
+      "pitch": 30
     }
   }
 }

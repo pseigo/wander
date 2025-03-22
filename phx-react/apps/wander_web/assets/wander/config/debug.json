@@ -1,25 +1,25 @@
 {
-  "enabled": false,
+  "enabled": true,
   "map": {
     "panels": {
       "pointer_position": false,
       "zoom_level": false,
       "bearing": false,
       "pitch": false,
-      "feature_sheet": false
+      "feature_sheet": true
     },
     "override_selected_feature": {
-      "enabled": false,
+      "enabled": true,
       "with": {
         "find_by": {
-          "name": "Monogram Coffee"
+          "name": "Amato Gelato Cafe"
         }
       }
     },
     "feature_sheet": {
       "initial": {
-        "tab": "info",
-        "detent": "small"
+        "tab": "collections",
+        "detent": "medium"
       }
     }
   }

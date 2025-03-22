@@ -18,6 +18,9 @@ import { clsx } from "clsx";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { isHtmlElement } from "/wander/common/elements";
+import { clamp } from "/wander/common/numbers";
+import { useSafeAreaInsetBottom } from "/wander/common/hooks/safe_area_insets";
+import { useViewportHeight } from "/wander/common/hooks/viewport_height";
 
 import { FEATURE_SHEET_ELEMENT_ID } from "./constants";
 
@@ -147,6 +150,28 @@ function useScrolling(_scrollContainerRef) {
   */
 }
 
+// TODO: Perfect the scroll translation algorithm.
+//
+//  As it currently stands, this seems to work well enough (essential
+//  interactivity works), but does not behave as we would like (visually)
+//  in all situations.
+//
+//  It's important to test scroll positions at (1) the top and bottom,
+//  (2) _near_ the top and bottom, and (3) in the middle, pulling from
+//  the smallest to the largest detent and vice versa, and on screens
+//  with zero and non-zero value for `env(safe-area-inset-bottom)` (CSS),
+//  for content that:
+//
+//  (a) does not overflow the `visibleContentAreaHeight`,
+//  (b) overflows `visibleContentAreaHeight` but not
+//   `fullContentAreaHeight`, and
+//  (c) overflows `fullContentAreaHeight`,
+//
+//  ... because a solution for one case may not work for all cases.
+//
+//  Performance optimizations are nice when possible, but correctness and
+//  readability must be prioritized first.
+
 /**
  * @param {number} height
  * @param {React.Dispatch<React.SetStateAction<number>>} setHeight
@@ -171,6 +196,8 @@ function useResizing(
   sheetHeight,
   sheetHeaderHeight
 ) {
+  const safeAreaInsetBottom = useSafeAreaInsetBottom();
+
   const offsetFromSheetTop = useMemo(() => {
     const outerTransformContainer = outerTransformContainerRef.current;
     return outerTransformContainer !== null
@@ -193,7 +220,7 @@ function useResizing(
   );
 
   const visibleContentAreaHeight = useMemo(
-    () => Math.min(-1 * sheetDY, sheetHeight) - offsetFromSheetTop,
+    () => Math.min(Math.max(0, -1 * sheetDY), sheetHeight) - offsetFromSheetTop,
     [sheetDY, sheetHeight, offsetFromSheetTop]
   );
 
@@ -218,8 +245,31 @@ function useResizing(
   useEffect(() => {
     if (isDragging) {
       if (dragState.current === null) {
-        const scrollHeight = scrollContainerRef.current.scrollHeight;
-        const scrollTop = scrollContainerRef.current.scrollTop;
+        const scrollContainer = scrollContainerRef.current;
+        const scrollHeight = scrollContainer.scrollHeight;
+
+        // Some platforms/browsers allow `scrollTop` to go out of bounds when
+        // overscrolling (see the CSS property `overscroll-behavior`), into the
+        // negatives or beyond `scrollHeight`, but others bound `scrollTop` to
+        // `[0, scrollTopMax]`, so let's normalize it (for now).
+        //const scrollTopMax = scrollContainer.scrollTopMax;
+        //const scrollTop = clamp(scrollContainer.scrollTop, 0, scrollTopMax);
+        const scrollTop = scrollContainer.scrollTop;
+
+        const isOverflowing = scrollHeight > fullContentAreaHeight;
+
+        const fullHeightWillDisruptShortScrollPosition =
+          !isOverflowing &&
+          scrollHeight > visibleContentAreaHeight &&
+          scrollHeight < fullContentAreaHeight &&
+          scrollTop > 0;
+
+        const fullHeightWillDisruptLongScrollPosition =
+          isOverflowing && scrollTop >= scrollHeight - fullContentAreaHeight;
+
+        const fullHeightWillDisruptScrollPosition =
+          fullHeightWillDisruptShortScrollPosition ||
+          fullHeightWillDisruptLongScrollPosition;
 
         dragState.current = {
           scrollHeight: scrollHeight,
@@ -227,67 +277,26 @@ function useResizing(
           initialSheetDY: sheetDY,
           shouldStickToBottom:
             scrollTop >= scrollHeight - visibleContentAreaHeight,
+          scrollHeightAboveFullContentAreaWhenFullHeight:
+            Math.max(0, scrollHeight - fullContentAreaHeight),
+          fullHeightWillDisruptScrollPosition:
+            fullHeightWillDisruptScrollPosition
         };
       }
 
-      const { scrollHeight, scrollTop, initialSheetDY, shouldStickToBottom } =
+      const { scrollHeight, scrollTop, initialSheetDY, shouldStickToBottom, scrollHeightAboveFullContentAreaWhenFullHeight, fullHeightWillDisruptScrollPosition } =
         dragState.current;
 
-      // TODO: Perfect the scroll translation algorithm.
-      //
-      //  As it currently stands, this seems to work well enough (essential
-      //  interactivity works), but does not behave as we would like (visually)
-      //  in all situations.
-      //
-      //  It's important to test scroll positions at (1) the top and bottom,
-      //  (2) _near_ the top and bottom, and (3) in the middle, pulling from
-      //  the smallest to the largest detent and vice versa, and on screens
-      //  with zero and non-zero value for `env(safe-area-inset-bottom)` (CSS),
-      //  for content that:
-      //
-      //  (a) does not overflow the `visibleContentAreaHeight`,
-      //  (b) overflows `visibleContentAreaHeight` but not
-      //   `fullContentAreaHeight`, and
-      //  (c) overflows `fullContentAreaHeight`,
-      //
-      //  ... because a solution for one case may not work for all cases.
-      //
-      //  Performance optimizations are nice when possible, but correctness and
-      //  readability must be prioritized first.
-
-      const maybeStickToBottom = shouldStickToBottom
-        ? sheetDY - initialSheetDY
-        : 0;
-
-      const isOverflowing = scrollHeight > fullContentAreaHeight;
-
-      const fullHeightWillDisruptShortScrollPosition =
-        !isOverflowing &&
-        scrollHeight > visibleContentAreaHeight &&
-        scrollHeight < fullContentAreaHeight &&
-        scrollTop > 0;
-
-      const fullHeightWillDisruptLongScrollPosition =
-        isOverflowing && scrollTop >= scrollHeight - fullContentAreaHeight;
-
       let verticalDisplacement = 0;
-      // prettier-ignore
-      if (fullHeightWillDisruptShortScrollPosition)
-      {
-        verticalDisplacement = -1 * (scrollTop + maybeStickToBottom);
-      }
-      else if (fullHeightWillDisruptLongScrollPosition)
-      {
-        const hiddenContentAreaHeight =
-          fullContentAreaHeight - visibleContentAreaHeight;
 
-        const initialScrollBottomGapHeight =
-          scrollHeight - scrollTop - visibleContentAreaHeight;
+      if (fullHeightWillDisruptScrollPosition) {
+        const maybeStickToBottom = shouldStickToBottom
+          ? sheetDY - initialSheetDY
+          : 0;
 
         verticalDisplacement = -1 * (
-          hiddenContentAreaHeight -
-            initialScrollBottomGapHeight +
-            maybeStickToBottom
+          scrollTop - scrollHeightAboveFullContentAreaWhenFullHeight + maybeStickToBottom
+          //scrollTop - scrollHeightAboveFullContentAreaWhenFullHeight + safeAreaInsetBottom + maybeStickToBottom
         );
       }
 
@@ -301,7 +310,16 @@ function useResizing(
       setOuterContainerTransform("");
       setHeight(`${Math.max(44, visibleContentAreaHeight)}px`);
     }
-  }, [isDragging, sheetDY, offsetFromSheetTop]);
+  }, [
+    isDragging,
+    sheetDY,
+    safeAreaInsetBottom,
+    offsetFromSheetTop,
+    fullContentAreaHeight,
+    visibleContentAreaHeight,
+    visibleContentAreaHeightRatio,
+    inverseVisibleContentAreaHeightRatio,
+  ]);
 
   // When drag completes: Restore scroll position and clean up `dragState`.
   useEffect(() => {
@@ -311,6 +329,16 @@ function useResizing(
       dragState.current = null;
     }
   }, [isDragging, height]);
+
+  const viewportHeight = useViewportHeight();
+
+  // DEBUG
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    const scrollHeight = scrollContainer.scrollHeight;
+
+    console.log("[FeatureSheet][ScrollableContent][useResizing] render: ", viewportHeight, safeAreaInsetBottom, sheetHeight, offsetFromSheetTop, scrollHeight);
+  });
 }
 
 /**

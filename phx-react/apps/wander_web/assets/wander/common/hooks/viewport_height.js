@@ -52,7 +52,7 @@ export function useViewportHeight() {
     };
   }, []);
 
-  return [observedViewportHeight];
+  return observedViewportHeight;
 }
 
 /*
