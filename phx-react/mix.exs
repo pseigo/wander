@@ -7,7 +7,19 @@ defmodule Wander.Umbrella.MixProject do
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      releases: [
+        blue: [
+          validate_compile_env: false,
+          include_executables_for: [:unix],
+          overlays: ["envs/"]
+        ],
+        green: [
+          validate_compile_env: false,
+          include_executables_for: [:unix],
+          overlays: ["envs/"]
+        ]
+      ]
     ]
   end
 
@@ -26,7 +38,8 @@ defmodule Wander.Umbrella.MixProject do
   defp deps do
     [
       # Required to run "mix format" on ~H/.heex files from the umbrella root
-      {:phoenix_live_view, ">= 0.0.0"}
+      {:phoenix_live_view, ">= 0.0.0"},
+      {:dotenvy, "~> 1.0.0"}
     ]
   end
 
