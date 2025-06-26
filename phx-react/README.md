@@ -14,7 +14,8 @@ There are a few steps to get the app up and running. At a glance:
 5. Set up a database for OpenStreetMap (OSM) data.
 6. Download an OSM extract for a region we're interested in.
 7. Import the OSM data into our database with `osm2pgsql`.
-8. Start the application!
+8. (OPTIONAL) Generate vector tiles with _tilemaker_.
+9. Start the application!
 
 ### Prerequisites
 
@@ -27,7 +28,7 @@ These are the programs you'll need to install to follow this guide:
 - [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (or another
-  program capable of running containers from a Docker Compose file)
+  program capable of pulling and running containers from a Docker Compose file)
 
 - [osm2pgsql](https://osm2pgsql.org/doc/install.html)
 
@@ -200,7 +201,7 @@ psql
 
 Phew! Onto the next step.
 
-### (6) Download an OSM extract
+### (6.1) Download an OSM extract
 
 The entire OpenStreetMap database, `Planet.osm`, is _huge_. It's a lot easier,
 faster, and less error-prone to get started with a small subset of the data.
@@ -222,27 +223,29 @@ In my case, I've used extracts graciously provided by Geofabrik:
 - https://download.geofabrik.de/
 
 Navigate to the **smallest** extract they offer for your region of interest and
-download the `(region)-latest.osm.pbf` file. Place this in
-`phx-react/scripts/osm2pgsql/data` and **rename it** to
-`extract-latest.osm.pbf`.
+download the `(region)-latest.osm.pbf` file.
+
+Geofabrik says when the extract was last updated, e.g., "2025-06-18T20:21:30Z",
+so I like to put that in my `pbf`'s filename by renaming
+`(region)-latest.osm.pbf` to `(region)_2025-06-18_20-21-30.osm.pbf`.
+
+### (6.2) Add the extract to the project
+
+Place the `.osm.pbf` file in `phx-react/scripts/osm_extracts`.
+
+Then run `phx-react/scripts/init-osm-extract.sh <path_to_your_extract>`.
 
 ### (7) Import the OSM data into the database with `osm2pgsql`
 
-Change to the `phx-react/scripts/osm2pgsql` directory and take a look at the
-`create.sh` script. You may need to adjust the `--cache` value based on the
-size of your extract:
+> Be sure to complete step (6.2) before continuing.
 
-> To decide how much cache to allocate, the rule of thumb is as follows: use
-> the size of the PBF file you are trying to import or about 75% of RAM,
-> whatever is smaller. \[...\]>
->
-> -- https://osm2pgsql.org/doc/manual.html#caching
+Run `phx-react/scripts/init-osm-database.sh --help` to see what options are
+available and their default values.
 
-Run it when you're ready:
+Run it when you're ready.
 
 ```sh
-# Working directory is `phx-react/scripts/osm2pgsql`.
-./create.sh
+./phx-react/scripts/init-osm-database.sh
 ```
 
 It will ask you for the password you set for "osmuser" at the end of step (5).
@@ -257,7 +260,37 @@ DataGrip](https://www.jetbrains.com/datagrip/), or something other) and take a
 look at the tables in the "osm2pgsql" schema in the "osm" database.  All the
 data from your OSM extract should be in there!
 
-### (8) Start the application!
+#### (OPTIONAL) How to start over
+
+If you want to start over, all you have to do is drop the `osm2pgsql` schema in
+the `osm` database and then recreate it.
+
+```sh
+# Get the Docker container ID.
+docker container ls
+CONTAINER_ID=b796ee122c78  # replace with your own!
+
+# Connect to the container.
+docker container exec -it ${CONTAINER_ID} sh
+
+# Switch to the `postgres` user.
+su postgres
+
+psql osm --command='DROP SCHEMA osm2pgsql CASCADE;'
+psql osm --command='CREATE SCHEMA osm2pgsql AUTHORIZATION osmuser;'
+
+# You can exit the container shell now.
+```
+
+Now you can go back to step (7).
+
+### (8) (OPTIONAL) Generate vector tiles with _tilemaker_
+
+> Be sure to complete step (6.2) before continuing.
+
+Run `phx-react/scripts/init-osm-tiles.sh`. Follow the instructions when it completes.
+
+### (9) Start the application
 
 Change to the project's root directory, `phx-react`, and run the following
 command:

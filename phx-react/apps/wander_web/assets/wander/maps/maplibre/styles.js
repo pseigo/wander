@@ -154,7 +154,7 @@ export function createInternalVectorStyle(region) {
     sources: {
       tiles: {
         type: "vector",
-        url: `pmtiles://${location.protocol}//${location.host}/map-tiles/${region}-shortbread.pmtiles`,
+        url: `pmtiles://${location.protocol}//${location.host}/map-tiles/${region}.pmtiles`,
       },
     },
     layers: shortbreadLayers,
