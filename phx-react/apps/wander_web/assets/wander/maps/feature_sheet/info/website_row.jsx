@@ -18,8 +18,8 @@ import { useMemo } from "react";
 
 import { ExternalLink } from "/wander/common/components/link";
 
-import { IconWithContent, RowIcon } from "./icon_with_content";
 import { Row } from "./row";
+import { IconWithContent, RowIcon } from "./icon_with_content";
 
 export function WebsiteRow({ website }) {
   const normalizedWebsite = useMemo(() => normalizeUrl(website), [website]);

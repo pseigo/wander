@@ -17,8 +17,8 @@
 import { clsx } from "clsx";
 import { useEffect, useRef, useState } from "react";
 
+import { randomLowerAlphaNumericString } from "tanaris/strings";
 import * as Config from "/wander/common/config";
-import { randomLowerAlphaNumericString } from "/wander/common/strings";
 
 import * as MapLibre from "/wander/maps/maplibre";
 import { CAFES } from "/wander/maps/maplibre/constants";

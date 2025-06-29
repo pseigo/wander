@@ -16,7 +16,7 @@
 
 import { useMemo } from "react";
 
-import { intersperse } from "/wander/common/arrays";
+import { intersperse } from "tanaris/arrays";
 import { Disclosure } from "/wander/common/components/disclosure";
 
 import { IconWithContent, RowIcon } from "./icon_with_content";

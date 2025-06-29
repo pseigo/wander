@@ -16,7 +16,7 @@
 
 import opening_hours from "opening_hours";
 
-import { hmsDifference } from "/wander/common/date_times";
+import { timeDifference } from "tanaris/date_times";
 
 /**
  * @typedef {{weekday: string, shortWeekday: string, timeRanges: string[]}} WeekdayWithTimeRangeStrs
@@ -28,7 +28,7 @@ import { hmsDifference } from "/wander/common/date_times";
  *   isOpen: boolean,
  *   stateStr: string,
  *   nextOpensOrClosesAt: Date | undefined,
- *   nextOpensOrClosesIn: Hms | undefined
+ *   nextOpensOrClosesIn: TimeDuration | undefined
  * }} OpenStateAtInstant
  */
 
@@ -72,7 +72,7 @@ export function openStateAtInstant(feature, atDate = new Date()) {
 
   const nextOpensOrClosesIn =
     nextOpensOrClosesAt !== undefined
-      ? hmsDifference(atDate, nextOpensOrClosesAt)
+      ? timeDifference(atDate, nextOpensOrClosesAt)
       : undefined;
 
   const result = {

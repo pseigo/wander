@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { wrap } from "/wander/common/arrays";
-import { isPlainObject } from "/wander/common/objects";
-import { isString } from "/wander/common/strings";
+import { wrap } from "tanaris/arrays";
+import { isPlainObject } from "tanaris/objects";
+import { isString } from "tanaris/strings";
 
 /**
  * @typedef {(

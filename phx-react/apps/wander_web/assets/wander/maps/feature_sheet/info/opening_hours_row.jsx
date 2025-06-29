@@ -17,7 +17,7 @@
 import { clsx } from "clsx";
 import { memo } from "react";
 
-import { intersperse } from "/wander/common/arrays";
+import { intersperse } from "tanaris/arrays";
 import { Disclosure } from "/wander/common/components/disclosure";
 
 import { ConciseOpeningHours } from "../concise_opening_hours";

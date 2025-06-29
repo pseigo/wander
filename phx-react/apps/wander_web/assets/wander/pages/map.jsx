@@ -20,6 +20,7 @@ import {
   useDocumentTitle,
   toDocumentTitle,
 } from "/wander/common/hooks/document_title";
+
 import { MapLibreMap } from "/wander/maps/maplibre_map";
 
 import { useOsmCafes } from "./map/osm_pois";

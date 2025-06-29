@@ -17,9 +17,10 @@
 //import { clsx } from "clsx";
 import { memo, useMemo } from "react";
 
+//import { capitalize } from "tanaris/strings";
 //import { Disclosure } from "/wander/common/components/disclosure";
 //import { ExternalLink } from "/wander/common/components/link";
-//import { capitalize } from "/wander/common/strings";
+
 import { weekdaysWithTimeRangeStrs } from "/wander/maps/osm/opening_hours";
 
 import { Section } from "./info/section";

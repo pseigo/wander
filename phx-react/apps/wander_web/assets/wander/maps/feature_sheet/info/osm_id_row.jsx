@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
+import { capitalize } from "tanaris/strings";
 import { ExternalLink } from "/wander/common/components/link";
-import { capitalize } from "/wander/common/strings";
 
 import { Row } from "./row";
 import { IconWithContent, RowIcon } from "./icon_with_content";

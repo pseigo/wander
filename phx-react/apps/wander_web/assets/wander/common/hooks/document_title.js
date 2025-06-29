@@ -16,8 +16,8 @@
 
 import { useState, useEffect } from "react";
 
-import { isStringArray, wrap } from "/wander/common/arrays";
-import { isString } from "/wander/common/strings";
+import { isStringArray, wrap } from "tanaris/arrays";
+import { isString } from "tanaris/strings";
 
 const siteName = "Wander";
 

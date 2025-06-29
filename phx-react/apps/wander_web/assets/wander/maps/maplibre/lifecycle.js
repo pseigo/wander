@@ -17,8 +17,9 @@
 import ML from "maplibre-gl";
 import { Protocol as PmtilesProtocol } from "pmtiles";
 
+import { toMarkdownTable } from "tanaris/strings/markdown_table";
 import * as Config from "/wander/common/config";
-import { toMarkdownTable } from "/wander/common/strings/markdown_table";
+
 import {
   externalRasterStyle,
   externalVectorStyle,

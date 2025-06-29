@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { isString } from "/wander/common/strings";
+import { isString } from "tanaris/strings";
 
 import * as nsGlobal from "/wander/config/global.json";
 import * as nsDebug from "/wander/config/debug.json";

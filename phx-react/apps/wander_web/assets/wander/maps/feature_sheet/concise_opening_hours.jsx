@@ -17,7 +17,7 @@
 import { clsx } from "clsx";
 import { memo } from "react";
 
-import { areOnSameDay } from "/wander/common/date_times";
+import { areOnSameDay } from "tanaris/date_times";
 
 import { useLiveOpenState } from "./concise_opening_hours/live_open_state";
 

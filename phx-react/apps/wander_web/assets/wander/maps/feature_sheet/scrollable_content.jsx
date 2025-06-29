@@ -17,7 +17,7 @@
 import { clsx } from "clsx";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { isHtmlElement } from "/wander/common/elements";
+import { isHtmlElement } from "tanaris/elements";
 
 import { FEATURE_SHEET_ELEMENT_ID } from "./constants";
 

@@ -18,10 +18,11 @@ import { clsx } from "clsx";
 import { memo } from "react";
 
 import { Disclosure } from "/wander/common/components/disclosure";
+
 import * as Features from "/wander/maps/osm/features";
 
-import { Row } from "./row";
 import { IconWithContent, RowIcon } from "./icon_with_content";
+import { Row } from "./row";
 
 /**
  * @param {Feature} feature

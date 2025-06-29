@@ -16,10 +16,10 @@
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-
 import { Switch } from "wouter";
 
 import { Route } from "/wander/common/router/route";
+
 import { LandingPage } from "/wander/pages/landing";
 import { MapPage } from "/wander/pages/map";
 import { NotFoundErrorPage } from "/wander/pages/errors/not_found";

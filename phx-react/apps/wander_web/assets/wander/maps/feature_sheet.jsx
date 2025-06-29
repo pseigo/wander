@@ -18,8 +18,8 @@ import { clsx } from "clsx";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import * as Config from "/wander/common/config";
-import { useSafeAreaInsetBottom } from "/wander/common/hooks/safe_area_insets";
 import { useElementHeightObserver } from "/wander/common/hooks/element_height_observer";
+import { useSafeAreaInsetBottom } from "/wander/common/hooks/safe_area_insets";
 import { useViewportHeight } from "/wander/common/hooks/viewport_height";
 
 import { FEATURE_SHEET_ELEMENT_ID } from "./feature_sheet/constants";
