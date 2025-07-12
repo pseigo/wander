@@ -7,6 +7,7 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
+    "bezier-easing": "2.1.0",
     "clsx": "^2.1.1",
     "maplibre-gl": "^5.0.1",
     "opening_hours": "3.8.0",
